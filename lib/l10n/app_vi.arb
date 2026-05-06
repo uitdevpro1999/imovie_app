@@ -1,0 +1,158 @@
+{
+  "authForgotPasswordTitle": "Qu\u00ean m\u1eadt kh\u1ea9u",
+  "authForgotPasswordSubtitle": "Nh\u1eadp email t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n. MovieGo s\u1ebd g\u1eedi email h\u01b0\u1edbng d\u1eabn \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u.",
+  "authForgotPasswordSubmit": "G\u1eedi email \u0111\u1eb7t l\u1ea1i",
+  "authForgotPasswordSuccess": "N\u1ebfu email t\u1ed3n t\u1ea1i, MovieGo s\u1ebd g\u1eedi h\u01b0\u1edbng d\u1eabn \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u.",
+  "authConfirmPasswordLabel": "Nh\u1eadp l\u1ea1i m\u1eadt kh\u1ea9u",
+  "authConfirmPasswordHint": "Nh\u1eadp l\u1ea1i m\u1eadt kh\u1ea9u c\u1ee7a b\u1ea1n",
+  "authPasswordMismatch": "M\u1eadt kh\u1ea9u nh\u1eadp l\u1ea1i kh\u00f4ng kh\u1edbp.",
+  "@@locale": "vi",
+  "appTitle": "iMovie App",
+  "retry": "Thử lại",
+  "homeFilterAll": "Tất cả",
+  "homeFilterUpdated": "Mới cập nhật",
+  "homeFilterSeries": "Phim bộ",
+  "homeFilterAnimation": "Hoạt hình",
+  "homeFilterYear": "Năm 2026",
+  "homeBadgeAdFree": "Không quảng cáo",
+  "homeSectionFreshUpdates": "Mới cập nhật",
+  "homeSectionHighestRated": "Điểm cao nhất",
+  "homeSectionSeriesSpotlight": "Phim bộ nổi bật",
+  "homeSectionAnimationPicks": "Hoạt hình đáng chú ý",
+  "homeSectionTopThisWeek": "Nổi bật tuần này",
+  "homeSectionViewMore": "Xem thêm",
+  "homeBottomNavHome": "Trang chủ",
+  "homeBottomNavBrowse": "Khám phá",
+  "homeBottomNavLibrary": "Tủ phim",
+  "homeBottomNavProfile": "Tài khoản",
+  "homeHeroDefaultSubtitle": "Những tựa phim mới cập nhật từ feed hôm nay",
+  "homeErrorLoadFeed": "Không thể tải dữ liệu trang chủ.",
+  "homeMetaEpisode": "{episode} • {duration}",
+  "@homeMetaEpisode": {
+    "placeholders": {
+      "episode": {},
+      "duration": {}
+    }
+  },
+  "homeMetaLanguage": "{language} • {quality}",
+  "@homeMetaLanguage": {
+    "placeholders": {
+      "language": {},
+      "quality": {}
+    }
+  },
+  "homeMetaYear": "{year}",
+  "@homeMetaYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "movieDetailErrorLoad": "Không thể tải chi tiết phim.",
+  "movieDetailPlay": "Phát",
+  "movieDetailActionTrailer": "Trailer",
+  "movieDetailActionWatchlist": "Danh sách",
+  "movieDetailActionRate": "Đánh giá",
+  "movieDetailActionShare": "Chia sẻ",
+  "movieDetailActors": "Diễn viên",
+  "movieDetailGenres": "Thể loại",
+  "movieDetailInformation": "Thông tin",
+  "movieDetailInfoOriginalTitle": "Tên gốc",
+  "movieDetailInfoStatus": "Trạng thái",
+  "movieDetailInfoYear": "Năm",
+  "movieDetailInfoRuntime": "Thời lượng",
+  "movieDetailInfoLanguage": "Ngôn ngữ",
+  "movieDetailInfoQuality": "Chất lượng",
+  "movieDetailInfoDirector": "Đạo diễn",
+  "movieDetailRating": "Đánh giá",
+  "movieDetailRateMovie": "Đánh giá phim",
+  "movieDetailRecommended": "Đề xuất",
+  "movieDetailReviews": "{count} lượt đánh giá",
+  "@movieDetailReviews": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "watchScreenTitle": "Xem phim",
+  "watchLoadError": "Không thể tải luồng phát này.",
+  "watchServerSection": "Server",
+  "watchEpisodeSection": "Tập",
+  "watchNoEpisodes": "Server này chưa có danh sách tập.",
+  "watchNoPlayableSource": "Không có nguồn m3u8 khả dụng cho tập đã chọn.",
+  "watchPlayerError": "Trình phát không thể khởi chạy luồng này.",
+  "watchPlayerPreview": "Trong widget test, player được thay bằng placeholder xem trước.",
+  "watchNoEpisodeSelected": "Chưa chọn tập",
+  "watchEpisodeValue": "Tập {episode}",
+  "@watchEpisodeValue": {
+    "placeholders": {
+      "episode": {}
+    }
+  },
+  "watchServerValue": "Server: {server}",
+  "@watchServerValue": {
+    "placeholders": {
+      "server": {}
+    }
+  },
+  "authSignInTitle": "Đăng nhập 👋🏻",
+  "authSignUpTitle": "Đăng ký",
+  "authSignInSubtitle": "Khi đăng nhập, bạn đồng ý với điều khoản sử dụng\nvà chính sách quyền riêng tư của MovieGo",
+  "authSignUpSubtitle": "Tạo tài khoản để cá nhân hóa gợi ý phim\ndành riêng cho bạn",
+  "authEmailLabel": "Email",
+  "authEmailHint": "Email của bạn",
+  "authPasswordLabel": "Mật khẩu",
+  "authPasswordHint": "Mật khẩu",
+  "authRememberMe": "Ghi nhớ đăng nhập",
+  "authForgotPassword": "Quên mật khẩu?",
+  "authAcceptTerms": "Tôi đồng ý với Điều khoản sử dụng và Chính sách\nquyền riêng tư",
+  "authSignInAction": "Đăng nhập",
+  "authSignUpAction": "Đăng ký",
+  "authDividerOr": "HOẶC",
+  "authSignInFooterPrefix": "Chưa có tài khoản? ",
+  "authSignUpFooterPrefix": "Đã có tài khoản? ",
+  "authInvalidEmail": "Nhập địa chỉ email hợp lệ.",
+  "authInvalidPassword": "Mật khẩu phải có ít nhất 6 ký tự.",
+  "authAcceptTermsError": "Vui lòng đồng ý điều khoản trước khi tạo tài khoản.",
+  "authSignInSuccess": "Đăng nhập thành công.",
+  "authSignUpSuccess": "Tạo tài khoản thành công.",
+  "browseSearchHint": "Phim, series, diễn viên",
+  "browsePopularSection": "Phổ biến",
+  "browseNoSearchResults": "Không tìm thấy phim phù hợp",
+  "browseSearchResults": "Kết quả tìm kiếm"
+,
+  "profileTitle": "Hồ sơ",
+  "profileChangeAvatar": "Đổi ảnh đại diện",
+  "profileFullNameLabel": "Họ và tên",
+  "profileFullNameHint": "Nhập họ và tên",
+  "profilePhoneLabel": "Số điện thoại",
+  "profilePhoneHint": "Nhập số điện thoại",
+  "profileSaveAction": "Lưu hồ sơ",
+  "profileSignOutAction": "Đăng xuất",
+  "profileSignedOutTitle": "Đăng nhập để quản lý hồ sơ",
+  "profileSignedOutSubtitle": "Ảnh đại diện, tên và số điện thoại sẽ hiển thị sau khi đăng nhập.",
+  "profileEmpty": "Không tìm thấy hồ sơ cho tài khoản này.",
+  "profileSaved": "Đã cập nhật hồ sơ.",
+  "profileAvatarSaved": "Đã cập nhật ảnh đại diện.",
+  "profileInvalidAvatar": "Vui lòng chọn một file ảnh hợp lệ.",
+  "profileFullNameRequired": "Vui lòng nhập họ và tên.",
+  "profileSignOutError": "Không thể đăng xuất.",
+  "profileWatchHistory": "Lịch sử xem của tôi",
+  "profileMovies": "Phim",
+  "profileShows": "Series",
+  "profileEpisodes": "Tập",
+  "profileMainSettings": "Cài đặt chính",
+  "profileOtherSettings": "Khác",
+  "profileSettingsProfile": "Cài đặt hồ sơ",
+  "profileSettingsNotifications": "Thông báo",
+  "profileSettingsAudioSubtitles": "Âm thanh phụ đề",
+  "profileSettingsAppearance": "Giao diện",
+  "profileSettingsDefault": "Mặc định",
+  "profileSettingsLanguage": "Ngôn ngữ",
+  "profileSettingsEnglish": "Tiếng Anh",
+  "profileSettingsHelpCenter": "Trung tâm trợ giúp",
+  "profileSettingsSecurity": "Bảo mật",
+  "profileSettingsAbout": "Giới thiệu",
+  "profileSettingsInviteFriends": "Mời bạn bè",
+  "profileSettingsRateApp": "Đánh giá ứng dụng"
+}
