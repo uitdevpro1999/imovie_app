@@ -4,32 +4,35 @@ import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/domain/entities/home/home_movie.dart';
 import 'package:imovie_app/presentation/ui/home/home_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_content_widgets.dart';
+import 'package:imovie_app/presentation/widgets/imovie_content_widgets.dart';
 
 class HomeMovieStripSection extends StatelessWidget {
   const HomeMovieStripSection({
     super.key,
     required this.title,
     required this.movies,
-    required this.actionLabel,
     required this.relatedMovies,
+    this.actionLabel,
+    this.onActionTap,
   });
 
   final String title;
   final List<HomeMovieViewData> movies;
-  final String actionLabel;
+  final String? actionLabel;
   final List<HomeMovie> relatedMovies;
+  final VoidCallback? onActionTap;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MovieGoSectionHeader(
+        IMovieSectionHeader(
           title: title,
-          actionLabel: actionLabel,
+          actionLabel: actionLabel ?? '',
           titleColor: AppColors.white,
           actionColor: AppColors.yellow500,
+          onActionTap: onActionTap,
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -46,7 +49,7 @@ class HomeMovieStripSection extends StatelessWidget {
                     relatedMovies: relatedMovies,
                   ),
                 ),
-                child: MovieGoPosterCard(
+                child: IMoviePosterCard(
                   imageUrl: movie.posterUrl,
                   title: movie.title,
                   subtitle: movie.subtitleLabel,

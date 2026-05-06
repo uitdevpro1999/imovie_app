@@ -11,7 +11,15 @@ abstract interface class HomeRemoteDataSource {
 
   Future<HomeGenresResponse> getCountries();
 
-  Future<HomeFeedResponse> searchMovies({required String keyword});
+  Future<HomeFeedResponse> searchMovies({
+    required String keyword,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+    required String country,
+    required String year,
+  });
 
   Future<HomeFeedResponse> getMoviesByGenre({
     required String slug,
@@ -21,6 +29,14 @@ abstract interface class HomeRemoteDataSource {
     required String sortType,
     required String country,
     required String year,
+  });
+
+  Future<HomeFeedResponse> getMoviesByList({
+    required String slug,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
   });
 }
 
@@ -48,10 +64,26 @@ class OPhimHomeRemoteDataSource implements HomeRemoteDataSource {
   }
 
   @override
-  Future<HomeFeedResponse> searchMovies({required String keyword}) async {
+  Future<HomeFeedResponse> searchMovies({
+    required String keyword,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+    required String country,
+    required String year,
+  }) async {
     final json = await apiClient.getJson(
       'tim-kiem',
-      queryParameters: {'keyword': keyword.trim()},
+      queryParameters: {
+        'keyword': keyword.trim(),
+        'page': page,
+        'limit': limit,
+        'sort_field': sortField,
+        'sort_type': sortType,
+        if (country.trim().isNotEmpty) 'country': country.trim(),
+        if (year.trim().isNotEmpty) 'year': year.trim(),
+      },
     );
     return HomeFeedResponse.fromJson(json);
   }
@@ -79,6 +111,26 @@ class OPhimHomeRemoteDataSource implements HomeRemoteDataSource {
     );
     return HomeFeedResponse.fromJson(json);
   }
+
+  @override
+  Future<HomeFeedResponse> getMoviesByList({
+    required String slug,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+  }) async {
+    final json = await apiClient.getJson(
+      'danh-sach/$slug',
+      queryParameters: {
+        'page': page,
+        'limit': limit,
+        'sort_field': sortField,
+        'sort_type': sortType,
+      },
+    );
+    return HomeFeedResponse.fromJson(json);
+  }
 }
 
 class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
@@ -100,7 +152,15 @@ class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
   }
 
   @override
-  Future<HomeFeedResponse> searchMovies({required String keyword}) async {
+  Future<HomeFeedResponse> searchMovies({
+    required String keyword,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+    required String country,
+    required String year,
+  }) async {
     return HomeFeedResponse.fromJson(_fakeHomeJson);
   }
 
@@ -113,6 +173,17 @@ class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
     required String sortType,
     required String country,
     required String year,
+  }) async {
+    return HomeFeedResponse.fromJson(_fakeHomeJson);
+  }
+
+  @override
+  Future<HomeFeedResponse> getMoviesByList({
+    required String slug,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
   }) async {
     return HomeFeedResponse.fromJson(_fakeHomeJson);
   }
@@ -130,7 +201,7 @@ final Map<String, dynamic> _fakeHomeJson = {
   'status': 'success',
   'message': '',
   'data': {
-    'seoOnPage': {'titleHead': 'MovieGo Home'},
+    'seoOnPage': {'titleHead': 'iMovie Home'},
     'APP_DOMAIN_CDN_IMAGE': 'https://img.ophim.live',
     'items': [
       {

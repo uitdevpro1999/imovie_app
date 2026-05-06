@@ -76,6 +76,9 @@ class MoviePersonResponse {
 class MovieDetailItemResponse {
   const MovieDetailItemResponse({
     required this.id,
+    required this.imdbId,
+    required this.tmdbId,
+    required this.tmdbType,
     required this.slug,
     required this.name,
     required this.originName,
@@ -108,6 +111,10 @@ class MovieDetailItemResponse {
 
     return MovieDetailItemResponse(
       id: json['_id'] as String? ?? '',
+      imdbId: imdb['id']?.toString() ?? '',
+      tmdbId: tmdb['id']?.toString() ?? '',
+      tmdbType:
+          tmdb['type']?.toString() ?? tmdb['media_type']?.toString() ?? '',
       slug: json['slug'] as String? ?? '',
       name: json['name'] as String? ?? '',
       originName: json['origin_name'] as String? ?? '',
@@ -153,6 +160,9 @@ class MovieDetailItemResponse {
   }
 
   final String id;
+  final String imdbId;
+  final String tmdbId;
+  final String tmdbType;
   final String slug;
   final String name;
   final String originName;

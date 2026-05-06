@@ -71,7 +71,12 @@ class _GenreFilterBar extends StatelessWidget {
     final filters = await showModalBottomSheet<_GenreFilterResult>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      useSafeArea: true,
+      backgroundColor: AppColors.grayscale950,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      clipBehavior: Clip.antiAlias,
       builder: (_) => _GenreFilterSheet(state: filterState),
     );
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:imovie_app/core/events/app_event_bus.dart';
 import 'package:imovie_app/core/events/app_toast_event.dart';
-import 'package:imovie_app/presentation/toast/moviego_toast.dart';
+import 'package:imovie_app/presentation/toast/imovie_toast.dart';
 
 class AppToastListener extends StatefulWidget {
   const AppToastListener({super.key, required this.child});
@@ -20,7 +20,7 @@ class _AppToastListenerState extends State<AppToastListener> {
   @override
   void initState() {
     super.initState();
-    _subscription = appEventBus.toastStream.listen(MovieGoToast.show);
+    _subscription = appEventBus.toastStream.listen(IMovieToast.show);
   }
 
   @override

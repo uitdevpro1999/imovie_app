@@ -16,5 +16,10 @@ abstract interface class SessionRepository {
 
   Future<Result<void>> resetPasswordForEmail({required String email});
 
+  Future<Result<void>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
+
   Future<Result<void>> signOut();
 }

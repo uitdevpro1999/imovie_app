@@ -5,18 +5,20 @@ import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/core/di/service_locator.dart';
+import 'package:imovie_app/domain/entities/home/home_country.dart';
 import 'package:imovie_app/domain/entities/home/home_movie.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/browse/browse_cubit.dart';
 import 'package:imovie_app/presentation/ui/browse/browse_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
-import 'package:imovie_app/presentation/widgets/moviego_content_widgets.dart';
-import 'package:imovie_app/presentation/widgets/moviego_remote_image.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_content_widgets.dart';
+import 'package:imovie_app/presentation/widgets/imovie_smart_refresher.dart';
 
 part 'widgets/browse_genres_section.dart';
+part 'widgets/browse_filter_selector.dart';
 part 'widgets/browse_movie_strip_section.dart';
-part 'widgets/browse_promo_card.dart';
+part 'widgets/browse_search_filter_sheet.dart';
 part 'widgets/browse_search_field.dart';
 part 'widgets/browse_success_view.dart';
 
@@ -49,6 +51,16 @@ class BrowsePage extends BasePage<BrowseCubit, BrowseState>
           state: state,
           controller: _searchController,
           onKeywordChanged: cubit.onKeywordChanged,
+          onApplySearchFilters: cubit.applySearchFilters,
+          onRefresh: cubit.refresh,
+          onLoadMoreSearch: () async {
+            final success = await cubit.loadMoreSearch();
+            return success
+                ? IMovieLoadMoreResult.success(
+                    hasMore: cubit.state.searchHasMore,
+                  )
+                : const IMovieLoadMoreResult.failure();
+          },
         );
       },
     );
@@ -75,7 +87,7 @@ class BrowsePage extends BasePage<BrowseCubit, BrowseState>
               ),
             ),
             const SizedBox(height: 16),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.retry,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

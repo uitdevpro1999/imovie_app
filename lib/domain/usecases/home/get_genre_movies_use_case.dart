@@ -13,7 +13,7 @@ class GetGenreMoviesUseCase implements UseCase<HomeFeed, GetGenreMoviesParams> {
     return repository.getMoviesByGenre(
       slug: params.slug,
       page: params.page,
-      limit: 24,
+      limit: params.limit,
       sortField: 'modified.time',
       sortType: params.sortType,
       country: params.country,
@@ -26,6 +26,7 @@ class GetGenreMoviesParams {
   const GetGenreMoviesParams({
     required this.slug,
     this.page = 1,
+    this.limit = 24,
     this.sortType = 'desc',
     this.country = '',
     this.year = '',
@@ -33,6 +34,7 @@ class GetGenreMoviesParams {
 
   final String slug;
   final int page;
+  final int limit;
   final String sortType;
   final String country;
   final String year;

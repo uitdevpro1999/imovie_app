@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MovieDetailState {
 
- String get slug; PageStatus get pageStatus; bool get processing; AppFailure? get failure; MovieDetail? get detail; List<HomeMovie> get relatedMovies;
+ String get slug; PageStatus get pageStatus; bool get processing; bool get addingToLibrary; bool get addedToLibrary; AppFailure? get failure; MovieDetail? get detail; List<HomeMovie> get relatedMovies;
 /// Create a copy of MovieDetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MovieDetailStateCopyWith<MovieDetailState> get copyWith => _$MovieDetailStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MovieDetailState&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.detail, detail) || other.detail == detail)&&const DeepCollectionEquality().equals(other.relatedMovies, relatedMovies));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MovieDetailState&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.addingToLibrary, addingToLibrary) || other.addingToLibrary == addingToLibrary)&&(identical(other.addedToLibrary, addedToLibrary) || other.addedToLibrary == addedToLibrary)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.detail, detail) || other.detail == detail)&&const DeepCollectionEquality().equals(other.relatedMovies, relatedMovies));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,slug,pageStatus,processing,failure,detail,const DeepCollectionEquality().hash(relatedMovies));
+int get hashCode => Object.hash(runtimeType,slug,pageStatus,processing,addingToLibrary,addedToLibrary,failure,detail,const DeepCollectionEquality().hash(relatedMovies));
 
 @override
 String toString() {
-  return 'MovieDetailState(slug: $slug, pageStatus: $pageStatus, processing: $processing, failure: $failure, detail: $detail, relatedMovies: $relatedMovies)';
+  return 'MovieDetailState(slug: $slug, pageStatus: $pageStatus, processing: $processing, addingToLibrary: $addingToLibrary, addedToLibrary: $addedToLibrary, failure: $failure, detail: $detail, relatedMovies: $relatedMovies)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MovieDetailStateCopyWith<$Res>  {
   factory $MovieDetailStateCopyWith(MovieDetailState value, $Res Function(MovieDetailState) _then) = _$MovieDetailStateCopyWithImpl;
 @useResult
 $Res call({
- String slug, PageStatus pageStatus, bool processing, AppFailure? failure, MovieDetail? detail, List<HomeMovie> relatedMovies
+ String slug, PageStatus pageStatus, bool processing, bool addingToLibrary, bool addedToLibrary, AppFailure? failure, MovieDetail? detail, List<HomeMovie> relatedMovies
 });
 
 
@@ -62,11 +62,13 @@ class _$MovieDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of MovieDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? detail = freezed,Object? relatedMovies = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? pageStatus = null,Object? processing = null,Object? addingToLibrary = null,Object? addedToLibrary = null,Object? failure = freezed,Object? detail = freezed,Object? relatedMovies = null,}) {
   return _then(_self.copyWith(
 slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
+as bool,addingToLibrary: null == addingToLibrary ? _self.addingToLibrary : addingToLibrary // ignore: cast_nullable_to_non_nullable
+as bool,addedToLibrary: null == addedToLibrary ? _self.addedToLibrary : addedToLibrary // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as MovieDetail?,relatedMovies: null == relatedMovies ? _self.relatedMovies : relatedMovies // ignore: cast_nullable_to_non_nullable
@@ -179,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String slug,  PageStatus pageStatus,  bool processing,  AppFailure? failure,  MovieDetail? detail,  List<HomeMovie> relatedMovies)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String slug,  PageStatus pageStatus,  bool processing,  bool addingToLibrary,  bool addedToLibrary,  AppFailure? failure,  MovieDetail? detail,  List<HomeMovie> relatedMovies)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MovieDetailState() when $default != null:
-return $default(_that.slug,_that.pageStatus,_that.processing,_that.failure,_that.detail,_that.relatedMovies);case _:
+return $default(_that.slug,_that.pageStatus,_that.processing,_that.addingToLibrary,_that.addedToLibrary,_that.failure,_that.detail,_that.relatedMovies);case _:
   return orElse();
 
 }
@@ -200,10 +202,10 @@ return $default(_that.slug,_that.pageStatus,_that.processing,_that.failure,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String slug,  PageStatus pageStatus,  bool processing,  AppFailure? failure,  MovieDetail? detail,  List<HomeMovie> relatedMovies)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String slug,  PageStatus pageStatus,  bool processing,  bool addingToLibrary,  bool addedToLibrary,  AppFailure? failure,  MovieDetail? detail,  List<HomeMovie> relatedMovies)  $default,) {final _that = this;
 switch (_that) {
 case _MovieDetailState():
-return $default(_that.slug,_that.pageStatus,_that.processing,_that.failure,_that.detail,_that.relatedMovies);case _:
+return $default(_that.slug,_that.pageStatus,_that.processing,_that.addingToLibrary,_that.addedToLibrary,_that.failure,_that.detail,_that.relatedMovies);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,10 +222,10 @@ return $default(_that.slug,_that.pageStatus,_that.processing,_that.failure,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String slug,  PageStatus pageStatus,  bool processing,  AppFailure? failure,  MovieDetail? detail,  List<HomeMovie> relatedMovies)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String slug,  PageStatus pageStatus,  bool processing,  bool addingToLibrary,  bool addedToLibrary,  AppFailure? failure,  MovieDetail? detail,  List<HomeMovie> relatedMovies)?  $default,) {final _that = this;
 switch (_that) {
 case _MovieDetailState() when $default != null:
-return $default(_that.slug,_that.pageStatus,_that.processing,_that.failure,_that.detail,_that.relatedMovies);case _:
+return $default(_that.slug,_that.pageStatus,_that.processing,_that.addingToLibrary,_that.addedToLibrary,_that.failure,_that.detail,_that.relatedMovies);case _:
   return null;
 
 }
@@ -235,12 +237,14 @@ return $default(_that.slug,_that.pageStatus,_that.processing,_that.failure,_that
 
 
 class _MovieDetailState extends MovieDetailState {
-  const _MovieDetailState({required this.slug, this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.detail, final  List<HomeMovie> relatedMovies = const <HomeMovie>[]}): _relatedMovies = relatedMovies,super._();
+  const _MovieDetailState({required this.slug, this.pageStatus = PageStatus.initial, this.processing = false, this.addingToLibrary = false, this.addedToLibrary = false, this.failure, this.detail, final  List<HomeMovie> relatedMovies = const <HomeMovie>[]}): _relatedMovies = relatedMovies,super._();
   
 
 @override final  String slug;
 @override@JsonKey() final  PageStatus pageStatus;
 @override@JsonKey() final  bool processing;
+@override@JsonKey() final  bool addingToLibrary;
+@override@JsonKey() final  bool addedToLibrary;
 @override final  AppFailure? failure;
 @override final  MovieDetail? detail;
  final  List<HomeMovie> _relatedMovies;
@@ -261,16 +265,16 @@ _$MovieDetailStateCopyWith<_MovieDetailState> get copyWith => __$MovieDetailStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MovieDetailState&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.detail, detail) || other.detail == detail)&&const DeepCollectionEquality().equals(other._relatedMovies, _relatedMovies));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MovieDetailState&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.addingToLibrary, addingToLibrary) || other.addingToLibrary == addingToLibrary)&&(identical(other.addedToLibrary, addedToLibrary) || other.addedToLibrary == addedToLibrary)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.detail, detail) || other.detail == detail)&&const DeepCollectionEquality().equals(other._relatedMovies, _relatedMovies));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,slug,pageStatus,processing,failure,detail,const DeepCollectionEquality().hash(_relatedMovies));
+int get hashCode => Object.hash(runtimeType,slug,pageStatus,processing,addingToLibrary,addedToLibrary,failure,detail,const DeepCollectionEquality().hash(_relatedMovies));
 
 @override
 String toString() {
-  return 'MovieDetailState(slug: $slug, pageStatus: $pageStatus, processing: $processing, failure: $failure, detail: $detail, relatedMovies: $relatedMovies)';
+  return 'MovieDetailState(slug: $slug, pageStatus: $pageStatus, processing: $processing, addingToLibrary: $addingToLibrary, addedToLibrary: $addedToLibrary, failure: $failure, detail: $detail, relatedMovies: $relatedMovies)';
 }
 
 
@@ -281,7 +285,7 @@ abstract mixin class _$MovieDetailStateCopyWith<$Res> implements $MovieDetailSta
   factory _$MovieDetailStateCopyWith(_MovieDetailState value, $Res Function(_MovieDetailState) _then) = __$MovieDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- String slug, PageStatus pageStatus, bool processing, AppFailure? failure, MovieDetail? detail, List<HomeMovie> relatedMovies
+ String slug, PageStatus pageStatus, bool processing, bool addingToLibrary, bool addedToLibrary, AppFailure? failure, MovieDetail? detail, List<HomeMovie> relatedMovies
 });
 
 
@@ -298,11 +302,13 @@ class __$MovieDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of MovieDetailState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? detail = freezed,Object? relatedMovies = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? pageStatus = null,Object? processing = null,Object? addingToLibrary = null,Object? addedToLibrary = null,Object? failure = freezed,Object? detail = freezed,Object? relatedMovies = null,}) {
   return _then(_MovieDetailState(
 slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
+as bool,addingToLibrary: null == addingToLibrary ? _self.addingToLibrary : addingToLibrary // ignore: cast_nullable_to_non_nullable
+as bool,addedToLibrary: null == addedToLibrary ? _self.addedToLibrary : addedToLibrary // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as MovieDetail?,relatedMovies: null == relatedMovies ? _self._relatedMovies : relatedMovies // ignore: cast_nullable_to_non_nullable

@@ -14,8 +14,14 @@ abstract class AppEnvironment with _$AppEnvironment {
 
   factory AppEnvironment.fromDefines() {
     return const AppEnvironment(
-      supabaseUrl: String.fromEnvironment('SUPABASE_URL'),
-      supabaseAnonKey: String.fromEnvironment('SUPABASE_ANON_KEY'),
+      supabaseUrl: String.fromEnvironment(
+        'SUPABASE_URL',
+        defaultValue: 'https://zlmmymxdivxkenfpqdxy.supabase.co',
+      ),
+      supabaseAnonKey: String.fromEnvironment(
+        'SUPABASE_ANON_KEY',
+        defaultValue: 'sb_publishable_c5XN15s7OiBzenu8V4XG6A_Tsa4sHTd',
+      ),
       ophimApiBaseUrl: String.fromEnvironment(
         'OPHIM_API_BASE_URL',
         defaultValue: 'https://ophim1.com/v1/api/',

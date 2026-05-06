@@ -31,6 +31,9 @@ class _SelectablePill extends StatelessWidget {
           ),
           child: Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             style: AppTypography.body2Medium.copyWith(
               color: isSelected ? AppColors.white : AppColors.grayscale200,
             ),

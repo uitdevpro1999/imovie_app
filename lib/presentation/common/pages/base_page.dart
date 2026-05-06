@@ -67,6 +67,7 @@ abstract class BasePage<C extends BaseCubit<S>, S extends BaseState>
 class _BasePageState<C extends BaseCubit<S>, S extends BaseState>
     extends State<BasePage<C, S>> {
   late final C cubit;
+  bool _didHandleInitialLoaded = false;
 
   @override
   void initState() {
@@ -74,6 +75,17 @@ class _BasePageState<C extends BaseCubit<S>, S extends BaseState>
     cubit = context.read<C>();
     widget.onInitState(context, cubit);
     cubit.initData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _didHandleInitialLoaded) {
+        return;
+      }
+
+      final currentState = cubit.state;
+      if (currentState.pageStatus == PageStatus.loaded) {
+        _didHandleInitialLoaded = true;
+        widget.onViewLoaded(context, cubit, currentState);
+      }
+    });
   }
 
   @override
@@ -87,14 +99,14 @@ class _BasePageState<C extends BaseCubit<S>, S extends BaseState>
     final l10n = AppLocalizations.of(context)!;
 
     return BlocConsumer<C, S>(
-      buildWhen: (previous, current) =>
-          previous.pageStatus != current.pageStatus ||
-          previous.processing != current.processing ||
-          previous.failure != current.failure,
+      buildWhen: (previous, current) => previous != current,
       listenWhen: (previous, current) =>
-          previous.pageStatus == PageStatus.loading &&
+          previous.pageStatus != PageStatus.loaded &&
           current.pageStatus == PageStatus.loaded,
-      listener: (context, state) => widget.onViewLoaded(context, cubit, state),
+      listener: (context, state) {
+        _didHandleInitialLoaded = true;
+        widget.onViewLoaded(context, cubit, state);
+      },
       builder: (context, state) {
         final child = switch (state.pageStatus) {
           PageStatus.initial ||

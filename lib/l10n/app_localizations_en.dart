@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'iMovie App';
+  String get appTitle => 'iMovie';
 
   @override
   String get retry => 'Retry';
@@ -45,6 +45,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSectionAnimationPicks => 'Animation picks';
 
   @override
+  String get homeSectionTvShows => 'TV Shows';
+
+  @override
+  String get homeSectionUpcoming => 'Coming soon';
+
+  @override
   String get homeSectionTopThisWeek => 'Top this week';
 
   @override
@@ -55,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeBottomNavBrowse => 'Browse';
+
+  @override
+  String get homeBottomNavCommunity => 'Community';
 
   @override
   String get homeBottomNavLibrary => 'Library';
@@ -94,10 +103,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieDetailActionTrailer => 'Trailer';
 
   @override
+  String get movieTrailerUnavailable =>
+      'No trailer is available for this movie.';
+
+  @override
   String get movieDetailActionWatchlist => 'Watchlist';
 
   @override
+  String get movieDetailActionInLibrary => 'Saved';
+
+  @override
+  String get movieDetailLibraryAddSuccess => 'Added to your library.';
+
+  @override
+  String get movieDetailLibraryEmptyMovie =>
+      'No movie data is available to save.';
+
+  @override
   String get movieDetailActionRate => 'Rate';
+
+  @override
+  String get movieDetailImdbOpenError => 'Unable to open IMDb.';
+
+  @override
+  String get movieDetailTmdbOpenError => 'Unable to open TMDb.';
+
+  @override
+  String get movieDetailRatingSourceTitle => 'Choose rating site';
+
+  @override
+  String get movieDetailRatingSourceImdbSubtitle => 'Open IMDb ratings';
+
+  @override
+  String get movieDetailRatingSourceTmdbSubtitle => 'Open TMDb ratings';
 
   @override
   String get movieDetailActionShare => 'Share';
@@ -193,7 +231,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authSignInSubtitle =>
-      'By signing in, you agree to MovieGo conditions of\nUse and Privacy Policy';
+      'By signing in, you agree to iMovie conditions of\nUse and Privacy Policy';
 
   @override
   String get authSignUpSubtitle =>
@@ -228,14 +266,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authForgotPasswordSubtitle =>
-      'Enter your account email. MovieGo will send password reset instructions to that address.';
+      'Enter your account email. iMovie will send password reset instructions to that address.';
 
   @override
   String get authForgotPasswordSubmit => 'Send reset email';
 
   @override
   String get authForgotPasswordSuccess =>
-      'If the email exists, MovieGo will send password reset instructions.';
+      'If the email exists, iMovie will send password reset instructions.';
 
   @override
   String get authAcceptTerms =>
@@ -287,6 +325,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get browseSearchResults => 'Search results';
+
+  @override
+  String get libraryEmptyTitle => 'Your library is empty';
+
+  @override
+  String get libraryEmptySubtitle =>
+      'Add movies from the detail screen to find them here.';
+
+  @override
+  String get libraryRemoveAction => 'Remove';
+
+  @override
+  String get libraryRemoveSuccess => 'Removed from your library.';
+
+  @override
+  String get libraryErrorLoad => 'Unable to load your movie library.';
 
   @override
   String get profileTitle => 'Profile';
@@ -359,6 +413,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSettingsProfile => 'Profile settings';
 
   @override
+  String get profileSettingsCommunity => 'Community';
+
+  @override
+  String get profileSettingsMyPosts => 'My posts';
+
+  @override
   String get profileSettingsNotifications => 'Notifications';
 
   @override
@@ -377,6 +437,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSettingsEnglish => 'English';
 
   @override
+  String get profileSettingsVietnamese => 'Vietnamese';
+
+  @override
   String get profileSettingsHelpCenter => 'Help center';
 
   @override
@@ -390,4 +453,214 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileSettingsRateApp => 'Rate the app';
+
+  @override
+  String get languageSelectTitle => 'Select language';
+
+  @override
+  String get languageSelectSubtitle =>
+      'The language is applied immediately across the app.';
+
+  @override
+  String get languageEnglishTitle => 'English';
+
+  @override
+  String get languageEnglishSubtitle => 'Use English for the app interface';
+
+  @override
+  String get languageVietnameseTitle => 'Tiếng Việt';
+
+  @override
+  String get languageVietnameseSubtitle =>
+      'Use Vietnamese for the app interface';
+
+  @override
+  String get languageChangeSuccess => 'Language updated.';
+
+  @override
+  String get languageChangeError => 'Unable to update language.';
+
+  @override
+  String get changePasswordTitle => 'Change password';
+
+  @override
+  String get changePasswordSubtitle =>
+      'Use your current password to confirm this change, then enter a new password for future sign-ins.';
+
+  @override
+  String get changePasswordCurrentLabel => 'Current password';
+
+  @override
+  String get changePasswordCurrentHint => 'Enter current password';
+
+  @override
+  String get changePasswordNewLabel => 'New password';
+
+  @override
+  String get changePasswordNewHint => 'Enter new password';
+
+  @override
+  String get changePasswordConfirmLabel => 'Confirm new password';
+
+  @override
+  String get changePasswordConfirmHint => 'Re-enter new password';
+
+  @override
+  String get changePasswordSaveAction => 'Update password';
+
+  @override
+  String get changePasswordInvalidCurrent => 'Enter your current password.';
+
+  @override
+  String get changePasswordInvalidNew =>
+      'New password must be at least 6 characters.';
+
+  @override
+  String get changePasswordUnchanged =>
+      'New password must be different from the current password.';
+
+  @override
+  String get changePasswordSuccess => 'Password updated successfully.';
+
+  @override
+  String get communityTitle => 'Community';
+
+  @override
+  String get communityMyPostsTitle => 'My posts';
+
+  @override
+  String get communityComposerPrompt => 'What are you watching today?';
+
+  @override
+  String get communityPostMovieLabel => 'Tagged movie';
+
+  @override
+  String get communityStoriesTitle => 'Stories';
+
+  @override
+  String get communityCreateStoryAction => 'Create story';
+
+  @override
+  String get communityStoryEditorTitle => 'Create story';
+
+  @override
+  String get communityStoryTextHint => 'Write on the image';
+
+  @override
+  String get communityStoryPickImageAction => 'Choose an image for your story';
+
+  @override
+  String get communityStoryChangeImageAction => 'Change image';
+
+  @override
+  String get communityStoryImageRequired =>
+      'Choose an image to create a story.';
+
+  @override
+  String get communityStoryPublishAction => 'Publish story';
+
+  @override
+  String get communityCreateStorySuccess => 'Story created.';
+
+  @override
+  String get communityDeleteStorySuccess => 'Story deleted.';
+
+  @override
+  String get communityCreateTitle => 'Create post';
+
+  @override
+  String get communityEditTitle => 'Edit post';
+
+  @override
+  String get communityEmptyTitle => 'No community posts yet';
+
+  @override
+  String get communityMyPostsEmptyTitle => 'You have not posted yet';
+
+  @override
+  String get communityEmptySubtitle =>
+      'Share a reaction, a favorite title, or a moment from your watch session.';
+
+  @override
+  String get communityLoadError => 'Unable to load community posts.';
+
+  @override
+  String get communityLikeAction => 'Like';
+
+  @override
+  String get communityCommentAction => 'Comment';
+
+  @override
+  String get communityEditAction => 'Edit';
+
+  @override
+  String get communityDeleteAction => 'Delete';
+
+  @override
+  String get communityDeleteSuccess => 'Post deleted.';
+
+  @override
+  String get communityCommentsTitle => 'Comments';
+
+  @override
+  String get communityCommentsEmpty => 'No comments yet.';
+
+  @override
+  String get communityCommentHint => 'Write a comment...';
+
+  @override
+  String get communityCommentEmptyError => 'Enter a comment first.';
+
+  @override
+  String get communityContentHint => 'What do you think about this movie?';
+
+  @override
+  String get communityMovieHint => 'Tag a movie title';
+
+  @override
+  String get communityMovieSearchSubtitle =>
+      'Choose a movie from search results';
+
+  @override
+  String get communityMovieClearAction => 'Clear selected movie';
+
+  @override
+  String get communityMoviePickerTitle => 'Choose movie';
+
+  @override
+  String get communityMovieSearchHint => 'Search movie title';
+
+  @override
+  String get communityMovieSearchEmpty =>
+      'Enter at least 2 characters to search movies.';
+
+  @override
+  String get communityLocationHint => 'Attach current address';
+
+  @override
+  String get communityUseCurrentLocation => 'Use current location';
+
+  @override
+  String get communityLocationError => 'Unable to get your current address.';
+
+  @override
+  String get communityPickImageAction => 'Add image';
+
+  @override
+  String get communityRemoveImageAction => 'Remove image';
+
+  @override
+  String get communityPublishAction => 'Publish';
+
+  @override
+  String get communityUpdateAction => 'Update post';
+
+  @override
+  String get communityEmptyContentError => 'Enter content or choose an image.';
+
+  @override
+  String get communityCreateSuccess => 'Post published.';
+
+  @override
+  String get communityUpdateSuccess => 'Post updated.';
 }

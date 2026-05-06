@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'iMovie App'**
+  /// **'iMovie'**
   String get appTitle;
 
   /// No description provided for @retry.
@@ -170,6 +170,18 @@ abstract class AppLocalizations {
   /// **'Animation picks'**
   String get homeSectionAnimationPicks;
 
+  /// No description provided for @homeSectionTvShows.
+  ///
+  /// In en, this message translates to:
+  /// **'TV Shows'**
+  String get homeSectionTvShows;
+
+  /// No description provided for @homeSectionUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get homeSectionUpcoming;
+
   /// No description provided for @homeSectionTopThisWeek.
   ///
   /// In en, this message translates to:
@@ -193,6 +205,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse'**
   String get homeBottomNavBrowse;
+
+  /// No description provided for @homeBottomNavCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get homeBottomNavCommunity;
 
   /// No description provided for @homeBottomNavLibrary.
   ///
@@ -254,17 +272,71 @@ abstract class AppLocalizations {
   /// **'Trailer'**
   String get movieDetailActionTrailer;
 
+  /// No description provided for @movieTrailerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No trailer is available for this movie.'**
+  String get movieTrailerUnavailable;
+
   /// No description provided for @movieDetailActionWatchlist.
   ///
   /// In en, this message translates to:
   /// **'Watchlist'**
   String get movieDetailActionWatchlist;
 
+  /// No description provided for @movieDetailActionInLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get movieDetailActionInLibrary;
+
+  /// No description provided for @movieDetailLibraryAddSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your library.'**
+  String get movieDetailLibraryAddSuccess;
+
+  /// No description provided for @movieDetailLibraryEmptyMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'No movie data is available to save.'**
+  String get movieDetailLibraryEmptyMovie;
+
   /// No description provided for @movieDetailActionRate.
   ///
   /// In en, this message translates to:
   /// **'Rate'**
   String get movieDetailActionRate;
+
+  /// No description provided for @movieDetailImdbOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open IMDb.'**
+  String get movieDetailImdbOpenError;
+
+  /// No description provided for @movieDetailTmdbOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open TMDb.'**
+  String get movieDetailTmdbOpenError;
+
+  /// No description provided for @movieDetailRatingSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose rating site'**
+  String get movieDetailRatingSourceTitle;
+
+  /// No description provided for @movieDetailRatingSourceImdbSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open IMDb ratings'**
+  String get movieDetailRatingSourceImdbSubtitle;
+
+  /// No description provided for @movieDetailRatingSourceTmdbSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open TMDb ratings'**
+  String get movieDetailRatingSourceTmdbSubtitle;
 
   /// No description provided for @movieDetailActionShare.
   ///
@@ -437,7 +509,7 @@ abstract class AppLocalizations {
   /// No description provided for @authSignInSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'By signing in, you agree to MovieGo conditions of\nUse and Privacy Policy'**
+  /// **'By signing in, you agree to iMovie conditions of\nUse and Privacy Policy'**
   String get authSignInSubtitle;
 
   /// No description provided for @authSignUpSubtitle.
@@ -503,7 +575,7 @@ abstract class AppLocalizations {
   /// No description provided for @authForgotPasswordSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Enter your account email. MovieGo will send password reset instructions to that address.'**
+  /// **'Enter your account email. iMovie will send password reset instructions to that address.'**
   String get authForgotPasswordSubtitle;
 
   /// No description provided for @authForgotPasswordSubmit.
@@ -515,7 +587,7 @@ abstract class AppLocalizations {
   /// No description provided for @authForgotPasswordSuccess.
   ///
   /// In en, this message translates to:
-  /// **'If the email exists, MovieGo will send password reset instructions.'**
+  /// **'If the email exists, iMovie will send password reset instructions.'**
   String get authForgotPasswordSuccess;
 
   /// No description provided for @authAcceptTerms.
@@ -613,6 +685,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search results'**
   String get browseSearchResults;
+
+  /// No description provided for @libraryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library is empty'**
+  String get libraryEmptyTitle;
+
+  /// No description provided for @libraryEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add movies from the detail screen to find them here.'**
+  String get libraryEmptySubtitle;
+
+  /// No description provided for @libraryRemoveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get libraryRemoveAction;
+
+  /// No description provided for @libraryRemoveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from your library.'**
+  String get libraryRemoveSuccess;
+
+  /// No description provided for @libraryErrorLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your movie library.'**
+  String get libraryErrorLoad;
 
   /// No description provided for @profileTitle.
   ///
@@ -752,6 +854,18 @@ abstract class AppLocalizations {
   /// **'Profile settings'**
   String get profileSettingsProfile;
 
+  /// No description provided for @profileSettingsCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get profileSettingsCommunity;
+
+  /// No description provided for @profileSettingsMyPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'My posts'**
+  String get profileSettingsMyPosts;
+
   /// No description provided for @profileSettingsNotifications.
   ///
   /// In en, this message translates to:
@@ -788,6 +902,12 @@ abstract class AppLocalizations {
   /// **'English'**
   String get profileSettingsEnglish;
 
+  /// No description provided for @profileSettingsVietnamese.
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese'**
+  String get profileSettingsVietnamese;
+
   /// No description provided for @profileSettingsHelpCenter.
   ///
   /// In en, this message translates to:
@@ -817,6 +937,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rate the app'**
   String get profileSettingsRateApp;
+
+  /// No description provided for @languageSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language'**
+  String get languageSelectTitle;
+
+  /// No description provided for @languageSelectSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The language is applied immediately across the app.'**
+  String get languageSelectSubtitle;
+
+  /// No description provided for @languageEnglishTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglishTitle;
+
+  /// No description provided for @languageEnglishSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use English for the app interface'**
+  String get languageEnglishSubtitle;
+
+  /// No description provided for @languageVietnameseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiếng Việt'**
+  String get languageVietnameseTitle;
+
+  /// No description provided for @languageVietnameseSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Vietnamese for the app interface'**
+  String get languageVietnameseSubtitle;
+
+  /// No description provided for @languageChangeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Language updated.'**
+  String get languageChangeSuccess;
+
+  /// No description provided for @languageChangeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update language.'**
+  String get languageChangeError;
+
+  /// No description provided for @changePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePasswordTitle;
+
+  /// No description provided for @changePasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your current password to confirm this change, then enter a new password for future sign-ins.'**
+  String get changePasswordSubtitle;
+
+  /// No description provided for @changePasswordCurrentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get changePasswordCurrentLabel;
+
+  /// No description provided for @changePasswordCurrentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter current password'**
+  String get changePasswordCurrentHint;
+
+  /// No description provided for @changePasswordNewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get changePasswordNewLabel;
+
+  /// No description provided for @changePasswordNewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter new password'**
+  String get changePasswordNewHint;
+
+  /// No description provided for @changePasswordConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get changePasswordConfirmLabel;
+
+  /// No description provided for @changePasswordConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter new password'**
+  String get changePasswordConfirmHint;
+
+  /// No description provided for @changePasswordSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update password'**
+  String get changePasswordSaveAction;
+
+  /// No description provided for @changePasswordInvalidCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password.'**
+  String get changePasswordInvalidCurrent;
+
+  /// No description provided for @changePasswordInvalidNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New password must be at least 6 characters.'**
+  String get changePasswordInvalidNew;
+
+  /// No description provided for @changePasswordUnchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'New password must be different from the current password.'**
+  String get changePasswordUnchanged;
+
+  /// No description provided for @changePasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated successfully.'**
+  String get changePasswordSuccess;
+
+  /// No description provided for @communityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get communityTitle;
+
+  /// No description provided for @communityMyPostsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My posts'**
+  String get communityMyPostsTitle;
+
+  /// No description provided for @communityComposerPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you watching today?'**
+  String get communityComposerPrompt;
+
+  /// No description provided for @communityPostMovieLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tagged movie'**
+  String get communityPostMovieLabel;
+
+  /// No description provided for @communityStoriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stories'**
+  String get communityStoriesTitle;
+
+  /// No description provided for @communityCreateStoryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create story'**
+  String get communityCreateStoryAction;
+
+  /// No description provided for @communityStoryEditorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create story'**
+  String get communityStoryEditorTitle;
+
+  /// No description provided for @communityStoryTextHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write on the image'**
+  String get communityStoryTextHint;
+
+  /// No description provided for @communityStoryPickImageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an image for your story'**
+  String get communityStoryPickImageAction;
+
+  /// No description provided for @communityStoryChangeImageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Change image'**
+  String get communityStoryChangeImageAction;
+
+  /// No description provided for @communityStoryImageRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an image to create a story.'**
+  String get communityStoryImageRequired;
+
+  /// No description provided for @communityStoryPublishAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish story'**
+  String get communityStoryPublishAction;
+
+  /// No description provided for @communityCreateStorySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Story created.'**
+  String get communityCreateStorySuccess;
+
+  /// No description provided for @communityDeleteStorySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Story deleted.'**
+  String get communityDeleteStorySuccess;
+
+  /// No description provided for @communityCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create post'**
+  String get communityCreateTitle;
+
+  /// No description provided for @communityEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit post'**
+  String get communityEditTitle;
+
+  /// No description provided for @communityEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No community posts yet'**
+  String get communityEmptyTitle;
+
+  /// No description provided for @communityMyPostsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You have not posted yet'**
+  String get communityMyPostsEmptyTitle;
+
+  /// No description provided for @communityEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share a reaction, a favorite title, or a moment from your watch session.'**
+  String get communityEmptySubtitle;
+
+  /// No description provided for @communityLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load community posts.'**
+  String get communityLoadError;
+
+  /// No description provided for @communityLikeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get communityLikeAction;
+
+  /// No description provided for @communityCommentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get communityCommentAction;
+
+  /// No description provided for @communityEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get communityEditAction;
+
+  /// No description provided for @communityDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get communityDeleteAction;
+
+  /// No description provided for @communityDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Post deleted.'**
+  String get communityDeleteSuccess;
+
+  /// No description provided for @communityCommentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get communityCommentsTitle;
+
+  /// No description provided for @communityCommentsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet.'**
+  String get communityCommentsEmpty;
+
+  /// No description provided for @communityCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a comment...'**
+  String get communityCommentHint;
+
+  /// No description provided for @communityCommentEmptyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a comment first.'**
+  String get communityCommentEmptyError;
+
+  /// No description provided for @communityContentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What do you think about this movie?'**
+  String get communityContentHint;
+
+  /// No description provided for @communityMovieHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag a movie title'**
+  String get communityMovieHint;
+
+  /// No description provided for @communityMovieSearchSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a movie from search results'**
+  String get communityMovieSearchSubtitle;
+
+  /// No description provided for @communityMovieClearAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear selected movie'**
+  String get communityMovieClearAction;
+
+  /// No description provided for @communityMoviePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose movie'**
+  String get communityMoviePickerTitle;
+
+  /// No description provided for @communityMovieSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search movie title'**
+  String get communityMovieSearchHint;
+
+  /// No description provided for @communityMovieSearchEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least 2 characters to search movies.'**
+  String get communityMovieSearchEmpty;
+
+  /// No description provided for @communityLocationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach current address'**
+  String get communityLocationHint;
+
+  /// No description provided for @communityUseCurrentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use current location'**
+  String get communityUseCurrentLocation;
+
+  /// No description provided for @communityLocationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to get your current address.'**
+  String get communityLocationError;
+
+  /// No description provided for @communityPickImageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get communityPickImageAction;
+
+  /// No description provided for @communityRemoveImageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove image'**
+  String get communityRemoveImageAction;
+
+  /// No description provided for @communityPublishAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get communityPublishAction;
+
+  /// No description provided for @communityUpdateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update post'**
+  String get communityUpdateAction;
+
+  /// No description provided for @communityEmptyContentError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter content or choose an image.'**
+  String get communityEmptyContentError;
+
+  /// No description provided for @communityCreateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Post published.'**
+  String get communityCreateSuccess;
+
+  /// No description provided for @communityUpdateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Post updated.'**
+  String get communityUpdateSuccess;
 }
 
 class _AppLocalizationsDelegate

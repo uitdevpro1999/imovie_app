@@ -12,8 +12,8 @@ import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/movie_watch/movie_watch_cubit.dart';
 import 'package:imovie_app/presentation/ui/movie_watch/movie_watch_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_app_bar.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
 import 'package:m3u8_player/m3u8_player.dart';
 
 part 'widgets/episode_grid.dart';
@@ -53,7 +53,7 @@ class MovieWatchPage extends BasePage<MovieWatchCubit, MovieWatchState>
   Widget wrapPage(BuildContext context, MovieWatchState state, Widget child) {
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
-      appBar: MovieGoAppBar(
+      appBar: IMovieAppBar(
         title: AppLocalizations.of(context)!.watchScreenTitle,
       ),
       body: child,
@@ -99,7 +99,7 @@ class MovieWatchPage extends BasePage<MovieWatchCubit, MovieWatchState>
               ),
             ),
             const SizedBox(height: 16),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.retry,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

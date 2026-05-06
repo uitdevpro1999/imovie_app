@@ -10,7 +10,15 @@ abstract interface class HomeRepository {
 
   Future<Result<List<HomeCountry>>> getCountries();
 
-  Future<Result<HomeFeed>> searchMovies({required String keyword});
+  Future<Result<HomeFeed>> searchMovies({
+    required String keyword,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+    required String country,
+    required String year,
+  });
 
   Future<Result<HomeFeed>> getMoviesByGenre({
     required String slug,
@@ -20,5 +28,13 @@ abstract interface class HomeRepository {
     required String sortType,
     required String country,
     required String year,
+  });
+
+  Future<Result<HomeFeed>> getMoviesByList({
+    required String slug,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
   });
 }

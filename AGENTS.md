@@ -91,6 +91,7 @@ Add local rules below. These rules override the generic kit when they are more s
 
 - Current project structure is still close to the default Flutter starter layout, with app code centered in `lib/main.dart`; treat it as an unstructured starter unless a documented Tech Lead decision says otherwise.
 - Prefer `flutter analyze` and `flutter test` for baseline validation when code changes affect behavior.
+- For every screen, keep the `*_page.dart` file focused on route setup, page shell, lifecycle, and high-level composition only. Extract all reusable or non-trivial UI widgets into separate files under that screen's `widgets/` folder; do not define screen widgets in the page file.
 - TODO: Add generated file policy.
 - TODO: Add state management convention.
 - TODO: Add API client and error handling convention.

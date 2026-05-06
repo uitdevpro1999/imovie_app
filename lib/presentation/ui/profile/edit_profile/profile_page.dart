@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,14 +11,15 @@ import 'package:imovie_app/core/di/service_locator.dart';
 import 'package:imovie_app/domain/entities/profile/app_profile.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
-import 'package:imovie_app/presentation/ui/profile/profile_cubit.dart';
-import 'package:imovie_app/presentation/ui/profile/profile_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_app_bar.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
-import 'package:imovie_app/presentation/widgets/moviego_remote_image.dart';
+import 'package:imovie_app/presentation/ui/main/main_cubit.dart';
+import 'package:imovie_app/presentation/ui/profile/edit_profile/edit_profile_cubit.dart';
+import 'package:imovie_app/presentation/ui/profile/edit_profile/edit_profile_state.dart';
+import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
 
 @RoutePage()
-class ProfilePage extends BasePage<ProfileCubit, ProfileState>
+class ProfilePage extends BasePage<EditProfileCubit, EditProfileState>
     implements AutoRouteWrapper {
   ProfilePage({super.key});
 
@@ -26,15 +29,21 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(create: (_) => sl<ProfileCubit>(), child: this);
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: sl<MainCubit>()),
+        BlocProvider(create: (_) => sl<EditProfileCubit>()),
+      ],
+      child: this,
+    );
   }
 
   @override
-  Widget wrapPage(BuildContext context, ProfileState state, Widget child) {
+  Widget wrapPage(BuildContext context, EditProfileState state, Widget child) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
-      appBar: MovieGoAppBar(title: l10n.profileSettingsProfile),
+      appBar: IMovieAppBar(title: l10n.profileSettingsProfile),
       body: SafeArea(top: false, child: child),
     );
   }
@@ -42,8 +51,8 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
   @override
   void onViewLoaded(
     BuildContext context,
-    ProfileCubit cubit,
-    ProfileState state,
+    EditProfileCubit cubit,
+    EditProfileState state,
   ) {
     _syncControllers(state.profile);
   }
@@ -51,12 +60,12 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
   @override
   Widget buildPage(
     BuildContext context,
-    ProfileCubit cubit,
-    ProfileState state,
+    EditProfileCubit cubit,
+    EditProfileState state,
   ) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocConsumer<ProfileCubit, ProfileState>(
+    return BlocConsumer<EditProfileCubit, EditProfileState>(
       listenWhen: (previous, current) => previous.profile != current.profile,
       listener: (context, state) {
         _syncControllers(state.profile);
@@ -65,7 +74,7 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
         if (!state.isAuthenticated) {
           return _SignedOutProfileView(
             l10n: l10n,
-            onSignInTap: () => context.router.root.push(const SignInRoute()),
+            onSignInTap: () => context.router.root.push(SignInRoute()),
           );
         }
 
@@ -77,6 +86,7 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
         return _ProfileContent(
           l10n: l10n,
           profile: profile,
+          pendingAvatarBytes: state.pendingAvatarBytes,
           fullNameController: _fullNameController,
           phoneController: _phoneController,
           onPickAvatar: () async {
@@ -89,18 +99,24 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
               return;
             }
 
-            await cubit.updateAvatar(
+            await cubit.selectAvatar(
               file: file,
-              successMessage: l10n.profileAvatarSaved,
               invalidFileMessage: l10n.profileInvalidAvatar,
             );
           },
-          onSave: () => cubit.saveProfile(
-            fullName: _fullNameController.text,
-            phone: _phoneController.text,
-            successMessage: l10n.profileSaved,
-            emptyNameMessage: l10n.profileFullNameRequired,
-          ),
+          onSave: () async {
+            final saved = await cubit.saveProfile(
+              fullName: _fullNameController.text,
+              phone: _phoneController.text,
+              successMessage: l10n.profileSaved,
+              emptyNameMessage: l10n.profileFullNameRequired,
+            );
+            if (!saved || !context.mounted) {
+              return;
+            }
+
+            await context.router.maybePop();
+          },
         );
       },
     );
@@ -130,7 +146,7 @@ class ProfilePage extends BasePage<ProfileCubit, ProfileState>
                   ),
                 ),
                 const SizedBox(height: 16),
-                MovieGoButton(
+                IMovieButton(
                   label: l10n.retry,
                   showLeadingIcon: false,
                   foregroundColor: AppColors.textPrimary,
@@ -168,6 +184,7 @@ class _ProfileContent extends StatelessWidget {
   const _ProfileContent({
     required this.l10n,
     required this.profile,
+    required this.pendingAvatarBytes,
     required this.fullNameController,
     required this.phoneController,
     required this.onPickAvatar,
@@ -176,6 +193,7 @@ class _ProfileContent extends StatelessWidget {
 
   final AppLocalizations l10n;
   final AppProfile profile;
+  final Uint8List? pendingAvatarBytes;
   final TextEditingController fullNameController;
   final TextEditingController phoneController;
   final VoidCallback onPickAvatar;
@@ -192,6 +210,7 @@ class _ProfileContent extends StatelessWidget {
               Center(
                 child: _ProfileAvatar(
                   profile: profile,
+                  pendingAvatarBytes: pendingAvatarBytes,
                   onPickAvatar: onPickAvatar,
                 ),
               ),
@@ -224,9 +243,9 @@ class _ProfileContent extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: SizedBox(
               width: double.infinity,
-              child: MovieGoButton(
+              child: IMovieButton(
                 label: l10n.profileSaveAction,
-                type: MovieGoButtonType.filled,
+                type: IMovieButtonType.filled,
                 showLeadingIcon: false,
                 onPressed: onSave,
               ),
@@ -239,9 +258,14 @@ class _ProfileContent extends StatelessWidget {
 }
 
 class _ProfileAvatar extends StatelessWidget {
-  const _ProfileAvatar({required this.profile, required this.onPickAvatar});
+  const _ProfileAvatar({
+    required this.profile,
+    required this.pendingAvatarBytes,
+    required this.onPickAvatar,
+  });
 
   final AppProfile profile;
+  final Uint8List? pendingAvatarBytes;
   final VoidCallback onPickAvatar;
 
   @override
@@ -262,9 +286,15 @@ class _ProfileAvatar extends StatelessWidget {
                 color: AppColors.grayscale800,
               ),
               clipBehavior: Clip.antiAlias,
-              child: profile.avatarUrl.trim().isEmpty
+              child: pendingAvatarBytes != null
+                  ? Image.memory(
+                      pendingAvatarBytes!,
+                      fit: BoxFit.cover,
+                      gaplessPlayback: true,
+                    )
+                  : profile.avatarUrl.trim().isEmpty
                   ? _InitialsAvatar(initials: initials)
-                  : MovieGoRemoteImage(
+                  : IMovieRemoteImage(
                       imageUrl: profile.avatarUrl,
                       fit: BoxFit.cover,
                       placeholderLabel: initials,
@@ -445,7 +475,7 @@ class _SignedOutProfileView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.authSignInAction,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,
@@ -480,7 +510,7 @@ class _ProfileEmptyView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.retry,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

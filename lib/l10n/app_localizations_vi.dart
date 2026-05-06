@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get appTitle => 'iMovie App';
+  String get appTitle => 'iMovie';
 
   @override
   String get retry => 'Thử lại';
@@ -45,6 +45,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get homeSectionAnimationPicks => 'Hoạt hình đáng chú ý';
 
   @override
+  String get homeSectionTvShows => 'TV Shows';
+
+  @override
+  String get homeSectionUpcoming => 'Sắp chiếu';
+
+  @override
   String get homeSectionTopThisWeek => 'Nổi bật tuần này';
 
   @override
@@ -55,6 +61,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get homeBottomNavBrowse => 'Khám phá';
+
+  @override
+  String get homeBottomNavCommunity => 'Cộng đồng';
 
   @override
   String get homeBottomNavLibrary => 'Tủ phim';
@@ -94,10 +103,37 @@ class AppLocalizationsVi extends AppLocalizations {
   String get movieDetailActionTrailer => 'Trailer';
 
   @override
+  String get movieTrailerUnavailable => 'Không tìm thấy trailer cho phim này.';
+
+  @override
   String get movieDetailActionWatchlist => 'Danh sách';
 
   @override
+  String get movieDetailActionInLibrary => 'Đã lưu';
+
+  @override
+  String get movieDetailLibraryAddSuccess => 'Đã thêm vào tủ phim.';
+
+  @override
+  String get movieDetailLibraryEmptyMovie => 'Không có dữ liệu phim để lưu.';
+
+  @override
   String get movieDetailActionRate => 'Đánh giá';
+
+  @override
+  String get movieDetailImdbOpenError => 'Không thể mở trang IMDb.';
+
+  @override
+  String get movieDetailTmdbOpenError => 'Không thể mở trang TMDb.';
+
+  @override
+  String get movieDetailRatingSourceTitle => 'Chọn trang đánh giá';
+
+  @override
+  String get movieDetailRatingSourceImdbSubtitle => 'Mở trang đánh giá IMDb';
+
+  @override
+  String get movieDetailRatingSourceTmdbSubtitle => 'Mở trang đánh giá TMDb';
 
   @override
   String get movieDetailActionShare => 'Chia sẻ';
@@ -193,7 +229,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get authSignInSubtitle =>
-      'Khi đăng nhập, bạn đồng ý với điều khoản sử dụng\nvà chính sách quyền riêng tư của MovieGo';
+      'Khi đăng nhập, bạn đồng ý với điều khoản sử dụng\nvà chính sách quyền riêng tư của iMovie';
 
   @override
   String get authSignUpSubtitle =>
@@ -228,14 +264,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get authForgotPasswordSubtitle =>
-      'Nhập email tài khoản của bạn. MovieGo sẽ gửi email hướng dẫn đặt lại mật khẩu.';
+      'Nhập email tài khoản của bạn. iMovie sẽ gửi email hướng dẫn đặt lại mật khẩu.';
 
   @override
   String get authForgotPasswordSubmit => 'Gửi email đặt lại';
 
   @override
   String get authForgotPasswordSuccess =>
-      'Nếu email tồn tại, MovieGo sẽ gửi hướng dẫn đặt lại mật khẩu.';
+      'Nếu email tồn tại, iMovie sẽ gửi hướng dẫn đặt lại mật khẩu.';
 
   @override
   String get authAcceptTerms =>
@@ -286,6 +322,22 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get browseSearchResults => 'Kết quả tìm kiếm';
+
+  @override
+  String get libraryEmptyTitle => 'Tủ phim đang trống';
+
+  @override
+  String get libraryEmptySubtitle =>
+      'Thêm phim từ màn chi tiết để xem lại nhanh hơn.';
+
+  @override
+  String get libraryRemoveAction => 'Xóa';
+
+  @override
+  String get libraryRemoveSuccess => 'Đã xóa khỏi tủ phim.';
+
+  @override
+  String get libraryErrorLoad => 'Không thể tải tủ phim.';
 
   @override
   String get profileTitle => 'Hồ sơ';
@@ -358,6 +410,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileSettingsProfile => 'Cài đặt hồ sơ';
 
   @override
+  String get profileSettingsCommunity => 'Cộng đồng';
+
+  @override
+  String get profileSettingsMyPosts => 'Bài viết của tôi';
+
+  @override
   String get profileSettingsNotifications => 'Thông báo';
 
   @override
@@ -376,6 +434,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileSettingsEnglish => 'Tiếng Anh';
 
   @override
+  String get profileSettingsVietnamese => 'Tiếng Việt';
+
+  @override
   String get profileSettingsHelpCenter => 'Trung tâm trợ giúp';
 
   @override
@@ -389,4 +450,212 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get profileSettingsRateApp => 'Đánh giá ứng dụng';
+
+  @override
+  String get languageSelectTitle => 'Chọn ngôn ngữ';
+
+  @override
+  String get languageSelectSubtitle =>
+      'Ngôn ngữ được áp dụng ngay cho toàn bộ ứng dụng.';
+
+  @override
+  String get languageEnglishTitle => 'English';
+
+  @override
+  String get languageEnglishSubtitle => 'Use English for app interface';
+
+  @override
+  String get languageVietnameseTitle => 'Tiếng Việt';
+
+  @override
+  String get languageVietnameseSubtitle =>
+      'Sử dụng tiếng Việt cho giao diện ứng dụng';
+
+  @override
+  String get languageChangeSuccess => 'Đã cập nhật ngôn ngữ.';
+
+  @override
+  String get languageChangeError => 'Không thể cập nhật ngôn ngữ.';
+
+  @override
+  String get changePasswordTitle => 'Đổi mật khẩu';
+
+  @override
+  String get changePasswordSubtitle =>
+      'Nhập mật khẩu hiện tại để xác nhận thay đổi, sau đó dùng mật khẩu mới cho các lần đăng nhập tiếp theo.';
+
+  @override
+  String get changePasswordCurrentLabel => 'Mật khẩu hiện tại';
+
+  @override
+  String get changePasswordCurrentHint => 'Nhập mật khẩu hiện tại';
+
+  @override
+  String get changePasswordNewLabel => 'Mật khẩu mới';
+
+  @override
+  String get changePasswordNewHint => 'Nhập mật khẩu mới';
+
+  @override
+  String get changePasswordConfirmLabel => 'Xác nhận mật khẩu mới';
+
+  @override
+  String get changePasswordConfirmHint => 'Nhập lại mật khẩu mới';
+
+  @override
+  String get changePasswordSaveAction => 'Cập nhật mật khẩu';
+
+  @override
+  String get changePasswordInvalidCurrent => 'Vui lòng nhập mật khẩu hiện tại.';
+
+  @override
+  String get changePasswordInvalidNew =>
+      'Mật khẩu mới phải có ít nhất 6 ký tự.';
+
+  @override
+  String get changePasswordUnchanged =>
+      'Mật khẩu mới phải khác mật khẩu hiện tại.';
+
+  @override
+  String get changePasswordSuccess => 'Đã cập nhật mật khẩu.';
+
+  @override
+  String get communityTitle => 'Cộng đồng';
+
+  @override
+  String get communityMyPostsTitle => 'Bài viết của tôi';
+
+  @override
+  String get communityComposerPrompt => 'Bạn đang nghĩ gì về bộ phim hôm nay?';
+
+  @override
+  String get communityPostMovieLabel => 'Phim được gắn';
+
+  @override
+  String get communityStoriesTitle => 'Tin';
+
+  @override
+  String get communityCreateStoryAction => 'Tạo tin';
+
+  @override
+  String get communityStoryEditorTitle => 'Tạo tin';
+
+  @override
+  String get communityStoryTextHint => 'Viết chữ lên ảnh';
+
+  @override
+  String get communityStoryPickImageAction => 'Chọn ảnh để tạo tin';
+
+  @override
+  String get communityStoryChangeImageAction => 'Đổi ảnh';
+
+  @override
+  String get communityStoryImageRequired => 'Vui lòng chọn ảnh để tạo tin.';
+
+  @override
+  String get communityStoryPublishAction => 'Đăng tin';
+
+  @override
+  String get communityCreateStorySuccess => 'Đã tạo tin.';
+
+  @override
+  String get communityDeleteStorySuccess => 'Đã xóa tin.';
+
+  @override
+  String get communityCreateTitle => 'Tạo bài viết';
+
+  @override
+  String get communityEditTitle => 'Sửa bài viết';
+
+  @override
+  String get communityEmptyTitle => 'Chưa có bài viết cộng đồng';
+
+  @override
+  String get communityMyPostsEmptyTitle => 'Bạn chưa đăng bài viết nào';
+
+  @override
+  String get communityEmptySubtitle =>
+      'Chia sẻ cảm nhận, tựa phim yêu thích hoặc khoảnh khắc xem phim của bạn.';
+
+  @override
+  String get communityLoadError => 'Không thể tải bài viết cộng đồng.';
+
+  @override
+  String get communityLikeAction => 'Thích';
+
+  @override
+  String get communityCommentAction => 'Bình luận';
+
+  @override
+  String get communityEditAction => 'Sửa';
+
+  @override
+  String get communityDeleteAction => 'Xóa';
+
+  @override
+  String get communityDeleteSuccess => 'Đã xóa bài viết.';
+
+  @override
+  String get communityCommentsTitle => 'Bình luận';
+
+  @override
+  String get communityCommentsEmpty => 'Chưa có bình luận nào.';
+
+  @override
+  String get communityCommentHint => 'Viết bình luận...';
+
+  @override
+  String get communityCommentEmptyError => 'Vui lòng nhập nội dung bình luận.';
+
+  @override
+  String get communityContentHint => 'Bạn đang nghĩ gì về bộ phim này?';
+
+  @override
+  String get communityMovieHint => 'Gắn tên tựa phim';
+
+  @override
+  String get communityMovieSearchSubtitle => 'Chọn phim từ dữ liệu tìm kiếm';
+
+  @override
+  String get communityMovieClearAction => 'Bỏ phim đã chọn';
+
+  @override
+  String get communityMoviePickerTitle => 'Chọn phim';
+
+  @override
+  String get communityMovieSearchHint => 'Tìm tên phim';
+
+  @override
+  String get communityMovieSearchEmpty => 'Nhập ít nhất 2 ký tự để tìm phim.';
+
+  @override
+  String get communityLocationHint => 'Gắn địa chỉ hiện tại';
+
+  @override
+  String get communityUseCurrentLocation => 'Dùng vị trí hiện tại';
+
+  @override
+  String get communityLocationError => 'Không thể lấy địa chỉ hiện tại.';
+
+  @override
+  String get communityPickImageAction => 'Thêm ảnh';
+
+  @override
+  String get communityRemoveImageAction => 'Bỏ ảnh';
+
+  @override
+  String get communityPublishAction => 'Đăng bài';
+
+  @override
+  String get communityUpdateAction => 'Cập nhật bài viết';
+
+  @override
+  String get communityEmptyContentError =>
+      'Vui lòng nhập nội dung hoặc chọn ảnh.';
+
+  @override
+  String get communityCreateSuccess => 'Đã đăng bài viết.';
+
+  @override
+  String get communityUpdateSuccess => 'Đã cập nhật bài viết.';
 }

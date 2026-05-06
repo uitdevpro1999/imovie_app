@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.shinjitsu" "\0"
-            VALUE "FileDescription", "imovie_app" "\0"
+            VALUE "FileDescription", "iMovie" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "imovie_app" "\0"
+            VALUE "InternalName", "iMovie" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.shinjitsu. All rights reserved." "\0"
-            VALUE "OriginalFilename", "imovie_app.exe" "\0"
-            VALUE "ProductName", "imovie_app" "\0"
+            VALUE "OriginalFilename", "iMovie.exe" "\0"
+            VALUE "ProductName", "iMovie" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

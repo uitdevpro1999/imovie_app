@@ -10,12 +10,32 @@ class SearchMoviesUseCase implements UseCase<HomeFeed, SearchMoviesParams> {
 
   @override
   Future<Result<HomeFeed>> call(SearchMoviesParams params) {
-    return repository.searchMovies(keyword: params.keyword);
+    return repository.searchMovies(
+      keyword: params.keyword,
+      page: params.page,
+      limit: params.limit,
+      sortField: 'modified.time',
+      sortType: params.sortType,
+      country: params.country,
+      year: params.year,
+    );
   }
 }
 
 class SearchMoviesParams {
-  const SearchMoviesParams({required this.keyword});
+  const SearchMoviesParams({
+    required this.keyword,
+    this.page = 1,
+    this.limit = 24,
+    this.sortType = 'desc',
+    this.country = '',
+    this.year = '',
+  });
 
   final String keyword;
+  final int page;
+  final int limit;
+  final String sortType;
+  final String country;
+  final String year;
 }

@@ -17,6 +17,8 @@ abstract class HomeState with _$HomeState implements BaseState {
     AppFailure? failure,
     HomeFeed? feed,
     @Default(<HomeGenre>[]) List<HomeGenre> genres,
+    @Default(<HomeMovie>[]) List<HomeMovie> tvShowMovies,
+    @Default(<HomeMovie>[]) List<HomeMovie> upcomingMovies,
   }) = _HomeState;
 
   @override
@@ -70,6 +72,15 @@ abstract class HomeState with _$HomeState implements BaseState {
 
   List<HomeMovieViewData> get animationMovieViewData =>
       _toViewData(animationMovies);
+
+  List<HomeMovie> get tvShows => tvShowMovies.take(10).toList(growable: false);
+
+  List<HomeMovieViewData> get tvShowMovieViewData => _toViewData(tvShows);
+
+  List<HomeMovie> get upcoming =>
+      upcomingMovies.take(10).toList(growable: false);
+
+  List<HomeMovieViewData> get upcomingMovieViewData => _toViewData(upcoming);
 
   List<HomeMovie> get topMovies =>
       sortedByRatingMovies.take(5).toList(growable: false);

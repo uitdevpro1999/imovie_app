@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:imovie_app/config/flavors/app_bootstrap.dart';
 import 'package:imovie_app/core/error/app_exception.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
+import 'package:imovie_app/core/logger/app_logger.dart';
 import 'package:imovie_app/core/result/result.dart';
+import 'package:imovie_app/core/services/local_storage_service.dart';
 import 'package:imovie_app/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:imovie_app/data/models/response/profile/profile_response.dart';
 import 'package:imovie_app/domain/entities/profile/app_profile.dart';
@@ -14,10 +16,29 @@ class ProfileRepositoryImpl implements ProfileRepository {
   const ProfileRepositoryImpl({
     required this.bootstrap,
     required this.remoteDataSource,
+    required this.localStorageService,
   });
+
+  static const _cachedProfileKey = 'profile.current';
 
   final AppBootstrap bootstrap;
   final ProfileRemoteDataSource remoteDataSource;
+  final LocalStorageService localStorageService;
+
+  @override
+  Future<Result<AppProfile?>> getCachedProfile() async {
+    try {
+      final json = await localStorageService.readJsonMap(_cachedProfileKey);
+      return Success(json == null ? null : _profileFromJson(json));
+    } catch (error) {
+      return FailureResult(
+        AppFailure.unknown(
+          'Unexpected error while loading cached profile.',
+          details: error.toString(),
+        ),
+      );
+    }
+  }
 
   @override
   Future<Result<AppProfile>> getCurrentProfile() async {
@@ -58,6 +79,21 @@ class ProfileRepositoryImpl implements ProfileRepository {
     );
   }
 
+  @override
+  Future<Result<void>> clearCachedProfile() async {
+    try {
+      await localStorageService.remove(_cachedProfileKey);
+      return const Success<void>(null);
+    } catch (error) {
+      return FailureResult(
+        AppFailure.unknown(
+          'Unexpected error while clearing cached profile.',
+          details: error.toString(),
+        ),
+      );
+    }
+  }
+
   Future<Result<AppProfile>> _runProfileRequest({
     required Future<ProfileResponse> Function() request,
     required String authMessage,
@@ -70,7 +106,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
     try {
       final response = await request();
-      return Success(response.toEntity());
+      final profile = response.toEntity();
+      await _cacheProfile(profile);
+      return Success(profile);
     } on AppException catch (error) {
       return FailureResult(error.failure);
     } on AuthException catch (error) {
@@ -100,5 +138,41 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     return bootstrap.initializationFailure;
+  }
+
+  Future<void> _cacheProfile(AppProfile profile) async {
+    try {
+      await localStorageService.writeJsonMap(
+        _cachedProfileKey,
+        _profileToJson(profile),
+      );
+    } catch (error, stackTrace) {
+      AppLogger.warning(
+        'Unable to cache profile locally.',
+        name: 'Profile.Cache',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  AppProfile _profileFromJson(Map<String, dynamic> json) {
+    return AppProfile(
+      id: json['id']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      fullName: json['full_name']?.toString() ?? '',
+      phone: json['phone']?.toString() ?? '',
+      avatarUrl: json['avatar_url']?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> _profileToJson(AppProfile profile) {
+    return {
+      'id': profile.id,
+      'email': profile.email,
+      'full_name': profile.fullName,
+      'phone': profile.phone,
+      'avatar_url': profile.avatarUrl,
+    };
   }
 }

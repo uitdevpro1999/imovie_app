@@ -122,8 +122,13 @@ final Map<String, dynamic> _fakeMovieDetailJson = {
           ],
         },
       ],
-      'imdb': {'vote_average': 8.0, 'vote_count': 120183},
-      'tmdb': {'vote_average': 8.537, 'vote_count': 3108},
+      'imdb': {'id': 'tt7587890', 'vote_average': 8.0, 'vote_count': 120183},
+      'tmdb': {
+        'id': 79744,
+        'type': 'tv',
+        'vote_average': 8.537,
+        'vote_count': 3108,
+      },
     },
   },
 };

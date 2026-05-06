@@ -22,7 +22,7 @@ class _BrowseMovieStripSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MovieGoSectionHeader(
+        IMovieSectionHeader(
           title: title,
           actionLabel: actionLabel,
           titleColor: AppColors.white,
@@ -42,7 +42,7 @@ class _BrowseMovieStripSection extends StatelessWidget {
                     relatedMovies: relatedMovies,
                   ),
                 ),
-                child: MovieGoPosterCard(
+                child: IMoviePosterCard(
                   imageUrl: item.movie.posterUrl,
                   title: item.movie.title,
                   subtitle: item.subtitleLabel,

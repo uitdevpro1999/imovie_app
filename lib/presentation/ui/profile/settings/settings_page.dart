@@ -4,34 +4,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
+import 'package:imovie_app/core/bloc/base_state.dart';
 import 'package:imovie_app/core/di/service_locator.dart';
 import 'package:imovie_app/domain/entities/profile/app_profile.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/app/app_cubit.dart';
-import 'package:imovie_app/presentation/common/pages/base_page.dart';
-import 'package:imovie_app/presentation/ui/profile/profile_cubit.dart';
-import 'package:imovie_app/presentation/ui/profile/profile_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_app_bar.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
-import 'package:imovie_app/presentation/widgets/moviego_preference_widgets.dart';
-import 'package:imovie_app/presentation/widgets/moviego_remote_image.dart';
+import 'package:imovie_app/presentation/ui/main/main_cubit.dart';
+import 'package:imovie_app/presentation/ui/profile/settings/settings_cubit.dart';
+import 'package:imovie_app/presentation/ui/profile/settings/settings_state.dart';
+import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_preference_widgets.dart';
+import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
 
 @RoutePage()
-class SettingsPage extends BasePage<ProfileCubit, ProfileState>
-    implements AutoRouteWrapper {
+class SettingsPage extends StatelessWidget implements AutoRouteWrapper {
   const SettingsPage({super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(create: (_) => sl<ProfileCubit>(), child: this);
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: sl<MainCubit>()),
+        BlocProvider(create: (_) => sl<SettingsCubit>()..initData()),
+      ],
+      child: this,
+    );
   }
 
   @override
-  Widget wrapPage(BuildContext context, ProfileState state, Widget child) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
-      appBar: MovieGoAppBar(
+      appBar: IMovieAppBar(
         title: l10n.profileTitle,
         centerTitle: false,
         automaticallyImplyLeading: false,
@@ -71,36 +77,60 @@ class SettingsPage extends BasePage<ProfileCubit, ProfileState>
           const SizedBox(width: 8),
         ],
       ),
-      body: SafeArea(top: false, child: child),
+      body: SafeArea(
+        top: false,
+        child: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, state) {
+            final child = _buildBody(context, l10n, state);
+            return Stack(
+              children: [
+                Positioned.fill(child: child),
+                if (state.processing)
+                  const Positioned.fill(child: _SettingsProcessingOverlay()),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 
-  @override
-  Widget buildPage(
+  Widget _buildBody(
     BuildContext context,
-    ProfileCubit cubit,
-    ProfileState state,
+    AppLocalizations l10n,
+    SettingsState state,
   ) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return state.isAuthenticated && state.profile != null
-        ? _SettingsContent(
+    switch (state.pageStatus) {
+      case PageStatus.initial:
+      case PageStatus.loading:
+        return const Center(
+          child: CircularProgressIndicator(color: AppColors.yellow500),
+        );
+      case PageStatus.error:
+        return _SettingsErrorView(
+          message: state.failure?.message ?? l10n.retry,
+          onRetry: context.read<SettingsCubit>().retry,
+          l10n: l10n,
+        );
+      case PageStatus.loaded:
+        if (state.isAuthenticated && state.profile != null) {
+          return _SettingsContent(
             l10n: l10n,
             profile: state.profile!,
             onEditProfile: () => context.router.root.push(ProfileRoute()),
             onSignOut: () async {
-              final signedOut = await cubit.signOut(
+              await context.read<SettingsCubit>().signOut(
                 failureMessage: l10n.profileSignOutError,
               );
-              if (signedOut && context.mounted) {
-                context.read<AppCubit>().markUnauthenticated();
-              }
             },
-          )
-        : _SignedOutSettingsView(
-            l10n: l10n,
-            onSignInTap: () => context.router.root.push(const SignInRoute()),
           );
+        }
+
+        return _SignedOutSettingsView(
+          l10n: l10n,
+          onSignInTap: () => context.router.root.push(SignInRoute()),
+        );
+    }
   }
 }
 
@@ -119,15 +149,18 @@ class _SettingsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedLanguageCode = context.select(
+      (AppCubit cubit) => cubit.state.localeCode,
+    );
+    final languageValue = selectedLanguageCode == 'en'
+        ? l10n.profileSettingsEnglish
+        : l10n.profileSettingsVietnamese;
+
     return ListView(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 104),
       children: [
         _SettingsProfileHeader(profile: profile),
         const SizedBox(height: 26),
-        _SettingsSectionTitle(l10n.profileWatchHistory),
-        const SizedBox(height: 8),
-        _WatchHistoryStats(l10n: l10n),
-        const SizedBox(height: 24),
         _SettingsSectionTitle(l10n.profileMainSettings),
         const SizedBox(height: 12),
         _SettingsGroup(
@@ -138,22 +171,15 @@ class _SettingsContent extends StatelessWidget {
               onTap: onEditProfile,
             ),
             _SettingsTile(
-              icon: Icons.notifications_none_rounded,
-              title: l10n.profileSettingsNotifications,
-            ),
-            _SettingsTile(
-              icon: Icons.volume_up_outlined,
-              title: l10n.profileSettingsAudioSubtitles,
-            ),
-            _SettingsTile(
-              icon: Icons.palette_outlined,
-              title: l10n.profileSettingsAppearance,
-              value: l10n.profileSettingsDefault,
+              icon: Icons.article_outlined,
+              title: l10n.profileSettingsMyPosts,
+              onTap: () => context.router.root.push(CommunityMineRoute()),
             ),
             _SettingsTile(
               icon: Icons.language_rounded,
               title: l10n.profileSettingsLanguage,
-              value: l10n.profileSettingsEnglish,
+              value: languageValue,
+              onTap: () => context.router.root.push(LanguageRoute()),
               isLast: true,
             ),
           ],
@@ -170,6 +196,7 @@ class _SettingsContent extends StatelessWidget {
             _SettingsTile(
               icon: Icons.security_rounded,
               title: l10n.profileSettingsSecurity,
+              onTap: () => context.router.root.push(ChangePasswordRoute()),
             ),
             _SettingsTile(
               icon: Icons.info_outline_rounded,
@@ -221,7 +248,7 @@ class _SettingsProfileHeader extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           child: profile.avatarUrl.trim().isEmpty
               ? _InitialsAvatar(initials: initials)
-              : MovieGoRemoteImage(
+              : IMovieRemoteImage(
                   imageUrl: profile.avatarUrl,
                   fit: BoxFit.cover,
                   placeholderLabel: initials,
@@ -263,59 +290,6 @@ class _InitialsAvatar extends StatelessWidget {
         initials,
         style: AppTypography.h1.copyWith(color: AppColors.yellow500),
       ),
-    );
-  }
-}
-
-class _WatchHistoryStats extends StatelessWidget {
-  const _WatchHistoryStats({required this.l10n});
-
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.grayscale900,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _WatchHistoryStat(value: '0', label: l10n.profileMovies),
-          ),
-          Expanded(
-            child: _WatchHistoryStat(value: '0', label: l10n.profileShows),
-          ),
-          Expanded(
-            child: _WatchHistoryStat(value: '0', label: l10n.profileEpisodes),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WatchHistoryStat extends StatelessWidget {
-  const _WatchHistoryStat({required this.value, required this.label});
-
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(value, style: AppTypography.h2.copyWith(color: AppColors.white)),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: AppTypography.body2Regular.copyWith(
-            color: AppColors.grayscale300,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -369,7 +343,7 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MovieGoSettingsTile(
+    return IMovieSettingsTile(
       label: title,
       icon: icon,
       value: value,
@@ -384,6 +358,60 @@ class _SettingsTile extends StatelessWidget {
       chevronColor: AppColors.white,
       horizontalPadding: 12,
       verticalPadding: 12,
+    );
+  }
+}
+
+class _SettingsErrorView extends StatelessWidget {
+  const _SettingsErrorView({
+    required this.l10n,
+    required this.message,
+    required this.onRetry,
+  });
+
+  final AppLocalizations l10n;
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: AppTypography.body1Regular.copyWith(
+                color: AppColors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            IMovieButton(
+              label: l10n.retry,
+              showLeadingIcon: false,
+              foregroundColor: AppColors.textPrimary,
+              onPressed: onRetry,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsProcessingOverlay extends StatelessWidget {
+  const _SettingsProcessingOverlay();
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.black38,
+      child: const Center(
+        child: CircularProgressIndicator(color: AppColors.yellow500),
+      ),
     );
   }
 }
@@ -422,7 +450,7 @@ class _SignedOutSettingsView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.authSignInAction,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

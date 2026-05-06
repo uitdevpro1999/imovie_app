@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MovieDetail {
 
- String get id; String get slug; String get title; String get originalTitle; String get posterUrl; String get backdropUrl; String get description; String get status; String get type; String get quality; String get language; String get runtime; String get currentEpisode; String get totalEpisodes; int get year; double get rating; int get ratingCount; List<String> get genres; List<String> get countries; List<MoviePerson> get actors; List<String> get directors; String get trailerUrl; List<MovieStreamServer> get servers;
+ String get id; String get imdbId; String get tmdbId; String get tmdbType; String get slug; String get title; String get originalTitle; String get posterUrl; String get backdropUrl; String get description; String get status; String get type; String get quality; String get language; String get runtime; String get currentEpisode; String get totalEpisodes; int get year; double get rating; int get ratingCount; List<String> get genres; List<String> get countries; List<MoviePerson> get actors; List<String> get directors; String get trailerUrl; List<MovieStreamServer> get servers;
 /// Create a copy of MovieDetail
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MovieDetailCopyWith<MovieDetail> get copyWith => _$MovieDetailCopyWithImpl<Movi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MovieDetail&&(identical(other.id, id) || other.id == id)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.title, title) || other.title == title)&&(identical(other.originalTitle, originalTitle) || other.originalTitle == originalTitle)&&(identical(other.posterUrl, posterUrl) || other.posterUrl == posterUrl)&&(identical(other.backdropUrl, backdropUrl) || other.backdropUrl == backdropUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.type, type) || other.type == type)&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.language, language) || other.language == language)&&(identical(other.runtime, runtime) || other.runtime == runtime)&&(identical(other.currentEpisode, currentEpisode) || other.currentEpisode == currentEpisode)&&(identical(other.totalEpisodes, totalEpisodes) || other.totalEpisodes == totalEpisodes)&&(identical(other.year, year) || other.year == year)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.countries, countries)&&const DeepCollectionEquality().equals(other.actors, actors)&&const DeepCollectionEquality().equals(other.directors, directors)&&(identical(other.trailerUrl, trailerUrl) || other.trailerUrl == trailerUrl)&&const DeepCollectionEquality().equals(other.servers, servers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MovieDetail&&(identical(other.id, id) || other.id == id)&&(identical(other.imdbId, imdbId) || other.imdbId == imdbId)&&(identical(other.tmdbId, tmdbId) || other.tmdbId == tmdbId)&&(identical(other.tmdbType, tmdbType) || other.tmdbType == tmdbType)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.title, title) || other.title == title)&&(identical(other.originalTitle, originalTitle) || other.originalTitle == originalTitle)&&(identical(other.posterUrl, posterUrl) || other.posterUrl == posterUrl)&&(identical(other.backdropUrl, backdropUrl) || other.backdropUrl == backdropUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.type, type) || other.type == type)&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.language, language) || other.language == language)&&(identical(other.runtime, runtime) || other.runtime == runtime)&&(identical(other.currentEpisode, currentEpisode) || other.currentEpisode == currentEpisode)&&(identical(other.totalEpisodes, totalEpisodes) || other.totalEpisodes == totalEpisodes)&&(identical(other.year, year) || other.year == year)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.countries, countries)&&const DeepCollectionEquality().equals(other.actors, actors)&&const DeepCollectionEquality().equals(other.directors, directors)&&(identical(other.trailerUrl, trailerUrl) || other.trailerUrl == trailerUrl)&&const DeepCollectionEquality().equals(other.servers, servers));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,slug,title,originalTitle,posterUrl,backdropUrl,description,status,type,quality,language,runtime,currentEpisode,totalEpisodes,year,rating,ratingCount,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(countries),const DeepCollectionEquality().hash(actors),const DeepCollectionEquality().hash(directors),trailerUrl,const DeepCollectionEquality().hash(servers)]);
+int get hashCode => Object.hashAll([runtimeType,id,imdbId,tmdbId,tmdbType,slug,title,originalTitle,posterUrl,backdropUrl,description,status,type,quality,language,runtime,currentEpisode,totalEpisodes,year,rating,ratingCount,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(countries),const DeepCollectionEquality().hash(actors),const DeepCollectionEquality().hash(directors),trailerUrl,const DeepCollectionEquality().hash(servers)]);
 
 @override
 String toString() {
-  return 'MovieDetail(id: $id, slug: $slug, title: $title, originalTitle: $originalTitle, posterUrl: $posterUrl, backdropUrl: $backdropUrl, description: $description, status: $status, type: $type, quality: $quality, language: $language, runtime: $runtime, currentEpisode: $currentEpisode, totalEpisodes: $totalEpisodes, year: $year, rating: $rating, ratingCount: $ratingCount, genres: $genres, countries: $countries, actors: $actors, directors: $directors, trailerUrl: $trailerUrl, servers: $servers)';
+  return 'MovieDetail(id: $id, imdbId: $imdbId, tmdbId: $tmdbId, tmdbType: $tmdbType, slug: $slug, title: $title, originalTitle: $originalTitle, posterUrl: $posterUrl, backdropUrl: $backdropUrl, description: $description, status: $status, type: $type, quality: $quality, language: $language, runtime: $runtime, currentEpisode: $currentEpisode, totalEpisodes: $totalEpisodes, year: $year, rating: $rating, ratingCount: $ratingCount, genres: $genres, countries: $countries, actors: $actors, directors: $directors, trailerUrl: $trailerUrl, servers: $servers)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MovieDetailCopyWith<$Res>  {
   factory $MovieDetailCopyWith(MovieDetail value, $Res Function(MovieDetail) _then) = _$MovieDetailCopyWithImpl;
 @useResult
 $Res call({
- String id, String slug, String title, String originalTitle, String posterUrl, String backdropUrl, String description, String status, String type, String quality, String language, String runtime, String currentEpisode, String totalEpisodes, int year, double rating, int ratingCount, List<String> genres, List<String> countries, List<MoviePerson> actors, List<String> directors, String trailerUrl, List<MovieStreamServer> servers
+ String id, String imdbId, String tmdbId, String tmdbType, String slug, String title, String originalTitle, String posterUrl, String backdropUrl, String description, String status, String type, String quality, String language, String runtime, String currentEpisode, String totalEpisodes, int year, double rating, int ratingCount, List<String> genres, List<String> countries, List<MoviePerson> actors, List<String> directors, String trailerUrl, List<MovieStreamServer> servers
 });
 
 
@@ -62,9 +62,12 @@ class _$MovieDetailCopyWithImpl<$Res>
 
 /// Create a copy of MovieDetail
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? slug = null,Object? title = null,Object? originalTitle = null,Object? posterUrl = null,Object? backdropUrl = null,Object? description = null,Object? status = null,Object? type = null,Object? quality = null,Object? language = null,Object? runtime = null,Object? currentEpisode = null,Object? totalEpisodes = null,Object? year = null,Object? rating = null,Object? ratingCount = null,Object? genres = null,Object? countries = null,Object? actors = null,Object? directors = null,Object? trailerUrl = null,Object? servers = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? imdbId = null,Object? tmdbId = null,Object? tmdbType = null,Object? slug = null,Object? title = null,Object? originalTitle = null,Object? posterUrl = null,Object? backdropUrl = null,Object? description = null,Object? status = null,Object? type = null,Object? quality = null,Object? language = null,Object? runtime = null,Object? currentEpisode = null,Object? totalEpisodes = null,Object? year = null,Object? rating = null,Object? ratingCount = null,Object? genres = null,Object? countries = null,Object? actors = null,Object? directors = null,Object? trailerUrl = null,Object? servers = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,imdbId: null == imdbId ? _self.imdbId : imdbId // ignore: cast_nullable_to_non_nullable
+as String,tmdbId: null == tmdbId ? _self.tmdbId : tmdbId // ignore: cast_nullable_to_non_nullable
+as String,tmdbType: null == tmdbType ? _self.tmdbType : tmdbType // ignore: cast_nullable_to_non_nullable
 as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,originalTitle: null == originalTitle ? _self.originalTitle : originalTitle // ignore: cast_nullable_to_non_nullable
@@ -172,10 +175,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String slug,  String title,  String originalTitle,  String posterUrl,  String backdropUrl,  String description,  String status,  String type,  String quality,  String language,  String runtime,  String currentEpisode,  String totalEpisodes,  int year,  double rating,  int ratingCount,  List<String> genres,  List<String> countries,  List<MoviePerson> actors,  List<String> directors,  String trailerUrl,  List<MovieStreamServer> servers)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String imdbId,  String tmdbId,  String tmdbType,  String slug,  String title,  String originalTitle,  String posterUrl,  String backdropUrl,  String description,  String status,  String type,  String quality,  String language,  String runtime,  String currentEpisode,  String totalEpisodes,  int year,  double rating,  int ratingCount,  List<String> genres,  List<String> countries,  List<MoviePerson> actors,  List<String> directors,  String trailerUrl,  List<MovieStreamServer> servers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MovieDetail() when $default != null:
-return $default(_that.id,_that.slug,_that.title,_that.originalTitle,_that.posterUrl,_that.backdropUrl,_that.description,_that.status,_that.type,_that.quality,_that.language,_that.runtime,_that.currentEpisode,_that.totalEpisodes,_that.year,_that.rating,_that.ratingCount,_that.genres,_that.countries,_that.actors,_that.directors,_that.trailerUrl,_that.servers);case _:
+return $default(_that.id,_that.imdbId,_that.tmdbId,_that.tmdbType,_that.slug,_that.title,_that.originalTitle,_that.posterUrl,_that.backdropUrl,_that.description,_that.status,_that.type,_that.quality,_that.language,_that.runtime,_that.currentEpisode,_that.totalEpisodes,_that.year,_that.rating,_that.ratingCount,_that.genres,_that.countries,_that.actors,_that.directors,_that.trailerUrl,_that.servers);case _:
   return orElse();
 
 }
@@ -193,10 +196,10 @@ return $default(_that.id,_that.slug,_that.title,_that.originalTitle,_that.poster
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String slug,  String title,  String originalTitle,  String posterUrl,  String backdropUrl,  String description,  String status,  String type,  String quality,  String language,  String runtime,  String currentEpisode,  String totalEpisodes,  int year,  double rating,  int ratingCount,  List<String> genres,  List<String> countries,  List<MoviePerson> actors,  List<String> directors,  String trailerUrl,  List<MovieStreamServer> servers)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String imdbId,  String tmdbId,  String tmdbType,  String slug,  String title,  String originalTitle,  String posterUrl,  String backdropUrl,  String description,  String status,  String type,  String quality,  String language,  String runtime,  String currentEpisode,  String totalEpisodes,  int year,  double rating,  int ratingCount,  List<String> genres,  List<String> countries,  List<MoviePerson> actors,  List<String> directors,  String trailerUrl,  List<MovieStreamServer> servers)  $default,) {final _that = this;
 switch (_that) {
 case _MovieDetail():
-return $default(_that.id,_that.slug,_that.title,_that.originalTitle,_that.posterUrl,_that.backdropUrl,_that.description,_that.status,_that.type,_that.quality,_that.language,_that.runtime,_that.currentEpisode,_that.totalEpisodes,_that.year,_that.rating,_that.ratingCount,_that.genres,_that.countries,_that.actors,_that.directors,_that.trailerUrl,_that.servers);case _:
+return $default(_that.id,_that.imdbId,_that.tmdbId,_that.tmdbType,_that.slug,_that.title,_that.originalTitle,_that.posterUrl,_that.backdropUrl,_that.description,_that.status,_that.type,_that.quality,_that.language,_that.runtime,_that.currentEpisode,_that.totalEpisodes,_that.year,_that.rating,_that.ratingCount,_that.genres,_that.countries,_that.actors,_that.directors,_that.trailerUrl,_that.servers);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +216,10 @@ return $default(_that.id,_that.slug,_that.title,_that.originalTitle,_that.poster
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String slug,  String title,  String originalTitle,  String posterUrl,  String backdropUrl,  String description,  String status,  String type,  String quality,  String language,  String runtime,  String currentEpisode,  String totalEpisodes,  int year,  double rating,  int ratingCount,  List<String> genres,  List<String> countries,  List<MoviePerson> actors,  List<String> directors,  String trailerUrl,  List<MovieStreamServer> servers)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String imdbId,  String tmdbId,  String tmdbType,  String slug,  String title,  String originalTitle,  String posterUrl,  String backdropUrl,  String description,  String status,  String type,  String quality,  String language,  String runtime,  String currentEpisode,  String totalEpisodes,  int year,  double rating,  int ratingCount,  List<String> genres,  List<String> countries,  List<MoviePerson> actors,  List<String> directors,  String trailerUrl,  List<MovieStreamServer> servers)?  $default,) {final _that = this;
 switch (_that) {
 case _MovieDetail() when $default != null:
-return $default(_that.id,_that.slug,_that.title,_that.originalTitle,_that.posterUrl,_that.backdropUrl,_that.description,_that.status,_that.type,_that.quality,_that.language,_that.runtime,_that.currentEpisode,_that.totalEpisodes,_that.year,_that.rating,_that.ratingCount,_that.genres,_that.countries,_that.actors,_that.directors,_that.trailerUrl,_that.servers);case _:
+return $default(_that.id,_that.imdbId,_that.tmdbId,_that.tmdbType,_that.slug,_that.title,_that.originalTitle,_that.posterUrl,_that.backdropUrl,_that.description,_that.status,_that.type,_that.quality,_that.language,_that.runtime,_that.currentEpisode,_that.totalEpisodes,_that.year,_that.rating,_that.ratingCount,_that.genres,_that.countries,_that.actors,_that.directors,_that.trailerUrl,_that.servers);case _:
   return null;
 
 }
@@ -228,10 +231,13 @@ return $default(_that.id,_that.slug,_that.title,_that.originalTitle,_that.poster
 
 
 class _MovieDetail extends MovieDetail {
-  const _MovieDetail({required this.id, required this.slug, required this.title, required this.originalTitle, required this.posterUrl, required this.backdropUrl, required this.description, required this.status, required this.type, required this.quality, required this.language, required this.runtime, required this.currentEpisode, required this.totalEpisodes, required this.year, required this.rating, required this.ratingCount, required final  List<String> genres, required final  List<String> countries, required final  List<MoviePerson> actors, required final  List<String> directors, required this.trailerUrl, required final  List<MovieStreamServer> servers}): _genres = genres,_countries = countries,_actors = actors,_directors = directors,_servers = servers,super._();
+  const _MovieDetail({required this.id, this.imdbId = '', this.tmdbId = '', this.tmdbType = '', required this.slug, required this.title, required this.originalTitle, required this.posterUrl, required this.backdropUrl, required this.description, required this.status, required this.type, required this.quality, required this.language, required this.runtime, required this.currentEpisode, required this.totalEpisodes, required this.year, required this.rating, required this.ratingCount, required final  List<String> genres, required final  List<String> countries, required final  List<MoviePerson> actors, required final  List<String> directors, required this.trailerUrl, required final  List<MovieStreamServer> servers}): _genres = genres,_countries = countries,_actors = actors,_directors = directors,_servers = servers,super._();
   
 
 @override final  String id;
+@override@JsonKey() final  String imdbId;
+@override@JsonKey() final  String tmdbId;
+@override@JsonKey() final  String tmdbType;
 @override final  String slug;
 @override final  String title;
 @override final  String originalTitle;
@@ -295,16 +301,16 @@ _$MovieDetailCopyWith<_MovieDetail> get copyWith => __$MovieDetailCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MovieDetail&&(identical(other.id, id) || other.id == id)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.title, title) || other.title == title)&&(identical(other.originalTitle, originalTitle) || other.originalTitle == originalTitle)&&(identical(other.posterUrl, posterUrl) || other.posterUrl == posterUrl)&&(identical(other.backdropUrl, backdropUrl) || other.backdropUrl == backdropUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.type, type) || other.type == type)&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.language, language) || other.language == language)&&(identical(other.runtime, runtime) || other.runtime == runtime)&&(identical(other.currentEpisode, currentEpisode) || other.currentEpisode == currentEpisode)&&(identical(other.totalEpisodes, totalEpisodes) || other.totalEpisodes == totalEpisodes)&&(identical(other.year, year) || other.year == year)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._countries, _countries)&&const DeepCollectionEquality().equals(other._actors, _actors)&&const DeepCollectionEquality().equals(other._directors, _directors)&&(identical(other.trailerUrl, trailerUrl) || other.trailerUrl == trailerUrl)&&const DeepCollectionEquality().equals(other._servers, _servers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MovieDetail&&(identical(other.id, id) || other.id == id)&&(identical(other.imdbId, imdbId) || other.imdbId == imdbId)&&(identical(other.tmdbId, tmdbId) || other.tmdbId == tmdbId)&&(identical(other.tmdbType, tmdbType) || other.tmdbType == tmdbType)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.title, title) || other.title == title)&&(identical(other.originalTitle, originalTitle) || other.originalTitle == originalTitle)&&(identical(other.posterUrl, posterUrl) || other.posterUrl == posterUrl)&&(identical(other.backdropUrl, backdropUrl) || other.backdropUrl == backdropUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.type, type) || other.type == type)&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.language, language) || other.language == language)&&(identical(other.runtime, runtime) || other.runtime == runtime)&&(identical(other.currentEpisode, currentEpisode) || other.currentEpisode == currentEpisode)&&(identical(other.totalEpisodes, totalEpisodes) || other.totalEpisodes == totalEpisodes)&&(identical(other.year, year) || other.year == year)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._countries, _countries)&&const DeepCollectionEquality().equals(other._actors, _actors)&&const DeepCollectionEquality().equals(other._directors, _directors)&&(identical(other.trailerUrl, trailerUrl) || other.trailerUrl == trailerUrl)&&const DeepCollectionEquality().equals(other._servers, _servers));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,slug,title,originalTitle,posterUrl,backdropUrl,description,status,type,quality,language,runtime,currentEpisode,totalEpisodes,year,rating,ratingCount,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_countries),const DeepCollectionEquality().hash(_actors),const DeepCollectionEquality().hash(_directors),trailerUrl,const DeepCollectionEquality().hash(_servers)]);
+int get hashCode => Object.hashAll([runtimeType,id,imdbId,tmdbId,tmdbType,slug,title,originalTitle,posterUrl,backdropUrl,description,status,type,quality,language,runtime,currentEpisode,totalEpisodes,year,rating,ratingCount,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_countries),const DeepCollectionEquality().hash(_actors),const DeepCollectionEquality().hash(_directors),trailerUrl,const DeepCollectionEquality().hash(_servers)]);
 
 @override
 String toString() {
-  return 'MovieDetail(id: $id, slug: $slug, title: $title, originalTitle: $originalTitle, posterUrl: $posterUrl, backdropUrl: $backdropUrl, description: $description, status: $status, type: $type, quality: $quality, language: $language, runtime: $runtime, currentEpisode: $currentEpisode, totalEpisodes: $totalEpisodes, year: $year, rating: $rating, ratingCount: $ratingCount, genres: $genres, countries: $countries, actors: $actors, directors: $directors, trailerUrl: $trailerUrl, servers: $servers)';
+  return 'MovieDetail(id: $id, imdbId: $imdbId, tmdbId: $tmdbId, tmdbType: $tmdbType, slug: $slug, title: $title, originalTitle: $originalTitle, posterUrl: $posterUrl, backdropUrl: $backdropUrl, description: $description, status: $status, type: $type, quality: $quality, language: $language, runtime: $runtime, currentEpisode: $currentEpisode, totalEpisodes: $totalEpisodes, year: $year, rating: $rating, ratingCount: $ratingCount, genres: $genres, countries: $countries, actors: $actors, directors: $directors, trailerUrl: $trailerUrl, servers: $servers)';
 }
 
 
@@ -315,7 +321,7 @@ abstract mixin class _$MovieDetailCopyWith<$Res> implements $MovieDetailCopyWith
   factory _$MovieDetailCopyWith(_MovieDetail value, $Res Function(_MovieDetail) _then) = __$MovieDetailCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String slug, String title, String originalTitle, String posterUrl, String backdropUrl, String description, String status, String type, String quality, String language, String runtime, String currentEpisode, String totalEpisodes, int year, double rating, int ratingCount, List<String> genres, List<String> countries, List<MoviePerson> actors, List<String> directors, String trailerUrl, List<MovieStreamServer> servers
+ String id, String imdbId, String tmdbId, String tmdbType, String slug, String title, String originalTitle, String posterUrl, String backdropUrl, String description, String status, String type, String quality, String language, String runtime, String currentEpisode, String totalEpisodes, int year, double rating, int ratingCount, List<String> genres, List<String> countries, List<MoviePerson> actors, List<String> directors, String trailerUrl, List<MovieStreamServer> servers
 });
 
 
@@ -332,9 +338,12 @@ class __$MovieDetailCopyWithImpl<$Res>
 
 /// Create a copy of MovieDetail
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? slug = null,Object? title = null,Object? originalTitle = null,Object? posterUrl = null,Object? backdropUrl = null,Object? description = null,Object? status = null,Object? type = null,Object? quality = null,Object? language = null,Object? runtime = null,Object? currentEpisode = null,Object? totalEpisodes = null,Object? year = null,Object? rating = null,Object? ratingCount = null,Object? genres = null,Object? countries = null,Object? actors = null,Object? directors = null,Object? trailerUrl = null,Object? servers = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? imdbId = null,Object? tmdbId = null,Object? tmdbType = null,Object? slug = null,Object? title = null,Object? originalTitle = null,Object? posterUrl = null,Object? backdropUrl = null,Object? description = null,Object? status = null,Object? type = null,Object? quality = null,Object? language = null,Object? runtime = null,Object? currentEpisode = null,Object? totalEpisodes = null,Object? year = null,Object? rating = null,Object? ratingCount = null,Object? genres = null,Object? countries = null,Object? actors = null,Object? directors = null,Object? trailerUrl = null,Object? servers = null,}) {
   return _then(_MovieDetail(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,imdbId: null == imdbId ? _self.imdbId : imdbId // ignore: cast_nullable_to_non_nullable
+as String,tmdbId: null == tmdbId ? _self.tmdbId : tmdbId // ignore: cast_nullable_to_non_nullable
+as String,tmdbType: null == tmdbType ? _self.tmdbType : tmdbType // ignore: cast_nullable_to_non_nullable
 as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,originalTitle: null == originalTitle ? _self.originalTitle : originalTitle // ignore: cast_nullable_to_non_nullable

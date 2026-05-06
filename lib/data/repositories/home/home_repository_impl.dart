@@ -81,9 +81,25 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Result<HomeFeed>> searchMovies({required String keyword}) async {
+  Future<Result<HomeFeed>> searchMovies({
+    required String keyword,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+    required String country,
+    required String year,
+  }) async {
     try {
-      final response = await remoteDataSource.searchMovies(keyword: keyword);
+      final response = await remoteDataSource.searchMovies(
+        keyword: keyword,
+        page: page,
+        limit: limit,
+        sortField: sortField,
+        sortType: sortType,
+        country: country,
+        year: year,
+      );
       return Success(_mapFeed(response));
     } on AppException catch (error) {
       return FailureResult(error.failure);
@@ -124,6 +140,35 @@ class HomeRepositoryImpl implements HomeRepository {
       return FailureResult(
         AppFailure.unknown(
           'Unexpected error while loading genre movies.',
+          details: error.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<HomeFeed>> getMoviesByList({
+    required String slug,
+    required int page,
+    required int limit,
+    required String sortField,
+    required String sortType,
+  }) async {
+    try {
+      final response = await remoteDataSource.getMoviesByList(
+        slug: slug,
+        page: page,
+        limit: limit,
+        sortField: sortField,
+        sortType: sortType,
+      );
+      return Success(_mapFeed(response));
+    } on AppException catch (error) {
+      return FailureResult(error.failure);
+    } catch (error) {
+      return FailureResult(
+        AppFailure.unknown(
+          'Unexpected error while loading movie list.',
           details: error.toString(),
         ),
       );

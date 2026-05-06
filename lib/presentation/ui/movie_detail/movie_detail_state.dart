@@ -14,6 +14,8 @@ abstract class MovieDetailState with _$MovieDetailState implements BaseState {
     required String slug,
     @Default(PageStatus.initial) PageStatus pageStatus,
     @Default(false) bool processing,
+    @Default(false) bool addingToLibrary,
+    @Default(false) bool addedToLibrary,
     AppFailure? failure,
     MovieDetail? detail,
     @Default(<HomeMovie>[]) List<HomeMovie> relatedMovies,

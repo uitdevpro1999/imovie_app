@@ -75,8 +75,6 @@ class GenreMovieListCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              const Icon(Icons.more_vert_rounded, color: AppColors.white),
             ],
           ),
         ),
@@ -101,7 +99,7 @@ class _Poster extends StatelessWidget {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(14),
-              child: MovieGoRemoteImage(
+              child: IMovieRemoteImage(
                 imageUrl: movie.posterUrl,
                 fit: BoxFit.cover,
                 placeholderLabel: movie.title,

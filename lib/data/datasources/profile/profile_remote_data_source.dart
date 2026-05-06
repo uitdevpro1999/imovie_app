@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:imovie_app/core/error/app_exception.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
 import 'package:imovie_app/core/logger/app_logger.dart';
+import 'package:imovie_app/core/services/supabase_data_service.dart';
 import 'package:imovie_app/data/models/response/profile/profile_response.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class ProfileRemoteDataSource {
   Future<ProfileResponse> getCurrentProfile();
@@ -22,12 +22,12 @@ abstract interface class ProfileRemoteDataSource {
 }
 
 class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
-  const SupabaseProfileRemoteDataSource({required this.client});
+  const SupabaseProfileRemoteDataSource({required this.dataService});
 
   static const _table = 'profiles';
   static const _avatarBucket = 'avatars';
 
-  final SupabaseClient client;
+  final SupabaseDataService dataService;
 
   @override
   Future<ProfileResponse> getCurrentProfile() async {
@@ -36,11 +36,10 @@ class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
       'Loading profile for ${AppLogger.shortId(user.id)}.',
       name: 'Supabase.Profile',
     );
-    final json = await client
-        .from(_table)
-        .select()
-        .eq('id', user.id)
-        .maybeSingle();
+    final json = await dataService.selectMaybeSingle(
+      table: _table,
+      equals: {'id': user.id},
+    );
 
     if (json == null) {
       AppLogger.warning(
@@ -69,12 +68,11 @@ class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
       'Updating profile fields for ${AppLogger.shortId(user.id)}.',
       name: 'Supabase.Profile',
     );
-    final json = await client
-        .from(_table)
-        .update({'full_name': fullName.trim(), 'phone': phone.trim()})
-        .eq('id', user.id)
-        .select()
-        .single();
+    final json = await dataService.updateAndSelectSingle(
+      table: _table,
+      values: {'full_name': fullName.trim(), 'phone': phone.trim()},
+      equals: {'id': user.id},
+    );
 
     AppLogger.info(
       'Profile fields updated for ${AppLogger.shortId(user.id)}.',
@@ -100,29 +98,27 @@ class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
       'Uploading avatar for ${AppLogger.shortId(user.id)} to $_avatarBucket/$path.',
       name: 'Supabase.Profile',
     );
-    await client.storage
-        .from(_avatarBucket)
-        .uploadBinary(
-          path,
-          bytes,
-          fileOptions: FileOptions(
-            cacheControl: '3600',
-            contentType: contentType,
-            upsert: true,
-          ),
-        );
+    await dataService.uploadBinary(
+      bucket: _avatarBucket,
+      path: path,
+      bytes: bytes,
+      contentType: contentType,
+      upsert: true,
+    );
 
-    final avatarUrl = client.storage.from(_avatarBucket).getPublicUrl(path);
+    final avatarUrl = dataService.getPublicUrl(
+      bucket: _avatarBucket,
+      path: path,
+    );
     AppLogger.info(
       'Avatar uploaded for ${AppLogger.shortId(user.id)}.',
       name: 'Supabase.Profile',
     );
-    final json = await client
-        .from(_table)
-        .update({'avatar_url': avatarUrl})
-        .eq('id', user.id)
-        .select()
-        .single();
+    final json = await dataService.updateAndSelectSingle(
+      table: _table,
+      values: {'avatar_url': avatarUrl},
+      equals: {'id': user.id},
+    );
 
     AppLogger.info(
       'Profile avatar URL updated for ${AppLogger.shortId(user.id)}.',
@@ -131,19 +127,13 @@ class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
     return ProfileResponse.fromJson(json);
   }
 
-  User _currentUser() {
-    final user = client.auth.currentUser;
-    if (user == null) {
-      AppLogger.warning(
-        'Profile request blocked because no Supabase user is signed in.',
-        name: 'Supabase.Profile',
-      );
-      throw AppException(
-        AppFailure.unauthorized('Sign in before editing your profile.'),
-      );
-    }
-
-    return user;
+  SupabaseDataUser _currentUser() {
+    return dataService.requireCurrentUser(
+      unauthorizedMessage: 'Sign in before editing your profile.',
+      logName: 'Supabase.Profile',
+      blockedLogMessage:
+          'Profile request blocked because no Supabase user is signed in.',
+    );
   }
 
   String _extensionFor({

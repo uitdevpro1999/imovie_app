@@ -1,18 +1,21 @@
 part of '../home_page.dart';
 
 class _HomeSuccessView extends StatelessWidget {
-  const _HomeSuccessView({required this.state});
+  const _HomeSuccessView({required this.state, required this.onRefresh});
 
   final HomeState state;
+  final Future<bool> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return IMovieSmartRefresher(
+      onRefresh: onRefresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        cacheExtent: 3200,
+        padding: const EdgeInsets.only(bottom: 16),
         children: [
           if (state.topMovieViewData.isNotEmpty) ...[
             HomeHeroSlider(
@@ -48,6 +51,12 @@ class _HomeSuccessView extends StatelessWidget {
                 actionLabel: l10n.homeSectionViewMore,
                 movies: state.freshUpdateMovieViewData,
                 relatedMovies: state.freshUpdateMovies,
+                onActionTap: () => context.router.push(
+                  MovieListRoute(
+                    slug: 'phim-moi',
+                    title: l10n.homeSectionFreshUpdates,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -57,7 +66,6 @@ class _HomeSuccessView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: HomeMovieStripSection(
                 title: l10n.homeSectionHighestRated,
-                actionLabel: l10n.homeSectionViewMore,
                 movies: state.highestRatedMovieViewData,
                 relatedMovies: state.highestRatedMovies,
               ),
@@ -72,6 +80,48 @@ class _HomeSuccessView extends StatelessWidget {
                 actionLabel: l10n.homeSectionViewMore,
                 movies: state.seriesMovieViewData,
                 relatedMovies: state.seriesMovies,
+                onActionTap: () => context.router.push(
+                  MovieListRoute(
+                    slug: 'phim-bo',
+                    title: l10n.homeSectionSeriesSpotlight,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+          if (state.tvShows.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: HomeMovieStripSection(
+                title: l10n.homeSectionTvShows,
+                actionLabel: l10n.homeSectionViewMore,
+                movies: state.tvShowMovieViewData,
+                relatedMovies: state.tvShows,
+                onActionTap: () => context.router.push(
+                  MovieListRoute(
+                    slug: 'tv-shows',
+                    title: l10n.homeSectionTvShows,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+          if (state.upcoming.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: HomeMovieStripSection(
+                title: l10n.homeSectionUpcoming,
+                actionLabel: l10n.homeSectionViewMore,
+                movies: state.upcomingMovieViewData,
+                relatedMovies: state.upcoming,
+                onActionTap: () => context.router.push(
+                  MovieListRoute(
+                    slug: 'phim-sap-chieu',
+                    title: l10n.homeSectionUpcoming,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -84,6 +134,12 @@ class _HomeSuccessView extends StatelessWidget {
                 actionLabel: l10n.homeSectionViewMore,
                 movies: state.animationMovieViewData,
                 relatedMovies: state.animationMovies,
+                onActionTap: () => context.router.push(
+                  MovieListRoute(
+                    slug: 'hoat-hinh',
+                    title: l10n.homeSectionAnimationPicks,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 24),

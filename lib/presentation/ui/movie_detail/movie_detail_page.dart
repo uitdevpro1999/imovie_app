@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
@@ -8,23 +9,28 @@ import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_screen_util.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/core/di/service_locator.dart';
+import 'package:imovie_app/core/events/app_event_bus.dart';
+import 'package:imovie_app/core/events/app_toast_event.dart';
 import 'package:imovie_app/domain/entities/home/home_movie.dart';
 import 'package:imovie_app/domain/entities/movie_detail/movie_detail.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/movie_detail/movie_detail_cubit.dart';
 import 'package:imovie_app/presentation/ui/movie_detail/movie_detail_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_app_bar.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
-import 'package:imovie_app/presentation/widgets/moviego_content_widgets.dart';
-import 'package:imovie_app/presentation/widgets/moviego_remote_image.dart';
+import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_content_widgets.dart';
+import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 part 'widgets/detail_hero.dart';
 part 'widgets/info_row.dart';
 part 'widgets/movie_detail_success_view.dart';
 part 'widgets/pill_label.dart';
 part 'widgets/quick_action.dart';
-part 'widgets/square_action_button.dart';
+part 'widgets/rating_source_sheet.dart';
+part 'widgets/trailer_popup.dart';
 
 @RoutePage()
 class MovieDetailPage extends BasePage<MovieDetailCubit, MovieDetailState>
@@ -51,17 +57,9 @@ class MovieDetailPage extends BasePage<MovieDetailCubit, MovieDetailState>
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
       extendBodyBehindAppBar: true,
-      appBar: MovieGoAppBar(
+      appBar: IMovieAppBar(
         backgroundColor: Colors.transparent,
         titleWidget: const SizedBox.shrink(),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert_rounded),
-            color: AppColors.white,
-          ),
-          const SizedBox(width: 8),
-        ],
       ),
       body: child,
     );
@@ -73,7 +71,7 @@ class MovieDetailPage extends BasePage<MovieDetailCubit, MovieDetailState>
     MovieDetailCubit cubit,
     MovieDetailState state,
   ) {
-    return _MovieDetailSuccessView(state: state);
+    return _MovieDetailSuccessView(cubit: cubit, state: state);
   }
 
   @override
@@ -97,7 +95,7 @@ class MovieDetailPage extends BasePage<MovieDetailCubit, MovieDetailState>
               ),
             ),
             const SizedBox(height: 16),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.retry,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

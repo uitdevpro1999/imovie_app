@@ -5,6 +5,7 @@ import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/core/di/service_locator.dart';
+import 'package:imovie_app/gen/assets.gen.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/home/home_cubit.dart';
@@ -12,9 +13,10 @@ import 'package:imovie_app/presentation/ui/home/home_state.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_hero_banner.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_hero_slider.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_movie_strip_section.dart';
-import 'package:imovie_app/presentation/widgets/moviego_app_bar.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
-import 'package:imovie_app/presentation/widgets/moviego_content_widgets.dart';
+import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_content_widgets.dart';
+import 'package:imovie_app/presentation/widgets/imovie_smart_refresher.dart';
 
 part 'widgets/home_genres_section.dart';
 part 'widgets/home_success_view.dart';
@@ -34,20 +36,26 @@ class HomePage extends BasePage<HomeCubit, HomeState>
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
-      appBar: MovieGoAppBar(
+      appBar: IMovieAppBar(
         centerTitle: false,
         automaticallyImplyLeading: false,
-        titleWidget: RichText(
-          text: TextSpan(
-            style: AppTypography.h4.copyWith(color: AppColors.white),
-            children: const [
-              TextSpan(text: 'Movie'),
-              TextSpan(
-                text: 'Go',
-                style: TextStyle(color: AppColors.yellow500),
+        titleWidget: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Assets.images.logo.image(
+                width: 24,
+                height: 24,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'iMovie',
+              style: AppTypography.h4.copyWith(color: AppColors.white),
+            ),
+          ],
         ),
         actions: [
           Center(
@@ -75,11 +83,6 @@ class HomePage extends BasePage<HomeCubit, HomeState>
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none_rounded),
-            color: AppColors.white,
-          ),
           const SizedBox(width: 8),
         ],
       ),
@@ -89,7 +92,7 @@ class HomePage extends BasePage<HomeCubit, HomeState>
 
   @override
   Widget buildPage(BuildContext context, HomeCubit cubit, HomeState state) {
-    return _HomeSuccessView(state: state);
+    return _HomeSuccessView(state: state, onRefresh: cubit.refresh);
   }
 
   @override
@@ -113,7 +116,7 @@ class HomePage extends BasePage<HomeCubit, HomeState>
               ),
             ),
             const SizedBox(height: 16),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.retry,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

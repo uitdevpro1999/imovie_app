@@ -16,7 +16,7 @@ class _BrowseGenresSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MovieGoSectionHeader(
+        IMovieSectionHeader(
           title: l10n.movieDetailGenres,
           actionLabel: state.hasHiddenGenres ? l10n.homeSectionViewMore : '',
           titleColor: AppColors.white,
@@ -36,7 +36,7 @@ class _BrowseGenresSection extends StatelessWidget {
                 onTap: () => context.router.push(
                   GenreMoviesRoute(slug: genre.slug, title: genre.name),
                 ),
-                child: MovieGoGenreChip(
+                child: IMovieGenreChip(
                   label: genre.name,
                   backgroundColor: AppColors.grayscale900,
                   textColor: AppColors.white,

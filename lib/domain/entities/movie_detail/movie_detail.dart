@@ -10,6 +10,9 @@ abstract class MovieDetail with _$MovieDetail {
 
   const factory MovieDetail({
     required String id,
+    @Default('') String imdbId,
+    @Default('') String tmdbId,
+    @Default('') String tmdbType,
     required String slug,
     required String title,
     required String originalTitle,

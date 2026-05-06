@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
 
@@ -11,10 +12,13 @@ abstract class AppState with _$AppState {
 
   const factory AppState({
     @Default(AppAuthStatus.initial) AppAuthStatus authStatus,
+    @Default('vi') String localeCode,
     AppFailure? failure,
   }) = _AppState;
 
   bool get isChecking =>
       authStatus == AppAuthStatus.initial ||
       authStatus == AppAuthStatus.checking;
+
+  Locale get locale => Locale(localeCode);
 }

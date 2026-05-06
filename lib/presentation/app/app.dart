@@ -29,8 +29,8 @@ class App extends StatelessWidget {
     );
 
     return BlocProvider(
-      create: (_) => sl<AppCubit>(),
-      child: BlocListener<AppCubit, AppState>(
+      create: (_) => sl<AppCubit>()..loadLocale(),
+      child: BlocConsumer<AppCubit, AppState>(
         listenWhen: (previous, current) =>
             previous.authStatus != current.authStatus,
         listener: (context, state) {
@@ -38,53 +38,57 @@ class App extends StatelessWidget {
             case AppAuthStatus.authenticated:
               appRouter.replaceAll([const MainRoute()]);
             case AppAuthStatus.unauthenticated:
-              appRouter.replaceAll([const SignInRoute()]);
+              appRouter.replaceAll([SignInRoute()]);
             case AppAuthStatus.initial:
             case AppAuthStatus.checking:
               break;
           }
         },
-        child: ToastificationWrapper(
-          child: AppToastListener(
-            child: MaterialApp.router(
-              locale: const Locale('vi'),
-              onGenerateTitle: (context) =>
-                  AppLocalizations.of(context)!.appTitle,
-              builder: (context, child) {
-                return AppScreenUtilInit(
-                  designSize: const Size(390, 844),
-                  child: child ?? const SizedBox.shrink(),
-                );
-              },
-              theme: ThemeData(
-                useMaterial3: true,
-                brightness: Brightness.light,
-                fontFamily: AppTypography.fontFamily,
-                colorScheme: colorScheme,
-                scaffoldBackgroundColor: AppColors.background,
-                canvasColor: AppColors.background,
-                cardColor: AppColors.surface,
-                dividerColor: AppColors.surfaceStroke,
-                appBarTheme: const AppBarTheme(
-                  backgroundColor: AppColors.background,
-                  foregroundColor: AppColors.textPrimary,
-                  surfaceTintColor: Colors.transparent,
-                  elevation: 0,
-                  centerTitle: false,
+        buildWhen: (previous, current) =>
+            previous.localeCode != current.localeCode,
+        builder: (context, state) {
+          return ToastificationWrapper(
+            child: AppToastListener(
+              child: MaterialApp.router(
+                locale: state.locale,
+                onGenerateTitle: (context) =>
+                    AppLocalizations.of(context)!.appTitle,
+                builder: (context, child) {
+                  return AppScreenUtilInit(
+                    designSize: const Size(390, 844),
+                    child: child ?? const SizedBox.shrink(),
+                  );
+                },
+                theme: ThemeData(
+                  useMaterial3: true,
+                  brightness: Brightness.light,
+                  fontFamily: AppTypography.fontFamily,
+                  colorScheme: colorScheme,
+                  scaffoldBackgroundColor: AppColors.background,
+                  canvasColor: AppColors.background,
+                  cardColor: AppColors.surface,
+                  dividerColor: AppColors.surfaceStroke,
+                  appBarTheme: const AppBarTheme(
+                    backgroundColor: AppColors.background,
+                    foregroundColor: AppColors.textPrimary,
+                    surfaceTintColor: Colors.transparent,
+                    elevation: 0,
+                    centerTitle: false,
+                  ),
+                  textTheme: AppTypography.textTheme,
                 ),
-                textTheme: AppTypography.textTheme,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: AppLocalizations.supportedLocales,
+                routerConfig: appRouter.config(),
               ),
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: AppLocalizations.supportedLocales,
-              routerConfig: appRouter.config(),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

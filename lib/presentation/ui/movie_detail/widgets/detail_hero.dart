@@ -13,7 +13,7 @@ class _DetailHero extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          MovieGoRemoteImage(
+          IMovieRemoteImage(
             imageUrl: detail.backdropUrl,
             fit: BoxFit.cover,
             placeholderLabel: detail.title,

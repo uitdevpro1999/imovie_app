@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppState {
 
- AppAuthStatus get authStatus; AppFailure? get failure;
+ AppAuthStatus get authStatus; String get localeCode; AppFailure? get failure;
 /// Create a copy of AppState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AppStateCopyWith<AppState> get copyWith => _$AppStateCopyWithImpl<AppState>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppState&&(identical(other.authStatus, authStatus) || other.authStatus == authStatus)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppState&&(identical(other.authStatus, authStatus) || other.authStatus == authStatus)&&(identical(other.localeCode, localeCode) || other.localeCode == localeCode)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,authStatus,failure);
+int get hashCode => Object.hash(runtimeType,authStatus,localeCode,failure);
 
 @override
 String toString() {
-  return 'AppState(authStatus: $authStatus, failure: $failure)';
+  return 'AppState(authStatus: $authStatus, localeCode: $localeCode, failure: $failure)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AppStateCopyWith<$Res>  {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) _then) = _$AppStateCopyWithImpl;
 @useResult
 $Res call({
- AppAuthStatus authStatus, AppFailure? failure
+ AppAuthStatus authStatus, String localeCode, AppFailure? failure
 });
 
 
@@ -62,10 +62,11 @@ class _$AppStateCopyWithImpl<$Res>
 
 /// Create a copy of AppState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? authStatus = null,Object? failure = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? authStatus = null,Object? localeCode = null,Object? failure = freezed,}) {
   return _then(_self.copyWith(
 authStatus: null == authStatus ? _self.authStatus : authStatus // ignore: cast_nullable_to_non_nullable
-as AppAuthStatus,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppAuthStatus,localeCode: null == localeCode ? _self.localeCode : localeCode // ignore: cast_nullable_to_non_nullable
+as String,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,
   ));
 }
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppAuthStatus authStatus,  AppFailure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppAuthStatus authStatus,  String localeCode,  AppFailure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppState() when $default != null:
-return $default(_that.authStatus,_that.failure);case _:
+return $default(_that.authStatus,_that.localeCode,_that.failure);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.authStatus,_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppAuthStatus authStatus,  AppFailure? failure)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppAuthStatus authStatus,  String localeCode,  AppFailure? failure)  $default,) {final _that = this;
 switch (_that) {
 case _AppState():
-return $default(_that.authStatus,_that.failure);case _:
+return $default(_that.authStatus,_that.localeCode,_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.authStatus,_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppAuthStatus authStatus,  AppFailure? failure)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppAuthStatus authStatus,  String localeCode,  AppFailure? failure)?  $default,) {final _that = this;
 switch (_that) {
 case _AppState() when $default != null:
-return $default(_that.authStatus,_that.failure);case _:
+return $default(_that.authStatus,_that.localeCode,_that.failure);case _:
   return null;
 
 }
@@ -219,10 +220,11 @@ return $default(_that.authStatus,_that.failure);case _:
 
 
 class _AppState extends AppState {
-  const _AppState({this.authStatus = AppAuthStatus.initial, this.failure}): super._();
+  const _AppState({this.authStatus = AppAuthStatus.initial, this.localeCode = 'vi', this.failure}): super._();
   
 
 @override@JsonKey() final  AppAuthStatus authStatus;
+@override@JsonKey() final  String localeCode;
 @override final  AppFailure? failure;
 
 /// Create a copy of AppState
@@ -235,16 +237,16 @@ _$AppStateCopyWith<_AppState> get copyWith => __$AppStateCopyWithImpl<_AppState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppState&&(identical(other.authStatus, authStatus) || other.authStatus == authStatus)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppState&&(identical(other.authStatus, authStatus) || other.authStatus == authStatus)&&(identical(other.localeCode, localeCode) || other.localeCode == localeCode)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,authStatus,failure);
+int get hashCode => Object.hash(runtimeType,authStatus,localeCode,failure);
 
 @override
 String toString() {
-  return 'AppState(authStatus: $authStatus, failure: $failure)';
+  return 'AppState(authStatus: $authStatus, localeCode: $localeCode, failure: $failure)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res>
   factory _$AppStateCopyWith(_AppState value, $Res Function(_AppState) _then) = __$AppStateCopyWithImpl;
 @override @useResult
 $Res call({
- AppAuthStatus authStatus, AppFailure? failure
+ AppAuthStatus authStatus, String localeCode, AppFailure? failure
 });
 
 
@@ -272,10 +274,11 @@ class __$AppStateCopyWithImpl<$Res>
 
 /// Create a copy of AppState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? authStatus = null,Object? failure = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? authStatus = null,Object? localeCode = null,Object? failure = freezed,}) {
   return _then(_AppState(
 authStatus: null == authStatus ? _self.authStatus : authStatus // ignore: cast_nullable_to_non_nullable
-as AppAuthStatus,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppAuthStatus,localeCode: null == localeCode ? _self.localeCode : localeCode // ignore: cast_nullable_to_non_nullable
+as String,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,
   ));
 }

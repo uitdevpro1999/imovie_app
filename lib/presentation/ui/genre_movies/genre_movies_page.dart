@@ -11,16 +11,16 @@ import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/genre_movies/genre_movies_cubit.dart';
 import 'package:imovie_app/presentation/ui/genre_movies/genre_movies_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_app_bar.dart';
-import 'package:imovie_app/presentation/widgets/moviego_buttons.dart';
-import 'package:imovie_app/presentation/widgets/moviego_remote_image.dart';
+import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
+import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
+import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
+import 'package:imovie_app/presentation/widgets/imovie_smart_refresher.dart';
 
 part 'widgets/filter_selector.dart';
 part 'widgets/genre_filter_bar.dart';
 part 'widgets/genre_filter_sheet.dart';
 part 'widgets/genre_movie_list_card.dart';
 part 'widgets/genre_movies_list_view.dart';
-part 'widgets/load_more_button.dart';
 
 @RoutePage()
 class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
@@ -47,7 +47,7 @@ class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
   Widget wrapPage(BuildContext context, GenreMoviesState state, Widget child) {
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
-      appBar: MovieGoAppBar(title: state.title),
+      appBar: IMovieAppBar(title: state.title),
       body: SafeArea(top: false, child: child),
     );
   }
@@ -84,8 +84,15 @@ class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
                     movies: state.movies,
                     movieViewData: state.movieViewData,
                     hasMore: state.hasMore,
-                    loadingMore: state.loadingMore,
-                    onLoadMore: cubit.loadMore,
+                    onRefresh: cubit.refresh,
+                    onLoadMore: () async {
+                      final success = await cubit.loadMore();
+                      return success
+                          ? IMovieLoadMoreResult.success(
+                              hasMore: cubit.state.hasMore,
+                            )
+                          : const IMovieLoadMoreResult.failure();
+                    },
                   );
                 },
               ),
@@ -115,7 +122,7 @@ class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
               ),
             ),
             const SizedBox(height: 16),
-            MovieGoButton(
+            IMovieButton(
               label: l10n.retry,
               showLeadingIcon: false,
               foregroundColor: AppColors.textPrimary,

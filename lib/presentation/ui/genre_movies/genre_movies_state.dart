@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:imovie_app/config/refresh/imovie_refresh_config.dart';
 import 'package:imovie_app/core/bloc/base_state.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
 import 'package:imovie_app/domain/entities/home/home_country.dart';
@@ -19,6 +20,7 @@ abstract class GenreMoviesState with _$GenreMoviesState implements BaseState {
     @Default(<HomeMovie>[]) List<HomeMovie> movies,
     @Default(<HomeCountry>[HomeCountry.all]) List<HomeCountry> countries,
     @Default(1) int page,
+    @Default(IMovieRefreshConfig.pageSize) int pageSize,
     @Default(GenreSortType.desc) GenreSortType sortType,
     @Default(HomeCountry.all) HomeCountry country,
     @Default(GenreYear.all) GenreYear year,

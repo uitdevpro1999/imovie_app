@@ -23,6 +23,9 @@ class MovieDetailRepositoryImpl implements MovieDetailRepository {
       return Success(
         MovieDetail(
           id: item.id,
+          imdbId: item.imdbId,
+          tmdbId: item.tmdbId,
+          tmdbType: item.tmdbType,
           slug: item.slug,
           title: item.name,
           originalTitle: item.originName,

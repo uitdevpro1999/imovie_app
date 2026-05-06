@@ -13,6 +13,8 @@ abstract interface class SessionRemoteDataSource {
 
   Future<void> resetPasswordForEmail({required String email});
 
+  Future<void> updatePassword({required String password});
+
   Future<void> signOut();
 }
 
@@ -42,6 +44,11 @@ class SupabaseSessionRemoteDataSource implements SessionRemoteDataSource {
   @override
   Future<void> resetPasswordForEmail({required String email}) {
     return authService.resetPasswordForEmail(email: email);
+  }
+
+  @override
+  Future<void> updatePassword({required String password}) {
+    return authService.updatePassword(password: password);
   }
 
   @override
@@ -76,6 +83,9 @@ class UnconfiguredSessionRemoteDataSource implements SessionRemoteDataSource {
 
   @override
   Future<void> resetPasswordForEmail({required String email}) async {}
+
+  @override
+  Future<void> updatePassword({required String password}) async {}
 
   @override
   Future<void> signOut() async {}

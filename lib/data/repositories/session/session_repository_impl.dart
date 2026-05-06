@@ -134,6 +134,59 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   @override
+  Future<Result<void>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final readinessFailure = _readinessFailure();
+    if (readinessFailure != null) {
+      return FailureResult(readinessFailure);
+    }
+
+    try {
+      final session = await remoteDataSource.getCurrentSession();
+      final email = session?.user.email;
+      if (email == null || email.trim().isEmpty) {
+        return FailureResult(
+          AppFailure.unauthorized('Sign in before changing your password.'),
+        );
+      }
+
+      await remoteDataSource.signInWithPassword(
+        email: email,
+        password: currentPassword,
+      );
+      await remoteDataSource.updatePassword(password: newPassword);
+      return const Success(null);
+    } on AuthException catch (error) {
+      AppLogger.error(
+        'Unable to change password. Supabase detail: ${error.message}',
+        name: 'Supabase.Session',
+        error: error,
+      );
+      return FailureResult(
+        AppFailure.unauthorized(
+          'Unable to change password. ${error.message}',
+          details: error.message,
+        ),
+      );
+    } catch (error, stackTrace) {
+      AppLogger.error(
+        'Password change failed unexpectedly. Unexpected detail: $error',
+        name: 'Supabase.Session',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return FailureResult(
+        AppFailure.unknown(
+          'Unexpected error while changing password.',
+          details: error.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Result<void>> signOut() async {
     if (!bootstrap.environment.isSupabaseConfigured) {
       return const Success(null);

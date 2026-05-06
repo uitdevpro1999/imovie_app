@@ -15,6 +15,8 @@ abstract interface class SupabaseAuthService {
 
   Future<void> resetPasswordForEmail({required String email});
 
+  Future<void> updatePassword({required String password});
+
   Future<void> signOut();
 }
 
@@ -90,6 +92,13 @@ class ConfiguredSupabaseAuthService implements SupabaseAuthService {
   }
 
   @override
+  Future<void> updatePassword({required String password}) async {
+    AppLogger.info('Updating current user password.', name: 'Supabase.Auth');
+    await client.auth.updateUser(UserAttributes(password: password));
+    AppLogger.info('Current user password updated.', name: 'Supabase.Auth');
+  }
+
+  @override
   Future<void> signOut() {
     AppLogger.info('Signing out current user.', name: 'Supabase.Auth');
     return client.auth.signOut();
@@ -136,6 +145,15 @@ class UnconfiguredSupabaseAuthService implements SupabaseAuthService {
   Future<void> resetPasswordForEmail({required String email}) async {
     AppLogger.warning(
       'Password reset blocked because Supabase is not configured.',
+      name: 'Supabase.Auth',
+    );
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<void> updatePassword({required String password}) async {
+    AppLogger.warning(
+      'Password update blocked because Supabase is not configured.',
       name: 'Supabase.Auth',
     );
     throw const AppException(_configurationFailure);

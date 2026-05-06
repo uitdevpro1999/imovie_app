@@ -3,7 +3,7 @@ import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/ui/home/home_state.dart';
-import 'package:imovie_app/presentation/widgets/moviego_remote_image.dart';
+import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
 
 class HomeHeroBanner extends StatelessWidget {
   const HomeHeroBanner({super.key, required this.movie});
@@ -19,7 +19,7 @@ class HomeHeroBanner extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: MovieGoRemoteImage(
+            child: IMovieRemoteImage(
               imageUrl: movie.posterUrl,
               fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(20),

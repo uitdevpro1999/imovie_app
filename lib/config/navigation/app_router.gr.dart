@@ -21,7 +21,7 @@ class AppSplashRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const AppSplashPage();
+      return WrappedRoute(child: const AppSplashPage());
     },
   );
 }
@@ -68,6 +68,187 @@ class BrowseRouteArgs {
 
   @override
   int get hashCode => key.hashCode;
+}
+
+/// generated route for
+/// [ChangePasswordPage]
+class ChangePasswordRoute extends PageRouteInfo<ChangePasswordRouteArgs> {
+  ChangePasswordRoute({Key? key, List<PageRouteInfo>? children})
+    : super(
+        ChangePasswordRoute.name,
+        args: ChangePasswordRouteArgs(key: key),
+        initialChildren: children,
+      );
+
+  static const String name = 'ChangePasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChangePasswordRouteArgs>(
+        orElse: () => const ChangePasswordRouteArgs(),
+      );
+      return WrappedRoute(child: ChangePasswordPage(key: args.key));
+    },
+  );
+}
+
+class ChangePasswordRouteArgs {
+  const ChangePasswordRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChangePasswordRouteArgs{key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChangePasswordRouteArgs) return false;
+    return key == other.key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
+}
+
+/// generated route for
+/// [CommunityComposePage]
+class CommunityComposeRoute extends PageRouteInfo<CommunityComposeRouteArgs> {
+  CommunityComposeRoute({
+    Key? key,
+    CommunityPost? initialPost,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CommunityComposeRoute.name,
+         args: CommunityComposeRouteArgs(key: key, initialPost: initialPost),
+         initialChildren: children,
+       );
+
+  static const String name = 'CommunityComposeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CommunityComposeRouteArgs>(
+        orElse: () => const CommunityComposeRouteArgs(),
+      );
+      return WrappedRoute(
+        child: CommunityComposePage(
+          key: args.key,
+          initialPost: args.initialPost,
+        ),
+      );
+    },
+  );
+}
+
+class CommunityComposeRouteArgs {
+  const CommunityComposeRouteArgs({this.key, this.initialPost});
+
+  final Key? key;
+
+  final CommunityPost? initialPost;
+
+  @override
+  String toString() {
+    return 'CommunityComposeRouteArgs{key: $key, initialPost: $initialPost}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommunityComposeRouteArgs) return false;
+    return key == other.key && initialPost == other.initialPost;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialPost.hashCode;
+}
+
+/// generated route for
+/// [CommunityMinePage]
+class CommunityMineRoute extends PageRouteInfo<void> {
+  const CommunityMineRoute({List<PageRouteInfo>? children})
+    : super(CommunityMineRoute.name, initialChildren: children);
+
+  static const String name = 'CommunityMineRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return WrappedRoute(child: const CommunityMinePage());
+    },
+  );
+}
+
+/// generated route for
+/// [CommunityPage]
+class CommunityRoute extends PageRouteInfo<CommunityRouteArgs> {
+  CommunityRoute({
+    Key? key,
+    bool mineOnly = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CommunityRoute.name,
+         args: CommunityRouteArgs(key: key, mineOnly: mineOnly),
+         initialChildren: children,
+       );
+
+  static const String name = 'CommunityRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CommunityRouteArgs>(
+        orElse: () => const CommunityRouteArgs(),
+      );
+      return WrappedRoute(
+        child: CommunityPage(key: args.key, mineOnly: args.mineOnly),
+      );
+    },
+  );
+}
+
+class CommunityRouteArgs {
+  const CommunityRouteArgs({this.key, this.mineOnly = false});
+
+  final Key? key;
+
+  final bool mineOnly;
+
+  @override
+  String toString() {
+    return 'CommunityRouteArgs{key: $key, mineOnly: $mineOnly}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommunityRouteArgs) return false;
+    return key == other.key && mineOnly == other.mineOnly;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ mineOnly.hashCode;
+}
+
+/// generated route for
+/// [CommunityStoryEditorPage]
+class CommunityStoryEditorRoute extends PageRouteInfo<void> {
+  const CommunityStoryEditorRoute({List<PageRouteInfo>? children})
+    : super(CommunityStoryEditorRoute.name, initialChildren: children);
+
+  static const String name = 'CommunityStoryEditorRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return WrappedRoute(child: const CommunityStoryEditorPage());
+    },
+  );
 }
 
 /// generated route for
@@ -195,7 +376,9 @@ class GenresRoute extends PageRouteInfo<GenresRouteArgs> {
       final args = data.argsAs<GenresRouteArgs>(
         orElse: () => const GenresRouteArgs(),
       );
-      return GenresPage(key: args.key, genres: args.genres);
+      return WrappedRoute(
+        child: GenresPage(key: args.key, genres: args.genres),
+      );
     },
   );
 }
@@ -242,6 +425,22 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [LanguagePage]
+class LanguageRoute extends PageRouteInfo<void> {
+  const LanguageRoute({List<PageRouteInfo>? children})
+    : super(LanguageRoute.name, initialChildren: children);
+
+  static const String name = 'LanguageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return WrappedRoute(child: const LanguagePage());
+    },
+  );
+}
+
+/// generated route for
 /// [LibraryPage]
 class LibraryRoute extends PageRouteInfo<void> {
   const LibraryRoute({List<PageRouteInfo>? children})
@@ -252,7 +451,7 @@ class LibraryRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const LibraryPage();
+      return WrappedRoute(child: const LibraryPage());
     },
   );
 }
@@ -347,6 +546,62 @@ class MovieDetailRouteArgs {
       key.hashCode ^
       slug.hashCode ^
       const ListEquality<HomeMovie>().hash(relatedMovies);
+}
+
+/// generated route for
+/// [MovieListPage]
+class MovieListRoute extends PageRouteInfo<MovieListRouteArgs> {
+  MovieListRoute({
+    Key? key,
+    required String slug,
+    String title = '',
+    List<PageRouteInfo>? children,
+  }) : super(
+         MovieListRoute.name,
+         args: MovieListRouteArgs(key: key, slug: slug, title: title),
+         rawPathParams: {'slug': slug},
+         initialChildren: children,
+       );
+
+  static const String name = 'MovieListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<MovieListRouteArgs>(
+        orElse: () => MovieListRouteArgs(slug: pathParams.getString('slug')),
+      );
+      return WrappedRoute(
+        child: MovieListPage(key: args.key, slug: args.slug, title: args.title),
+      );
+    },
+  );
+}
+
+class MovieListRouteArgs {
+  const MovieListRouteArgs({this.key, required this.slug, this.title = ''});
+
+  final Key? key;
+
+  final String slug;
+
+  final String title;
+
+  @override
+  String toString() {
+    return 'MovieListRouteArgs{key: $key, slug: $slug, title: $title}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MovieListRouteArgs) return false;
+    return key == other.key && slug == other.slug && title == other.title;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ slug.hashCode ^ title.hashCode;
 }
 
 /// generated route for
@@ -477,32 +732,88 @@ class SettingsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SignInPage]
-class SignInRoute extends PageRouteInfo<void> {
-  const SignInRoute({List<PageRouteInfo>? children})
-    : super(SignInRoute.name, initialChildren: children);
+class SignInRoute extends PageRouteInfo<SignInRouteArgs> {
+  SignInRoute({Key? key, List<PageRouteInfo>? children})
+    : super(
+        SignInRoute.name,
+        args: SignInRouteArgs(key: key),
+        initialChildren: children,
+      );
 
   static const String name = 'SignInRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return WrappedRoute(child: const SignInPage());
+      final args = data.argsAs<SignInRouteArgs>(
+        orElse: () => const SignInRouteArgs(),
+      );
+      return WrappedRoute(child: SignInPage(key: args.key));
     },
   );
 }
 
+class SignInRouteArgs {
+  const SignInRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'SignInRouteArgs{key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SignInRouteArgs) return false;
+    return key == other.key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
+}
+
 /// generated route for
 /// [SignUpPage]
-class SignUpRoute extends PageRouteInfo<void> {
-  const SignUpRoute({List<PageRouteInfo>? children})
-    : super(SignUpRoute.name, initialChildren: children);
+class SignUpRoute extends PageRouteInfo<SignUpRouteArgs> {
+  SignUpRoute({Key? key, List<PageRouteInfo>? children})
+    : super(
+        SignUpRoute.name,
+        args: SignUpRouteArgs(key: key),
+        initialChildren: children,
+      );
 
   static const String name = 'SignUpRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return WrappedRoute(child: const SignUpPage());
+      final args = data.argsAs<SignUpRouteArgs>(
+        orElse: () => const SignUpRouteArgs(),
+      );
+      return WrappedRoute(child: SignUpPage(key: args.key));
     },
   );
+}
+
+class SignUpRouteArgs {
+  const SignUpRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'SignUpRouteArgs{key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SignUpRouteArgs) return false;
+    return key == other.key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
 }

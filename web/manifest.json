@@ -1,6 +1,6 @@
 {
-    "name": "imovie_app",
-    "short_name": "imovie_app",
+    "name": "iMovie",
+    "short_name": "iMovie",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

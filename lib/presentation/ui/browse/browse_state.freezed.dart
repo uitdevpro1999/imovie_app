@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BrowseState {
 
- PageStatus get pageStatus; bool get processing; AppFailure? get failure; HomeFeed? get feed; List<HomeGenre> get genres; String get keyword; bool get searchLoading; List<HomeMovie> get searchResults;
+ PageStatus get pageStatus; bool get processing; AppFailure? get failure; HomeFeed? get feed; List<HomeGenre> get genres; List<HomeCountry> get countries; String get keyword; bool get searchLoading; bool get searchLoadingMore; List<HomeMovie> get searchResults; int get searchPage; int get searchPageSize; int get searchTotalItems; BrowseSearchSortType get searchSortType; HomeCountry get searchCountry; BrowseSearchYear get searchYear;
 /// Create a copy of BrowseState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $BrowseStateCopyWith<BrowseState> get copyWith => _$BrowseStateCopyWithImpl<Brow
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BrowseState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other.genres, genres)&&(identical(other.keyword, keyword) || other.keyword == keyword)&&(identical(other.searchLoading, searchLoading) || other.searchLoading == searchLoading)&&const DeepCollectionEquality().equals(other.searchResults, searchResults));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BrowseState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.countries, countries)&&(identical(other.keyword, keyword) || other.keyword == keyword)&&(identical(other.searchLoading, searchLoading) || other.searchLoading == searchLoading)&&(identical(other.searchLoadingMore, searchLoadingMore) || other.searchLoadingMore == searchLoadingMore)&&const DeepCollectionEquality().equals(other.searchResults, searchResults)&&(identical(other.searchPage, searchPage) || other.searchPage == searchPage)&&(identical(other.searchPageSize, searchPageSize) || other.searchPageSize == searchPageSize)&&(identical(other.searchTotalItems, searchTotalItems) || other.searchTotalItems == searchTotalItems)&&(identical(other.searchSortType, searchSortType) || other.searchSortType == searchSortType)&&(identical(other.searchCountry, searchCountry) || other.searchCountry == searchCountry)&&(identical(other.searchYear, searchYear) || other.searchYear == searchYear));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(genres),keyword,searchLoading,const DeepCollectionEquality().hash(searchResults));
+int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(countries),keyword,searchLoading,searchLoadingMore,const DeepCollectionEquality().hash(searchResults),searchPage,searchPageSize,searchTotalItems,searchSortType,searchCountry,searchYear);
 
 @override
 String toString() {
-  return 'BrowseState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres, keyword: $keyword, searchLoading: $searchLoading, searchResults: $searchResults)';
+  return 'BrowseState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres, countries: $countries, keyword: $keyword, searchLoading: $searchLoading, searchLoadingMore: $searchLoadingMore, searchResults: $searchResults, searchPage: $searchPage, searchPageSize: $searchPageSize, searchTotalItems: $searchTotalItems, searchSortType: $searchSortType, searchCountry: $searchCountry, searchYear: $searchYear)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $BrowseStateCopyWith<$Res>  {
   factory $BrowseStateCopyWith(BrowseState value, $Res Function(BrowseState) _then) = _$BrowseStateCopyWithImpl;
 @useResult
 $Res call({
- PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres, String keyword, bool searchLoading, List<HomeMovie> searchResults
+ PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres, List<HomeCountry> countries, String keyword, bool searchLoading, bool searchLoadingMore, List<HomeMovie> searchResults, int searchPage, int searchPageSize, int searchTotalItems, BrowseSearchSortType searchSortType, HomeCountry searchCountry, BrowseSearchYear searchYear
 });
 
 
@@ -62,17 +62,25 @@ class _$BrowseStateCopyWithImpl<$Res>
 
 /// Create a copy of BrowseState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,Object? keyword = null,Object? searchLoading = null,Object? searchResults = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,Object? countries = null,Object? keyword = null,Object? searchLoading = null,Object? searchLoadingMore = null,Object? searchResults = null,Object? searchPage = null,Object? searchPageSize = null,Object? searchTotalItems = null,Object? searchSortType = null,Object? searchCountry = null,Object? searchYear = null,}) {
   return _then(_self.copyWith(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,feed: freezed == feed ? _self.feed : feed // ignore: cast_nullable_to_non_nullable
 as HomeFeed?,genres: null == genres ? _self.genres : genres // ignore: cast_nullable_to_non_nullable
-as List<HomeGenre>,keyword: null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
+as List<HomeGenre>,countries: null == countries ? _self.countries : countries // ignore: cast_nullable_to_non_nullable
+as List<HomeCountry>,keyword: null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
 as String,searchLoading: null == searchLoading ? _self.searchLoading : searchLoading // ignore: cast_nullable_to_non_nullable
+as bool,searchLoadingMore: null == searchLoadingMore ? _self.searchLoadingMore : searchLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,searchResults: null == searchResults ? _self.searchResults : searchResults // ignore: cast_nullable_to_non_nullable
-as List<HomeMovie>,
+as List<HomeMovie>,searchPage: null == searchPage ? _self.searchPage : searchPage // ignore: cast_nullable_to_non_nullable
+as int,searchPageSize: null == searchPageSize ? _self.searchPageSize : searchPageSize // ignore: cast_nullable_to_non_nullable
+as int,searchTotalItems: null == searchTotalItems ? _self.searchTotalItems : searchTotalItems // ignore: cast_nullable_to_non_nullable
+as int,searchSortType: null == searchSortType ? _self.searchSortType : searchSortType // ignore: cast_nullable_to_non_nullable
+as BrowseSearchSortType,searchCountry: null == searchCountry ? _self.searchCountry : searchCountry // ignore: cast_nullable_to_non_nullable
+as HomeCountry,searchYear: null == searchYear ? _self.searchYear : searchYear // ignore: cast_nullable_to_non_nullable
+as BrowseSearchYear,
   ));
 }
 /// Create a copy of BrowseState
@@ -181,10 +189,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  String keyword,  bool searchLoading,  List<HomeMovie> searchResults)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  List<HomeCountry> countries,  String keyword,  bool searchLoading,  bool searchLoadingMore,  List<HomeMovie> searchResults,  int searchPage,  int searchPageSize,  int searchTotalItems,  BrowseSearchSortType searchSortType,  HomeCountry searchCountry,  BrowseSearchYear searchYear)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BrowseState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.keyword,_that.searchLoading,_that.searchResults);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.countries,_that.keyword,_that.searchLoading,_that.searchLoadingMore,_that.searchResults,_that.searchPage,_that.searchPageSize,_that.searchTotalItems,_that.searchSortType,_that.searchCountry,_that.searchYear);case _:
   return orElse();
 
 }
@@ -202,10 +210,10 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  String keyword,  bool searchLoading,  List<HomeMovie> searchResults)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  List<HomeCountry> countries,  String keyword,  bool searchLoading,  bool searchLoadingMore,  List<HomeMovie> searchResults,  int searchPage,  int searchPageSize,  int searchTotalItems,  BrowseSearchSortType searchSortType,  HomeCountry searchCountry,  BrowseSearchYear searchYear)  $default,) {final _that = this;
 switch (_that) {
 case _BrowseState():
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.keyword,_that.searchLoading,_that.searchResults);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.countries,_that.keyword,_that.searchLoading,_that.searchLoadingMore,_that.searchResults,_that.searchPage,_that.searchPageSize,_that.searchTotalItems,_that.searchSortType,_that.searchCountry,_that.searchYear);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -222,10 +230,10 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  String keyword,  bool searchLoading,  List<HomeMovie> searchResults)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  List<HomeCountry> countries,  String keyword,  bool searchLoading,  bool searchLoadingMore,  List<HomeMovie> searchResults,  int searchPage,  int searchPageSize,  int searchTotalItems,  BrowseSearchSortType searchSortType,  HomeCountry searchCountry,  BrowseSearchYear searchYear)?  $default,) {final _that = this;
 switch (_that) {
 case _BrowseState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.keyword,_that.searchLoading,_that.searchResults);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.countries,_that.keyword,_that.searchLoading,_that.searchLoadingMore,_that.searchResults,_that.searchPage,_that.searchPageSize,_that.searchTotalItems,_that.searchSortType,_that.searchCountry,_that.searchYear);case _:
   return null;
 
 }
@@ -237,7 +245,7 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that
 
 
 class _BrowseState extends BrowseState {
-  const _BrowseState({this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.feed, final  List<HomeGenre> genres = const <HomeGenre>[], this.keyword = '', this.searchLoading = false, final  List<HomeMovie> searchResults = const <HomeMovie>[]}): _genres = genres,_searchResults = searchResults,super._();
+  const _BrowseState({this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.feed, final  List<HomeGenre> genres = const <HomeGenre>[], final  List<HomeCountry> countries = const <HomeCountry>[HomeCountry.all], this.keyword = '', this.searchLoading = false, this.searchLoadingMore = false, final  List<HomeMovie> searchResults = const <HomeMovie>[], this.searchPage = 1, this.searchPageSize = IMovieRefreshConfig.pageSize, this.searchTotalItems = 0, this.searchSortType = BrowseSearchSortType.desc, this.searchCountry = HomeCountry.all, this.searchYear = BrowseSearchYear.all}): _genres = genres,_countries = countries,_searchResults = searchResults,super._();
   
 
 @override@JsonKey() final  PageStatus pageStatus;
@@ -251,8 +259,16 @@ class _BrowseState extends BrowseState {
   return EqualUnmodifiableListView(_genres);
 }
 
+ final  List<HomeCountry> _countries;
+@override@JsonKey() List<HomeCountry> get countries {
+  if (_countries is EqualUnmodifiableListView) return _countries;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_countries);
+}
+
 @override@JsonKey() final  String keyword;
 @override@JsonKey() final  bool searchLoading;
+@override@JsonKey() final  bool searchLoadingMore;
  final  List<HomeMovie> _searchResults;
 @override@JsonKey() List<HomeMovie> get searchResults {
   if (_searchResults is EqualUnmodifiableListView) return _searchResults;
@@ -260,6 +276,12 @@ class _BrowseState extends BrowseState {
   return EqualUnmodifiableListView(_searchResults);
 }
 
+@override@JsonKey() final  int searchPage;
+@override@JsonKey() final  int searchPageSize;
+@override@JsonKey() final  int searchTotalItems;
+@override@JsonKey() final  BrowseSearchSortType searchSortType;
+@override@JsonKey() final  HomeCountry searchCountry;
+@override@JsonKey() final  BrowseSearchYear searchYear;
 
 /// Create a copy of BrowseState
 /// with the given fields replaced by the non-null parameter values.
@@ -271,16 +293,16 @@ _$BrowseStateCopyWith<_BrowseState> get copyWith => __$BrowseStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BrowseState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other._genres, _genres)&&(identical(other.keyword, keyword) || other.keyword == keyword)&&(identical(other.searchLoading, searchLoading) || other.searchLoading == searchLoading)&&const DeepCollectionEquality().equals(other._searchResults, _searchResults));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BrowseState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._countries, _countries)&&(identical(other.keyword, keyword) || other.keyword == keyword)&&(identical(other.searchLoading, searchLoading) || other.searchLoading == searchLoading)&&(identical(other.searchLoadingMore, searchLoadingMore) || other.searchLoadingMore == searchLoadingMore)&&const DeepCollectionEquality().equals(other._searchResults, _searchResults)&&(identical(other.searchPage, searchPage) || other.searchPage == searchPage)&&(identical(other.searchPageSize, searchPageSize) || other.searchPageSize == searchPageSize)&&(identical(other.searchTotalItems, searchTotalItems) || other.searchTotalItems == searchTotalItems)&&(identical(other.searchSortType, searchSortType) || other.searchSortType == searchSortType)&&(identical(other.searchCountry, searchCountry) || other.searchCountry == searchCountry)&&(identical(other.searchYear, searchYear) || other.searchYear == searchYear));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(_genres),keyword,searchLoading,const DeepCollectionEquality().hash(_searchResults));
+int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_countries),keyword,searchLoading,searchLoadingMore,const DeepCollectionEquality().hash(_searchResults),searchPage,searchPageSize,searchTotalItems,searchSortType,searchCountry,searchYear);
 
 @override
 String toString() {
-  return 'BrowseState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres, keyword: $keyword, searchLoading: $searchLoading, searchResults: $searchResults)';
+  return 'BrowseState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres, countries: $countries, keyword: $keyword, searchLoading: $searchLoading, searchLoadingMore: $searchLoadingMore, searchResults: $searchResults, searchPage: $searchPage, searchPageSize: $searchPageSize, searchTotalItems: $searchTotalItems, searchSortType: $searchSortType, searchCountry: $searchCountry, searchYear: $searchYear)';
 }
 
 
@@ -291,7 +313,7 @@ abstract mixin class _$BrowseStateCopyWith<$Res> implements $BrowseStateCopyWith
   factory _$BrowseStateCopyWith(_BrowseState value, $Res Function(_BrowseState) _then) = __$BrowseStateCopyWithImpl;
 @override @useResult
 $Res call({
- PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres, String keyword, bool searchLoading, List<HomeMovie> searchResults
+ PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres, List<HomeCountry> countries, String keyword, bool searchLoading, bool searchLoadingMore, List<HomeMovie> searchResults, int searchPage, int searchPageSize, int searchTotalItems, BrowseSearchSortType searchSortType, HomeCountry searchCountry, BrowseSearchYear searchYear
 });
 
 
@@ -308,17 +330,25 @@ class __$BrowseStateCopyWithImpl<$Res>
 
 /// Create a copy of BrowseState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,Object? keyword = null,Object? searchLoading = null,Object? searchResults = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,Object? countries = null,Object? keyword = null,Object? searchLoading = null,Object? searchLoadingMore = null,Object? searchResults = null,Object? searchPage = null,Object? searchPageSize = null,Object? searchTotalItems = null,Object? searchSortType = null,Object? searchCountry = null,Object? searchYear = null,}) {
   return _then(_BrowseState(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,feed: freezed == feed ? _self.feed : feed // ignore: cast_nullable_to_non_nullable
 as HomeFeed?,genres: null == genres ? _self._genres : genres // ignore: cast_nullable_to_non_nullable
-as List<HomeGenre>,keyword: null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
+as List<HomeGenre>,countries: null == countries ? _self._countries : countries // ignore: cast_nullable_to_non_nullable
+as List<HomeCountry>,keyword: null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
 as String,searchLoading: null == searchLoading ? _self.searchLoading : searchLoading // ignore: cast_nullable_to_non_nullable
+as bool,searchLoadingMore: null == searchLoadingMore ? _self.searchLoadingMore : searchLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,searchResults: null == searchResults ? _self._searchResults : searchResults // ignore: cast_nullable_to_non_nullable
-as List<HomeMovie>,
+as List<HomeMovie>,searchPage: null == searchPage ? _self.searchPage : searchPage // ignore: cast_nullable_to_non_nullable
+as int,searchPageSize: null == searchPageSize ? _self.searchPageSize : searchPageSize // ignore: cast_nullable_to_non_nullable
+as int,searchTotalItems: null == searchTotalItems ? _self.searchTotalItems : searchTotalItems // ignore: cast_nullable_to_non_nullable
+as int,searchSortType: null == searchSortType ? _self.searchSortType : searchSortType // ignore: cast_nullable_to_non_nullable
+as BrowseSearchSortType,searchCountry: null == searchCountry ? _self.searchCountry : searchCountry // ignore: cast_nullable_to_non_nullable
+as HomeCountry,searchYear: null == searchYear ? _self.searchYear : searchYear // ignore: cast_nullable_to_non_nullable
+as BrowseSearchYear,
   ));
 }
 

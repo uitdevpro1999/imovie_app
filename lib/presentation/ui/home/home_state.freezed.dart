@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- PageStatus get pageStatus; bool get processing; AppFailure? get failure; HomeFeed? get feed; List<HomeGenre> get genres;
+ PageStatus get pageStatus; bool get processing; AppFailure? get failure; HomeFeed? get feed; List<HomeGenre> get genres; List<HomeMovie> get tvShowMovies; List<HomeMovie> get upcomingMovies;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other.genres, genres));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.tvShowMovies, tvShowMovies)&&const DeepCollectionEquality().equals(other.upcomingMovies, upcomingMovies));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(genres));
+int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(tvShowMovies),const DeepCollectionEquality().hash(upcomingMovies));
 
 @override
 String toString() {
-  return 'HomeState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres)';
+  return 'HomeState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres, tvShowMovies: $tvShowMovies, upcomingMovies: $upcomingMovies)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres
+ PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres, List<HomeMovie> tvShowMovies, List<HomeMovie> upcomingMovies
 });
 
 
@@ -62,14 +62,16 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,Object? tvShowMovies = null,Object? upcomingMovies = null,}) {
   return _then(_self.copyWith(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,feed: freezed == feed ? _self.feed : feed // ignore: cast_nullable_to_non_nullable
 as HomeFeed?,genres: null == genres ? _self.genres : genres // ignore: cast_nullable_to_non_nullable
-as List<HomeGenre>,
+as List<HomeGenre>,tvShowMovies: null == tvShowMovies ? _self.tvShowMovies : tvShowMovies // ignore: cast_nullable_to_non_nullable
+as List<HomeMovie>,upcomingMovies: null == upcomingMovies ? _self.upcomingMovies : upcomingMovies // ignore: cast_nullable_to_non_nullable
+as List<HomeMovie>,
   ));
 }
 /// Create a copy of HomeState
@@ -178,10 +180,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  List<HomeMovie> tvShowMovies,  List<HomeMovie> upcomingMovies)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.tvShowMovies,_that.upcomingMovies);case _:
   return orElse();
 
 }
@@ -199,10 +201,10 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  List<HomeMovie> tvShowMovies,  List<HomeMovie> upcomingMovies)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.tvShowMovies,_that.upcomingMovies);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -219,10 +221,10 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  HomeFeed? feed,  List<HomeGenre> genres,  List<HomeMovie> tvShowMovies,  List<HomeMovie> upcomingMovies)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that.genres,_that.tvShowMovies,_that.upcomingMovies);case _:
   return null;
 
 }
@@ -234,7 +236,7 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.feed,_that
 
 
 class _HomeState extends HomeState {
-  const _HomeState({this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.feed, final  List<HomeGenre> genres = const <HomeGenre>[]}): _genres = genres,super._();
+  const _HomeState({this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.feed, final  List<HomeGenre> genres = const <HomeGenre>[], final  List<HomeMovie> tvShowMovies = const <HomeMovie>[], final  List<HomeMovie> upcomingMovies = const <HomeMovie>[]}): _genres = genres,_tvShowMovies = tvShowMovies,_upcomingMovies = upcomingMovies,super._();
   
 
 @override@JsonKey() final  PageStatus pageStatus;
@@ -248,6 +250,20 @@ class _HomeState extends HomeState {
   return EqualUnmodifiableListView(_genres);
 }
 
+ final  List<HomeMovie> _tvShowMovies;
+@override@JsonKey() List<HomeMovie> get tvShowMovies {
+  if (_tvShowMovies is EqualUnmodifiableListView) return _tvShowMovies;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_tvShowMovies);
+}
+
+ final  List<HomeMovie> _upcomingMovies;
+@override@JsonKey() List<HomeMovie> get upcomingMovies {
+  if (_upcomingMovies is EqualUnmodifiableListView) return _upcomingMovies;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_upcomingMovies);
+}
+
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -259,16 +275,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other._genres, _genres));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.feed, feed) || other.feed == feed)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._tvShowMovies, _tvShowMovies)&&const DeepCollectionEquality().equals(other._upcomingMovies, _upcomingMovies));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(_genres));
+int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,feed,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_tvShowMovies),const DeepCollectionEquality().hash(_upcomingMovies));
 
 @override
 String toString() {
-  return 'HomeState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres)';
+  return 'HomeState(pageStatus: $pageStatus, processing: $processing, failure: $failure, feed: $feed, genres: $genres, tvShowMovies: $tvShowMovies, upcomingMovies: $upcomingMovies)';
 }
 
 
@@ -279,7 +295,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres
+ PageStatus pageStatus, bool processing, AppFailure? failure, HomeFeed? feed, List<HomeGenre> genres, List<HomeMovie> tvShowMovies, List<HomeMovie> upcomingMovies
 });
 
 
@@ -296,14 +312,16 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? feed = freezed,Object? genres = null,Object? tvShowMovies = null,Object? upcomingMovies = null,}) {
   return _then(_HomeState(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,feed: freezed == feed ? _self.feed : feed // ignore: cast_nullable_to_non_nullable
 as HomeFeed?,genres: null == genres ? _self._genres : genres // ignore: cast_nullable_to_non_nullable
-as List<HomeGenre>,
+as List<HomeGenre>,tvShowMovies: null == tvShowMovies ? _self._tvShowMovies : tvShowMovies // ignore: cast_nullable_to_non_nullable
+as List<HomeMovie>,upcomingMovies: null == upcomingMovies ? _self._upcomingMovies : upcomingMovies // ignore: cast_nullable_to_non_nullable
+as List<HomeMovie>,
   ));
 }
 

@@ -54,10 +54,16 @@ class _HomeGenresSection extends StatelessWidget {
           runSpacing: 10,
           children: [
             for (final genre in state.visibleGenres)
-              MovieGoGenreChip(
-                label: genre.name,
-                backgroundColor: AppColors.grayscale900,
-                textColor: AppColors.white,
+              InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: () => context.router.push(
+                  GenreMoviesRoute(slug: genre.slug, title: genre.name),
+                ),
+                child: IMovieGenreChip(
+                  label: genre.name,
+                  backgroundColor: AppColors.grayscale900,
+                  textColor: AppColors.white,
+                ),
               ),
           ],
         ),
