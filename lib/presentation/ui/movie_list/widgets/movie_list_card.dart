@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/domain/entities/home/home_movie.dart';
@@ -122,7 +123,7 @@ class _MovieListPoster extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(
-                      Icons.star_rounded,
+                      FluentIcons.star_24_filled,
                       size: 12,
                       color: AppColors.yellow500,
                     ),

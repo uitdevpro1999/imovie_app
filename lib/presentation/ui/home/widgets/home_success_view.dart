@@ -1,10 +1,17 @@
 part of '../home_page.dart';
 
 class _HomeSuccessView extends StatelessWidget {
-  const _HomeSuccessView({required this.state, required this.onRefresh});
+  const _HomeSuccessView({
+    required this.state,
+    required this.onRefresh,
+    required this.onPlayMovie,
+    required this.onOpenTrailer,
+  });
 
   final HomeState state;
   final Future<bool> Function() onRefresh;
+  final ValueChanged<HomeMovie> onPlayMovie;
+  final ValueChanged<HomeMovie> onOpenTrailer;
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +22,47 @@ class _HomeSuccessView extends StatelessWidget {
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         cacheExtent: 3200,
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(top: 8, bottom: 112),
         children: [
           if (state.topMovieViewData.isNotEmpty) ...[
             HomeHeroSlider(
               movies: state.topMovieViewData,
               relatedMovies: state.topMovies,
+              onPlayMovie: onPlayMovie,
+              onOpenTrailer: onOpenTrailer,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
           ] else if (state.heroMovieViewData != null) ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: HomeHeroBanner(movie: state.heroMovieViewData!),
+              child: HomeHeroBanner(
+                movie: state.heroMovieViewData!,
+                onPlayTap: () => onPlayMovie(state.heroMovieViewData!.movie),
+                onTrailerTap: () =>
+                    onOpenTrailer(state.heroMovieViewData!.movie),
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
+          ],
+          if (state.freshUpdateMovies.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: HomeFeaturedUpdatesSection(
+                title: l10n.homeSectionFreshUpdates,
+                actionLabel: l10n.homeSectionViewMore,
+                movies: state.freshUpdateMovieViewData,
+                relatedMovies: state.freshUpdateMovies,
+                onPlayMovie: onPlayMovie,
+                onOpenTrailer: onOpenTrailer,
+                onActionTap: () => context.router.push(
+                  MovieListRoute(
+                    slug: 'phim-moi',
+                    title: l10n.homeSectionFreshUpdates,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
           ],
           if (state.visibleGenres.isNotEmpty) ...[
             Padding(
@@ -41,25 +75,7 @@ class _HomeSuccessView extends StatelessWidget {
                     context.router.push(GenresRoute(genres: state.genres)),
               ),
             ),
-            const SizedBox(height: 24),
-          ],
-          if (state.freshUpdateMovies.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: HomeMovieStripSection(
-                title: l10n.homeSectionFreshUpdates,
-                actionLabel: l10n.homeSectionViewMore,
-                movies: state.freshUpdateMovieViewData,
-                relatedMovies: state.freshUpdateMovies,
-                onActionTap: () => context.router.push(
-                  MovieListRoute(
-                    slug: 'phim-moi',
-                    title: l10n.homeSectionFreshUpdates,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
           if (state.highestRatedMovies.isNotEmpty) ...[
             Padding(
@@ -70,7 +86,7 @@ class _HomeSuccessView extends StatelessWidget {
                 relatedMovies: state.highestRatedMovies,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
           if (state.seriesMovies.isNotEmpty) ...[
             Padding(
@@ -88,7 +104,7 @@ class _HomeSuccessView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
           if (state.tvShows.isNotEmpty) ...[
             Padding(
@@ -106,7 +122,7 @@ class _HomeSuccessView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
           if (state.upcoming.isNotEmpty) ...[
             Padding(
@@ -124,7 +140,7 @@ class _HomeSuccessView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
           if (state.animationMovies.isNotEmpty) ...[
             Padding(
@@ -142,7 +158,7 @@ class _HomeSuccessView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
         ],
       ),

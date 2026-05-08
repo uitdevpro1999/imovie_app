@@ -29,32 +29,42 @@ class _BrowseMovieStripSection extends StatelessWidget {
           actionColor: AppColors.yellow500,
         ),
         const SizedBox(height: 16),
-        SizedBox(
-          height: 236,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final item = movies[index];
-              return GestureDetector(
-                onTap: () => context.router.push(
-                  MovieDetailRoute(
-                    slug: item.movie.slug,
-                    relatedMovies: relatedMovies,
-                  ),
-                ),
-                child: IMoviePosterCard(
-                  imageUrl: item.movie.posterUrl,
-                  title: item.movie.title,
-                  subtitle: item.subtitleLabel,
-                  badgeText: item.ratingLabel,
-                  width: 124,
-                  titleColor: AppColors.white,
-                  subtitleColor: AppColors.grayscale300,
-                ),
-              );
-            },
-            separatorBuilder: (_, _) => const SizedBox(width: 12),
-            itemCount: movies.length,
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.grayscale900,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.white.withValues(alpha: 0.06)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+            child: SizedBox(
+              height: 236,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final item = movies[index];
+                  return GestureDetector(
+                    onTap: () => context.router.push(
+                      MovieDetailRoute(
+                        slug: item.movie.slug,
+                        relatedMovies: relatedMovies,
+                      ),
+                    ),
+                    child: IMoviePosterCard(
+                      imageUrl: item.movie.posterUrl,
+                      title: item.movie.title,
+                      subtitle: item.subtitleLabel,
+                      badgeText: item.ratingLabel,
+                      width: 124,
+                      titleColor: AppColors.white,
+                      subtitleColor: AppColors.grayscale300,
+                    ),
+                  );
+                },
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                itemCount: movies.length,
+              ),
+            ),
           ),
         ),
       ],

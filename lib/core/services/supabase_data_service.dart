@@ -1,9 +1,30 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:imovie_app/core/error/app_exception.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
 import 'package:imovie_app/core/logger/app_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+class SupabaseTableChange {
+  const SupabaseTableChange({
+    required this.schema,
+    required this.table,
+    required this.commitTimestamp,
+    required this.eventType,
+    required this.record,
+    required this.oldRecord,
+  });
+
+  final String schema;
+  final String table;
+  final DateTime commitTimestamp;
+  final PostgresChangeEvent eventType;
+  final Map<String, dynamic> record;
+  final Map<String, dynamic> oldRecord;
+
+  bool get isDelete => eventType == PostgresChangeEvent.delete;
+}
 
 class SupabaseDataUser {
   const SupabaseDataUser({required this.id, this.email});
@@ -13,6 +34,10 @@ class SupabaseDataUser {
 }
 
 abstract interface class SupabaseDataService {
+  String getCurrentUserId();
+
+  Future<void> syncRealtimeAuth();
+
   SupabaseDataUser requireCurrentUser({
     required String unauthorizedMessage,
     required String logName,
@@ -65,6 +90,36 @@ abstract interface class SupabaseDataService {
     required Map<String, Object?> equals,
   });
 
+  Future<int> count({
+    required String table,
+    Map<String, Object?> equals = const {},
+  });
+
+  Future<void> rpc({
+    required String function,
+    Map<String, dynamic> params = const {},
+  });
+
+  Stream<void> watchTableChanges({
+    required String table,
+    String schema = 'public',
+    String? filterColumn,
+    String? filterValue,
+  });
+
+  Stream<SupabaseTableChange> watchTableChangeDetails({
+    required String table,
+    String schema = 'public',
+    String? filterColumn,
+    String? filterValue,
+  });
+
+  Stream<SupabaseTableChange> watchBroadcastChanges({
+    required String topic,
+    String event = '*',
+    bool isPrivate = true,
+  });
+
   Future<void> delete({
     required String table,
     required Map<String, Object?> equals,
@@ -90,7 +145,30 @@ abstract interface class SupabaseDataService {
 class ConfiguredSupabaseDataService implements SupabaseDataService {
   const ConfiguredSupabaseDataService({required this.client});
 
+  static const _databaseBroadcastEvents = <String>[
+    'INSERT',
+    'UPDATE',
+    'DELETE',
+  ];
+
   final SupabaseClient client;
+
+  @override
+  String getCurrentUserId() {
+    return client.auth.currentUser?.id ?? '';
+  }
+
+  @override
+  Future<void> syncRealtimeAuth() async {
+    try {
+      await client.realtime.setAuth(client.auth.currentSession?.accessToken);
+    } catch (error) {
+      AppLogger.warning(
+        'Unable to sync realtime auth token. $error',
+        name: 'SupabaseRealtime',
+      );
+    }
+  }
 
   @override
   SupabaseDataUser requireCurrentUser({
@@ -201,6 +279,158 @@ class ConfiguredSupabaseDataService implements SupabaseDataService {
   }
 
   @override
+  Future<int> count({
+    required String table,
+    Map<String, Object?> equals = const {},
+  }) async {
+    dynamic query = client.from(table).count(CountOption.exact);
+    query = _applyEquals(query, equals);
+    return await query as int;
+  }
+
+  @override
+  Future<void> rpc({
+    required String function,
+    Map<String, dynamic> params = const {},
+  }) async {
+    await client.rpc(function, params: params);
+  }
+
+  @override
+  Stream<void> watchTableChanges({
+    required String table,
+    String schema = 'public',
+    String? filterColumn,
+    String? filterValue,
+  }) {
+    return watchTableChangeDetails(
+      table: table,
+      schema: schema,
+      filterColumn: filterColumn,
+      filterValue: filterValue,
+    ).map((_) {});
+  }
+
+  @override
+  Stream<SupabaseTableChange> watchTableChangeDetails({
+    required String table,
+    String schema = 'public',
+    String? filterColumn,
+    String? filterValue,
+  }) {
+    late RealtimeChannel channel;
+    late final StreamController<SupabaseTableChange> controller;
+    final safeFilterColumn = filterColumn?.trim() ?? '';
+    final safeFilterValue = filterValue?.trim() ?? '';
+    final hasFilter = safeFilterColumn.isNotEmpty && safeFilterValue.isNotEmpty;
+
+    controller = StreamController<SupabaseTableChange>.broadcast(
+      onListen: () {
+        channel = client.channel(
+          '$schema:$table:${safeFilterColumn.isEmpty ? 'all' : safeFilterColumn}:${safeFilterValue.isEmpty ? 'all' : safeFilterValue}',
+        );
+
+        channel = channel.onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: schema,
+          table: table,
+          filter: hasFilter
+              ? PostgresChangeFilter(
+                  type: PostgresChangeFilterType.eq,
+                  column: safeFilterColumn,
+                  value: safeFilterValue,
+                )
+              : null,
+          callback: (payload) {
+            if (!controller.isClosed) {
+              controller.add(
+                SupabaseTableChange(
+                  schema: payload.schema,
+                  table: payload.table,
+                  commitTimestamp: payload.commitTimestamp,
+                  eventType: payload.eventType,
+                  record: Map<String, dynamic>.unmodifiable(payload.newRecord),
+                  oldRecord: Map<String, dynamic>.unmodifiable(
+                    payload.oldRecord,
+                  ),
+                ),
+              );
+            }
+          },
+        );
+
+        channel.subscribe();
+      },
+      onCancel: () {
+        unawaited(client.removeChannel(channel));
+      },
+    );
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<SupabaseTableChange> watchBroadcastChanges({
+    required String topic,
+    String event = '*',
+    bool isPrivate = true,
+  }) {
+    late RealtimeChannel channel;
+    late final StreamController<SupabaseTableChange> controller;
+    final normalizedTopic = topic.trim();
+    final normalizedEvent = event.trim().isEmpty ? '*' : event.trim();
+
+    controller = StreamController<SupabaseTableChange>.broadcast(
+      onListen: () {
+        channel = client.channel(
+          normalizedTopic,
+          opts: RealtimeChannelConfig(private: isPrivate),
+        );
+
+        void handlePayload(String fallbackEvent, Map<String, dynamic> payload) {
+          final data = _extractBroadcastChangePayload(
+            payload,
+            fallbackEvent: fallbackEvent,
+          );
+          if (data == null || controller.isClosed) {
+            return;
+          }
+
+          controller.add(data);
+        }
+
+        if (normalizedEvent == '*') {
+          for (final eventName in _databaseBroadcastEvents) {
+            channel = channel.onBroadcast(
+              event: eventName,
+              callback: (payload) => handlePayload(eventName, payload),
+            );
+          }
+        } else {
+          channel = channel.onBroadcast(
+            event: normalizedEvent,
+            callback: (payload) => handlePayload(normalizedEvent, payload),
+          );
+        }
+
+        channel.subscribe((status, error) {
+          if (status == RealtimeSubscribeStatus.channelError) {
+            AppLogger.warning(
+              'Broadcast subscribe failed for $normalizedTopic:$normalizedEvent. $error',
+              name: 'SupabaseRealtime',
+            );
+          }
+        });
+      },
+      onCancel: () {
+        unawaited(client.removeChannel(channel));
+      },
+    );
+
+    return controller.stream;
+  }
+
+  @override
   Future<void> delete({
     required String table,
     required Map<String, Object?> equals,
@@ -293,10 +523,95 @@ class ConfiguredSupabaseDataService implements SupabaseDataService {
       AppFailure.unknown('Unexpected Supabase response shape.'),
     );
   }
+
+  SupabaseTableChange? _extractBroadcastChangePayload(
+    Map<String, dynamic> payload, {
+    required String fallbackEvent,
+  }) {
+    final base = payload['schema'] != null && payload['table'] != null
+        ? payload
+        : payload['payload'] is Map<String, dynamic>
+        ? Map<String, dynamic>.from(payload['payload'] as Map<String, dynamic>)
+        : payload['data'] is Map<String, dynamic>
+        ? Map<String, dynamic>.from(payload['data'] as Map<String, dynamic>)
+        : null;
+    if (base == null) {
+      return null;
+    }
+
+    final table = base['table']?.toString().trim() ?? '';
+    if (table.isEmpty) {
+      return null;
+    }
+
+    final rawEvent =
+        base['eventType']?.toString() ??
+        base['type']?.toString() ??
+        payload['event']?.toString() ??
+        fallbackEvent;
+
+    final eventType = _postgresChangeEventFromString(rawEvent);
+    final record = _recordFromAny(base, const [
+      'new',
+      'new_record',
+      'newRecord',
+      'record',
+    ]);
+    final oldRecord = _recordFromAny(base, const [
+      'old',
+      'old_record',
+      'oldRecord',
+      'previous_record',
+    ]);
+
+    return SupabaseTableChange(
+      schema: base['schema']?.toString() ?? 'public',
+      table: table,
+      commitTimestamp:
+          DateTime.tryParse(base['commit_timestamp']?.toString() ?? '') ??
+          DateTime.now().toUtc(),
+      eventType: eventType,
+      record: Map<String, dynamic>.unmodifiable(record),
+      oldRecord: Map<String, dynamic>.unmodifiable(
+        eventType == PostgresChangeEvent.delete && oldRecord.isEmpty
+            ? record
+            : oldRecord,
+      ),
+    );
+  }
+
+  Map<String, dynamic> _recordFromAny(
+    Map<String, dynamic> payload,
+    List<String> keys,
+  ) {
+    for (final key in keys) {
+      final value = payload[key];
+      if (value is Map) {
+        return Map<String, dynamic>.from(value);
+      }
+    }
+
+    return const <String, dynamic>{};
+  }
+
+  PostgresChangeEvent _postgresChangeEventFromString(String rawEvent) {
+    return switch (rawEvent.toUpperCase()) {
+      'INSERT' => PostgresChangeEvent.insert,
+      'UPDATE' => PostgresChangeEvent.update,
+      'DELETE' => PostgresChangeEvent.delete,
+      _ => PostgresChangeEvent.all,
+    };
+  }
 }
 
 class UnconfiguredSupabaseDataService implements SupabaseDataService {
   const UnconfiguredSupabaseDataService();
+
+  @override
+  String getCurrentUserId() => '';
+
+  @override
+  Future<void> syncRealtimeAuth() async {}
 
   @override
   SupabaseDataUser requireCurrentUser({
@@ -383,6 +698,51 @@ class UnconfiguredSupabaseDataService implements SupabaseDataService {
     required String table,
     required Map<String, Object?> equals,
   }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<int> count({
+    required String table,
+    Map<String, Object?> equals = const {},
+  }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<void> rpc({
+    required String function,
+    Map<String, dynamic> params = const {},
+  }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Stream<void> watchTableChanges({
+    required String table,
+    String schema = 'public',
+    String? filterColumn,
+    String? filterValue,
+  }) {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Stream<SupabaseTableChange> watchTableChangeDetails({
+    required String table,
+    String schema = 'public',
+    String? filterColumn,
+    String? filterValue,
+  }) {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Stream<SupabaseTableChange> watchBroadcastChanges({
+    required String topic,
+    String event = '*',
+    bool isPrivate = true,
+  }) {
     throw const AppException(_configurationFailure);
   }
 

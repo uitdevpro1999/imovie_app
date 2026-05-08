@@ -19,6 +19,12 @@ abstract interface class ProfileRemoteDataSource {
     required String fileName,
     required String contentType,
   });
+
+  Future<ProfileResponse> updateCover({
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  });
 }
 
 class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
@@ -87,15 +93,49 @@ class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
     required String fileName,
     required String contentType,
   }) async {
+    return _updateProfileImage(
+      bytes: bytes,
+      fileName: fileName,
+      contentType: contentType,
+      filePrefix: 'avatar',
+      columnName: 'avatar_url',
+      logLabel: 'avatar',
+    );
+  }
+
+  @override
+  Future<ProfileResponse> updateCover({
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async {
+    return _updateProfileImage(
+      bytes: bytes,
+      fileName: fileName,
+      contentType: contentType,
+      filePrefix: 'cover',
+      columnName: 'cover_url',
+      logLabel: 'cover image',
+    );
+  }
+
+  Future<ProfileResponse> _updateProfileImage({
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+    required String filePrefix,
+    required String columnName,
+    required String logLabel,
+  }) async {
     final user = _currentUser();
     final extension = _extensionFor(
       fileName: fileName,
       contentType: contentType,
     );
-    final path = '${user.id}/avatar$extension';
+    final path = '${user.id}/$filePrefix$extension';
 
     AppLogger.info(
-      'Uploading avatar for ${AppLogger.shortId(user.id)} to $_avatarBucket/$path.',
+      'Uploading $logLabel for ${AppLogger.shortId(user.id)} to $_avatarBucket/$path.',
       name: 'Supabase.Profile',
     );
     await dataService.uploadBinary(
@@ -106,22 +146,22 @@ class SupabaseProfileRemoteDataSource implements ProfileRemoteDataSource {
       upsert: true,
     );
 
-    final avatarUrl = dataService.getPublicUrl(
+    final imageUrl = dataService.getPublicUrl(
       bucket: _avatarBucket,
       path: path,
     );
     AppLogger.info(
-      'Avatar uploaded for ${AppLogger.shortId(user.id)}.',
+      'Profile $logLabel uploaded for ${AppLogger.shortId(user.id)}.',
       name: 'Supabase.Profile',
     );
     final json = await dataService.updateAndSelectSingle(
       table: _table,
-      values: {'avatar_url': avatarUrl},
+      values: {columnName: imageUrl},
       equals: {'id': user.id},
     );
 
     AppLogger.info(
-      'Profile avatar URL updated for ${AppLogger.shortId(user.id)}.',
+      'Profile $logLabel URL updated for ${AppLogger.shortId(user.id)}.',
       name: 'Supabase.Profile',
     );
     return ProfileResponse.fromJson(json);
@@ -176,6 +216,15 @@ class UnconfiguredProfileRemoteDataSource implements ProfileRemoteDataSource {
 
   @override
   Future<ProfileResponse> updateAvatar({
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<ProfileResponse> updateCover({
     required Uint8List bytes,
     required String fileName,
     required String contentType,

@@ -509,13 +509,13 @@ abstract class AppLocalizations {
   /// No description provided for @authSignInSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'By signing in, you agree to iMovie conditions of\nUse and Privacy Policy'**
+  /// **'By signing in, you agree to iMovie conditions of Use and Privacy Policy'**
   String get authSignInSubtitle;
 
   /// No description provided for @authSignUpSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Create account in a second, this need to personalize\nrecommendations for you'**
+  /// **'Create account in a second, this need to personalize recommendations for you'**
   String get authSignUpSubtitle;
 
   /// No description provided for @authEmailLabel.
@@ -668,6 +668,48 @@ abstract class AppLocalizations {
   /// **'Movies, series, actors'**
   String get browseSearchHint;
 
+  /// No description provided for @browseHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find movies that fit your mood'**
+  String get browseHeroTitle;
+
+  /// No description provided for @browseHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter quickly by genre, country, and release year.'**
+  String get browseHeroSubtitle;
+
+  /// No description provided for @browseStatCatalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalog'**
+  String get browseStatCatalog;
+
+  /// No description provided for @browseStatGenres.
+  ///
+  /// In en, this message translates to:
+  /// **'Genres'**
+  String get browseStatGenres;
+
+  /// No description provided for @browseStatPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get browseStatPopular;
+
+  /// No description provided for @browseMovieCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} movies'**
+  String browseMovieCount(int count);
+
+  /// No description provided for @browseSearchCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} results'**
+  String browseSearchCount(int count);
+
   /// No description provided for @browsePopularSection.
   ///
   /// In en, this message translates to:
@@ -698,6 +740,72 @@ abstract class AppLocalizations {
   /// **'Add movies from the detail screen to find them here.'**
   String get libraryEmptySubtitle;
 
+  /// No description provided for @libraryCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal collection'**
+  String get libraryCollectionTitle;
+
+  /// No description provided for @libraryCollectionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies you saved so you can return to them anytime.'**
+  String get libraryCollectionSubtitle;
+
+  /// No description provided for @libraryStatsMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved movies'**
+  String get libraryStatsMovies;
+
+  /// No description provided for @libraryStatsPlayable.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to watch'**
+  String get libraryStatsPlayable;
+
+  /// No description provided for @libraryStatsUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently added'**
+  String get libraryStatsUpdated;
+
+  /// No description provided for @librarySavedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {date}'**
+  String librarySavedAt(String date);
+
+  /// No description provided for @librarySwipeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe left to remove'**
+  String get librarySwipeHint;
+
+  /// No description provided for @libraryRemoveConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from library?'**
+  String get libraryRemoveConfirmTitle;
+
+  /// No description provided for @libraryRemoveConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This movie will be removed from your library. You can still add it again from the movie detail screen.'**
+  String get libraryRemoveConfirmMessage;
+
+  /// No description provided for @libraryRemoveConfirmCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get libraryRemoveConfirmCancel;
+
+  /// No description provided for @libraryRemoveConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get libraryRemoveConfirmAction;
+
   /// No description provided for @libraryRemoveAction.
   ///
   /// In en, this message translates to:
@@ -727,6 +835,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change avatar'**
   String get profileChangeAvatar;
+
+  /// No description provided for @profileChangeCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Change cover'**
+  String get profileChangeCover;
 
   /// No description provided for @profileFullNameLabel.
   ///
@@ -836,6 +950,24 @@ abstract class AppLocalizations {
   /// **'Episodes'**
   String get profileEpisodes;
 
+  /// No description provided for @profileStatsPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts'**
+  String get profileStatsPosts;
+
+  /// No description provided for @profileStatsFollowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get profileStatsFollowers;
+
+  /// No description provided for @profileStatsFollowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get profileStatsFollowing;
+
   /// No description provided for @profileMainSettings.
   ///
   /// In en, this message translates to:
@@ -863,7 +995,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileSettingsMyPosts.
   ///
   /// In en, this message translates to:
-  /// **'My posts'**
+  /// **'My profile'**
   String get profileSettingsMyPosts;
 
   /// No description provided for @profileSettingsNotifications.
@@ -925,6 +1057,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get profileSettingsAbout;
+
+  /// No description provided for @profileContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact info'**
+  String get profileContactTitle;
+
+  /// No description provided for @profileContactSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct channels to contact Nguyen Quoc Trung.'**
+  String get profileContactSubtitle;
+
+  /// No description provided for @profileContactOpenAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get profileContactOpenAction;
+
+  /// No description provided for @profileContactCopyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get profileContactCopyAction;
+
+  /// No description provided for @profileContactCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact information copied.'**
+  String get profileContactCopied;
+
+  /// No description provided for @profileContactOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open this contact channel.'**
+  String get profileContactOpenError;
+
+  /// No description provided for @profileContactZaloTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zalo'**
+  String get profileContactZaloTitle;
+
+  /// No description provided for @profileContactFacebookTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook'**
+  String get profileContactFacebookTitle;
+
+  /// No description provided for @profileContactGmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gmail'**
+  String get profileContactGmailTitle;
+
+  /// No description provided for @profileContactFacebookSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nguyen Quoc Trung (Shinjitsu Kudo)'**
+  String get profileContactFacebookSubtitle;
+
+  /// No description provided for @profileContactGmailSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'nqtrungit1999@gmail.com'**
+  String get profileContactGmailSubtitle;
+
+  /// No description provided for @profileContactZaloSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'+84975182035'**
+  String get profileContactZaloSubtitle;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new yet'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New posts, stories, comments, and reactions will show up here.'**
+  String get notificationsEmptySubtitle;
+
+  /// No description provided for @notificationsHeaderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay in sync with your community activity.'**
+  String get notificationsHeaderSubtitle;
+
+  /// No description provided for @notificationsReadAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Read all'**
+  String get notificationsReadAll;
+
+  /// No description provided for @notificationsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load notifications.'**
+  String get notificationsLoadError;
+
+  /// No description provided for @notificationsHeaderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0 {All caught up} =1 {1 unread notification} other {{count} unread notifications}}'**
+  String notificationsHeaderTitle(int count);
+
+  /// No description provided for @profileAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get profileAboutTitle;
+
+  /// No description provided for @profileAboutSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Introduction screen for the creator behind iMovie.'**
+  String get profileAboutSubtitle;
+
+  /// No description provided for @profileAboutRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Developer'**
+  String get profileAboutRole;
+
+  /// No description provided for @profileAboutCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Company'**
+  String get profileAboutCompany;
+
+  /// No description provided for @profileAboutHandle.
+  ///
+  /// In en, this message translates to:
+  /// **'Handle'**
+  String get profileAboutHandle;
+
+  /// No description provided for @profileAboutFocusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus'**
+  String get profileAboutFocusTitle;
+
+  /// No description provided for @profileAboutFocusSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter, GraphQL, Maps, Firebase, RESTful API, Clean Architecture, and polished mobile product experiences.'**
+  String get profileAboutFocusSubtitle;
+
+  /// No description provided for @profileAboutFocusFlutter.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter'**
+  String get profileAboutFocusFlutter;
+
+  /// No description provided for @profileAboutFocusArchitecture.
+  ///
+  /// In en, this message translates to:
+  /// **'Bloc'**
+  String get profileAboutFocusArchitecture;
+
+  /// No description provided for @profileAboutFocusBackend.
+  ///
+  /// In en, this message translates to:
+  /// **'Supabase'**
+  String get profileAboutFocusBackend;
+
+  /// No description provided for @profileAboutFocusGraphql.
+  ///
+  /// In en, this message translates to:
+  /// **'GraphQL'**
+  String get profileAboutFocusGraphql;
+
+  /// No description provided for @profileAboutFocusMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Maps'**
+  String get profileAboutFocusMaps;
+
+  /// No description provided for @profileAboutFocusFirebase.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase'**
+  String get profileAboutFocusFirebase;
+
+  /// No description provided for @profileAboutFocusRestfulApi.
+  ///
+  /// In en, this message translates to:
+  /// **'RESTful API'**
+  String get profileAboutFocusRestfulApi;
+
+  /// No description provided for @profileAboutFocusCleanArchitecture.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Architecture'**
+  String get profileAboutFocusCleanArchitecture;
+
+  /// No description provided for @profileAboutFocusProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Product UI'**
+  String get profileAboutFocusProduct;
 
   /// No description provided for @profileSettingsInviteFriends.
   ///
@@ -1070,6 +1412,114 @@ abstract class AppLocalizations {
   /// **'Community'**
   String get communityTitle;
 
+  /// No description provided for @communityProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get communityProfileTitle;
+
+  /// No description provided for @communityUserFallbackName.
+  ///
+  /// In en, this message translates to:
+  /// **'iMovie user'**
+  String get communityUserFallbackName;
+
+  /// No description provided for @communityFollowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow'**
+  String get communityFollowAction;
+
+  /// No description provided for @communityFollowingAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get communityFollowingAction;
+
+  /// No description provided for @communityFollowersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get communityFollowersLabel;
+
+  /// No description provided for @communityFollowingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get communityFollowingLabel;
+
+  /// No description provided for @communityFollowersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get communityFollowersTitle;
+
+  /// No description provided for @communityFollowingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get communityFollowingTitle;
+
+  /// No description provided for @communityFollowersEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No followers yet'**
+  String get communityFollowersEmptyTitle;
+
+  /// No description provided for @communityFollowersEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People who follow you will appear here.'**
+  String get communityFollowersEmptySubtitle;
+
+  /// No description provided for @communityFollowingEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not following anyone yet'**
+  String get communityFollowingEmptyTitle;
+
+  /// No description provided for @communityFollowingEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People you follow will appear here.'**
+  String get communityFollowingEmptySubtitle;
+
+  /// No description provided for @communityPostsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts'**
+  String get communityPostsLabel;
+
+  /// No description provided for @communityStoriesMetricLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stories'**
+  String get communityStoriesMetricLabel;
+
+  /// No description provided for @communityFollowSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You are now following this user.'**
+  String get communityFollowSuccess;
+
+  /// No description provided for @communityUnfollowSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You unfollowed this user.'**
+  String get communityUnfollowSuccess;
+
+  /// No description provided for @communityProfileEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No posts yet'**
+  String get communityProfileEmptyTitle;
+
+  /// No description provided for @communityProfileEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This user\'s shared posts will appear here.'**
+  String get communityProfileEmptySubtitle;
+
   /// No description provided for @communityMyPostsTitle.
   ///
   /// In en, this message translates to:
@@ -1123,6 +1573,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change image'**
   String get communityStoryChangeImageAction;
+
+  /// No description provided for @communityStoryDoneEditingAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide keyboard'**
+  String get communityStoryDoneEditingAction;
 
   /// No description provided for @communityStoryImageRequired.
   ///
@@ -1315,6 +1771,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Publish'**
   String get communityPublishAction;
+
+  /// No description provided for @communityCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get communityCancelAction;
 
   /// No description provided for @communityUpdateAction.
   ///

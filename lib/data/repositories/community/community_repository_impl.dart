@@ -5,6 +5,7 @@ import 'package:imovie_app/core/result/result.dart';
 import 'package:imovie_app/data/datasources/community/community_remote_data_source.dart';
 import 'package:imovie_app/domain/entities/community/community_comment.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
+import 'package:imovie_app/domain/entities/community/community_profile.dart';
 import 'package:imovie_app/domain/entities/community/community_story.dart';
 import 'package:imovie_app/domain/repositories/community_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -19,14 +20,41 @@ class CommunityRepositoryImpl implements CommunityRepository {
   final CommunityRemoteDataSource remoteDataSource;
 
   @override
-  Future<Result<List<CommunityStory>>> getStories() async {
+  Future<Result<CommunityStory>> getStoryById(String id) async {
     return _run(
       request: () async {
-        final response = await remoteDataSource.getStories();
+        final response = await remoteDataSource.getStoryById(id);
+        return response.toEntity();
+      },
+      authMessage: 'Unable to load this story.',
+      unknownMessage: 'Unexpected error while loading this story.',
+    );
+  }
+
+  @override
+  Future<Result<List<CommunityStory>>> getStories({
+    required String userId,
+    required bool followedOnly,
+  }) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.getStories(
+          userId: userId,
+          followedOnly: followedOnly,
+        );
         return response.map((item) => item.toEntity()).toList(growable: false);
       },
       authMessage: 'Unable to load community stories.',
       unknownMessage: 'Unexpected error while loading community stories.',
+    );
+  }
+
+  @override
+  Future<Result<List<String>>> getFollowedUserIds() async {
+    return _run(
+      request: () => remoteDataSource.getFollowedUserIds(),
+      authMessage: 'Unable to load followed users.',
+      unknownMessage: 'Unexpected error while loading followed users.',
     );
   }
 
@@ -78,8 +106,21 @@ class CommunityRepositoryImpl implements CommunityRepository {
   }
 
   @override
+  Future<Result<CommunityPost>> getPostById(String id) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.getPostById(id);
+        return response.toEntity();
+      },
+      authMessage: 'Unable to load this post.',
+      unknownMessage: 'Unexpected error while loading this post.',
+    );
+  }
+
+  @override
   Future<Result<List<CommunityPost>>> getPosts({
     required bool mineOnly,
+    required String userId,
     required int page,
     required int limit,
   }) async {
@@ -87,6 +128,7 @@ class CommunityRepositoryImpl implements CommunityRepository {
       request: () async {
         final response = await remoteDataSource.getPosts(
           mineOnly: mineOnly,
+          userId: userId,
           page: page,
           limit: limit,
         );
@@ -98,13 +140,89 @@ class CommunityRepositoryImpl implements CommunityRepository {
   }
 
   @override
+  Future<Result<CommunityProfile>> getProfile(String userId) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.getProfile(userId);
+        return response.toEntity();
+      },
+      authMessage: 'Unable to load this community profile.',
+      unknownMessage: 'Unexpected error while loading this community profile.',
+    );
+  }
+
+  @override
+  Future<Result<List<CommunityProfile>>> getFollowers({
+    required String userId,
+    required int page,
+    required int limit,
+  }) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.getFollowers(
+          userId: userId,
+          page: page,
+          limit: limit,
+        );
+        return response.map((item) => item.toEntity()).toList(growable: false);
+      },
+      authMessage: 'Unable to load followers.',
+      unknownMessage: 'Unexpected error while loading followers.',
+    );
+  }
+
+  @override
+  Future<Result<List<CommunityProfile>>> getFollowing({
+    required String userId,
+    required int page,
+    required int limit,
+  }) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.getFollowing(
+          userId: userId,
+          page: page,
+          limit: limit,
+        );
+        return response.map((item) => item.toEntity()).toList(growable: false);
+      },
+      authMessage: 'Unable to load following users.',
+      unknownMessage: 'Unexpected error while loading following users.',
+    );
+  }
+
+  @override
+  Future<Result<CommunityProfile>> followUser(String userId) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.followUser(userId);
+        return response.toEntity();
+      },
+      authMessage: 'Unable to follow this user.',
+      unknownMessage: 'Unexpected error while following this user.',
+    );
+  }
+
+  @override
+  Future<Result<CommunityProfile>> unfollowUser(String userId) async {
+    return _run(
+      request: () async {
+        final response = await remoteDataSource.unfollowUser(userId);
+        return response.toEntity();
+      },
+      authMessage: 'Unable to unfollow this user.',
+      unknownMessage: 'Unexpected error while unfollowing this user.',
+    );
+  }
+
+  @override
   Future<Result<CommunityPost>> createPost({
     required String content,
     required String movieTitle,
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<CommunityImagePayload> images,
   }) async {
     return _run(
       request: () async {
@@ -114,7 +232,7 @@ class CommunityRepositoryImpl implements CommunityRepository {
           movieSlug: movieSlug,
           moviePosterUrl: moviePosterUrl,
           locationName: locationName,
-          image: image,
+          images: images,
         );
         return response.toEntity();
       },
@@ -131,7 +249,8 @@ class CommunityRepositoryImpl implements CommunityRepository {
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<String> keptImageUrls,
+    required List<CommunityImagePayload> images,
   }) async {
     return _run(
       request: () async {
@@ -142,7 +261,8 @@ class CommunityRepositoryImpl implements CommunityRepository {
           movieSlug: movieSlug,
           moviePosterUrl: moviePosterUrl,
           locationName: locationName,
-          image: image,
+          keptImageUrls: keptImageUrls,
+          images: images,
         );
         return response.toEntity();
       },

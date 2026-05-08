@@ -27,26 +27,35 @@ class CommunityComposePage extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<CommunityComposeCubit, CommunityComposeState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.grayscale950,
-          appBar: IMovieAppBar(
-            title: state.isEditing
-                ? l10n.communityEditTitle
-                : l10n.communityCreateTitle,
-          ),
-          body: SafeArea(
-            child: Stack(
-              children: [
-                const Positioned.fill(child: CommunityComposeForm()),
-                if (state.processing)
-                  const Positioned.fill(child: _CommunityComposeOverlay()),
-              ],
+    return Scaffold(
+      backgroundColor: AppColors.grayscale950,
+      appBar: IMovieAppBar(
+        title: initialPost == null
+            ? l10n.communityCreateTitle
+            : l10n.communityEditTitle,
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            const Positioned.fill(child: CommunityComposeForm()),
+            Positioned.fill(
+              child:
+                  BlocSelector<
+                    CommunityComposeCubit,
+                    CommunityComposeState,
+                    bool
+                  >(
+                    selector: (state) => state.processing,
+                    builder: (context, processing) {
+                      return processing
+                          ? const _CommunityComposeOverlay()
+                          : const SizedBox.shrink();
+                    },
+                  ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }

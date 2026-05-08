@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -8,6 +9,11 @@ abstract final class IMovieRefreshConfig {
   static const bool enablePullDown = true;
   static const double footerSpinnerSize = 22;
   static const double footerSpinnerStrokeWidth = 2;
+  static const springDescription = SpringDescription(
+    mass: 1,
+    stiffness: 364.73,
+    damping: 35.2,
+  );
 
   static const String loadingText = '';
   static const String idleText = '';
@@ -35,15 +41,15 @@ abstract final class IMovieRefreshConfig {
         ),
       ),
       canLoadingIcon: const Icon(
-        Icons.keyboard_arrow_up_rounded,
+        FluentIcons.chevron_up_24_regular,
         color: AppColors.grayscale400,
       ),
       idleIcon: const Icon(
-        Icons.keyboard_arrow_up_rounded,
+        FluentIcons.chevron_up_24_regular,
         color: AppColors.grayscale500,
       ),
       failedIcon: const Icon(
-        Icons.error_outline_rounded,
+        FluentIcons.error_circle_24_regular,
         color: AppColors.red400,
       ),
     );

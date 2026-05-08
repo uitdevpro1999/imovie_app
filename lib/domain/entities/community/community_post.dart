@@ -5,7 +5,7 @@ class CommunityPost {
     required this.authorName,
     required this.authorAvatarUrl,
     required this.content,
-    required this.imageUrl,
+    required this.imageUrls,
     required this.movieTitle,
     required this.movieSlug,
     required this.moviePosterUrl,
@@ -23,7 +23,7 @@ class CommunityPost {
   final String authorName;
   final String authorAvatarUrl;
   final String content;
-  final String imageUrl;
+  final List<String> imageUrls;
   final String movieTitle;
   final String movieSlug;
   final String moviePosterUrl;
@@ -35,9 +35,13 @@ class CommunityPost {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  String get imageUrl => imageUrls.isEmpty ? '' : imageUrls.first;
+
   CommunityPost copyWith({
+    String? authorName,
+    String? authorAvatarUrl,
     String? content,
-    String? imageUrl,
+    List<String>? imageUrls,
     String? movieTitle,
     String? movieSlug,
     String? moviePosterUrl,
@@ -49,10 +53,10 @@ class CommunityPost {
     return CommunityPost(
       id: id,
       userId: userId,
-      authorName: authorName,
-      authorAvatarUrl: authorAvatarUrl,
+      authorName: authorName ?? this.authorName,
+      authorAvatarUrl: authorAvatarUrl ?? this.authorAvatarUrl,
       content: content ?? this.content,
-      imageUrl: imageUrl ?? this.imageUrl,
+      imageUrls: imageUrls ?? this.imageUrls,
       movieTitle: movieTitle ?? this.movieTitle,
       movieSlug: movieSlug ?? this.movieSlug,
       moviePosterUrl: moviePosterUrl ?? this.moviePosterUrl,

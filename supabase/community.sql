@@ -15,6 +15,7 @@ create table if not exists public.community_posts (
   author_avatar_url text not null default '',
   content text not null default '',
   image_url text not null default '',
+  image_urls jsonb not null default '[]'::jsonb,
   movie_title text not null default '',
   movie_slug text not null default '',
   movie_poster_url text not null default '',
@@ -27,7 +28,29 @@ create table if not exists public.community_posts (
 
 alter table public.community_posts
   add column if not exists movie_slug text not null default '',
-  add column if not exists movie_poster_url text not null default '';
+  add column if not exists movie_poster_url text not null default '',
+  add column if not exists image_urls jsonb not null default '[]'::jsonb;
+
+update public.community_posts
+set image_urls = jsonb_build_array(image_url)
+where image_url <> ''
+  and image_urls = '[]'::jsonb;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'community_posts_image_urls_max_5'
+  ) then
+    alter table public.community_posts
+      add constraint community_posts_image_urls_max_5
+      check (
+        jsonb_typeof(image_urls) = 'array'
+        and jsonb_array_length(image_urls) <= 5
+      );
+  end if;
+end $$;
 
 create table if not exists public.community_comments (
   id uuid primary key default gen_random_uuid(),
@@ -47,6 +70,27 @@ create table if not exists public.community_reactions (
   created_at timestamptz not null default now(),
   constraint community_reactions_user_post_unique unique (user_id, post_id)
 );
+
+create table if not exists public.community_follows (
+  id uuid primary key default gen_random_uuid(),
+  follower_id uuid not null references auth.users(id) on delete cascade,
+  following_id uuid not null references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  constraint community_follows_no_self_follow
+    check (follower_id <> following_id),
+  constraint community_follows_pair_unique
+    unique (follower_id, following_id)
+);
+
+create or replace view public.community_public_profiles as
+select
+  id,
+  coalesce(full_name, '') as full_name,
+  coalesce(avatar_url, '') as avatar_url,
+  coalesce(cover_url, '') as cover_url
+from public.profiles;
+
+grant select on public.community_public_profiles to authenticated;
 
 create table if not exists public.community_stories (
   id uuid primary key default gen_random_uuid(),
@@ -90,6 +134,89 @@ alter table public.community_stories
   add column if not exists location_position_x double precision not null default 0.32,
   add column if not exists location_position_y double precision not null default 0.88;
 
+create or replace function public.sync_community_author_from_profile()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  next_author_name text;
+  next_author_avatar_url text;
+begin
+  if tg_op = 'UPDATE'
+    and coalesce(new.full_name, '') = coalesce(old.full_name, '')
+    and coalesce(new.avatar_url, '') = coalesce(old.avatar_url, '')
+  then
+    return new;
+  end if;
+
+  next_author_name := coalesce(new.full_name, '');
+  next_author_avatar_url := coalesce(new.avatar_url, '');
+
+  update public.community_posts
+    set
+      author_name = next_author_name,
+      author_avatar_url = next_author_avatar_url
+    where user_id = new.id;
+
+  update public.community_comments
+    set
+      author_name = next_author_name,
+      author_avatar_url = next_author_avatar_url
+    where user_id = new.id;
+
+  update public.community_stories
+    set
+      author_name = next_author_name,
+      author_avatar_url = next_author_avatar_url
+    where user_id = new.id;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists sync_community_author_from_profile
+  on public.profiles;
+create trigger sync_community_author_from_profile
+  after insert or update of full_name, avatar_url
+  on public.profiles
+  for each row
+  execute function public.sync_community_author_from_profile();
+
+update public.community_posts as post
+  set
+    author_name = coalesce(profile.full_name, ''),
+    author_avatar_url = coalesce(profile.avatar_url, '')
+  from public.profiles as profile
+  where post.user_id = profile.id
+    and (
+      post.author_name is distinct from coalesce(profile.full_name, '')
+      or post.author_avatar_url is distinct from coalesce(profile.avatar_url, '')
+    );
+
+update public.community_comments as comment
+  set
+    author_name = coalesce(profile.full_name, ''),
+    author_avatar_url = coalesce(profile.avatar_url, '')
+  from public.profiles as profile
+  where comment.user_id = profile.id
+    and (
+      comment.author_name is distinct from coalesce(profile.full_name, '')
+      or comment.author_avatar_url is distinct from coalesce(profile.avatar_url, '')
+    );
+
+update public.community_stories as story
+  set
+    author_name = coalesce(profile.full_name, ''),
+    author_avatar_url = coalesce(profile.avatar_url, '')
+  from public.profiles as profile
+  where story.user_id = profile.id
+    and (
+      story.author_name is distinct from coalesce(profile.full_name, '')
+      or story.author_avatar_url is distinct from coalesce(profile.avatar_url, '')
+    );
+
 create index if not exists community_posts_created_at_idx
   on public.community_posts (created_at desc);
 
@@ -106,6 +233,12 @@ create index if not exists community_comments_post_created_at_idx
 create index if not exists community_reactions_post_idx
   on public.community_reactions (post_id);
 
+create index if not exists community_follows_follower_idx
+  on public.community_follows (follower_id, created_at desc);
+
+create index if not exists community_follows_following_idx
+  on public.community_follows (following_id, created_at desc);
+
 create index if not exists community_stories_active_created_at_idx
   on public.community_stories (expires_at, created_at desc);
 
@@ -119,6 +252,7 @@ create index if not exists community_stories_movie_slug_idx
 alter table public.community_posts enable row level security;
 alter table public.community_comments enable row level security;
 alter table public.community_reactions enable row level security;
+alter table public.community_follows enable row level security;
 alter table public.community_stories enable row level security;
 
 drop policy if exists "Authenticated users can read community posts"
@@ -191,6 +325,30 @@ create policy "Users can delete their community reactions"
   on public.community_reactions
   for delete
   using (auth.uid() = user_id);
+
+drop policy if exists "Authenticated users can read community follows"
+  on public.community_follows;
+create policy "Authenticated users can read community follows"
+  on public.community_follows
+  for select
+  using (auth.role() = 'authenticated');
+
+drop policy if exists "Users can create their community follows"
+  on public.community_follows;
+create policy "Users can create their community follows"
+  on public.community_follows
+  for insert
+  with check (
+    auth.uid() = follower_id
+    and follower_id <> following_id
+  );
+
+drop policy if exists "Users can delete their community follows"
+  on public.community_follows;
+create policy "Users can delete their community follows"
+  on public.community_follows
+  for delete
+  using (auth.uid() = follower_id);
 
 drop policy if exists "Authenticated users can read active community stories"
   on public.community_stories;

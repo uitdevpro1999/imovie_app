@@ -26,23 +26,33 @@ class _BrowseGenresSection extends StatelessWidget {
               : null,
         ),
         const SizedBox(height: 16),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            for (final genre in state.visibleGenres)
-              InkWell(
-                borderRadius: BorderRadius.circular(999),
-                onTap: () => context.router.push(
-                  GenreMoviesRoute(slug: genre.slug, title: genre.name),
-                ),
-                child: IMovieGenreChip(
-                  label: genre.name,
-                  backgroundColor: AppColors.grayscale900,
-                  textColor: AppColors.white,
-                ),
-              ),
-          ],
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.grayscale900,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.white.withValues(alpha: 0.06)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                for (final genre in state.visibleGenres)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () => context.router.push(
+                      GenreMoviesRoute(slug: genre.slug, title: genre.name),
+                    ),
+                    child: IMovieGenreChip(
+                      label: genre.name,
+                      backgroundColor: AppColors.black.withValues(alpha: 0.22),
+                      textColor: AppColors.white,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ],
     );

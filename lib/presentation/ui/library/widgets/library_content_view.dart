@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:imovie_app/config/styles/app_colors.dart';
-import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/domain/entities/library/library_movie.dart';
 import 'package:imovie_app/presentation/ui/library/widgets/library_empty_view.dart';
+import 'package:imovie_app/presentation/ui/library/widgets/library_header.dart';
 import 'package:imovie_app/presentation/ui/library/widgets/library_movie_card.dart';
+import 'package:imovie_app/presentation/ui/library/widgets/library_swipe_action_tile.dart';
 
 class LibraryContentView extends StatelessWidget {
   const LibraryContentView({
@@ -11,7 +11,16 @@ class LibraryContentView extends StatelessWidget {
     required this.movies,
     required this.emptyTitle,
     required this.emptySubtitle,
+    this.collectionTitle = 'Personal collection',
+    this.collectionSubtitle = 'Movies you saved so you can return anytime.',
+    this.savedMoviesLabel = 'Saved',
+    this.playableMoviesLabel = 'Ready',
+    this.swipeHint = 'Swipe left to remove',
     required this.removeActionLabel,
+    this.removeConfirmTitle = 'Remove from library?',
+    this.removeConfirmMessage = 'This movie will be removed from your library.',
+    this.removeConfirmCancel = 'Cancel',
+    this.removeConfirmAction = 'Remove',
     required this.onMovieTap,
     required this.onMovieRemove,
   });
@@ -19,7 +28,16 @@ class LibraryContentView extends StatelessWidget {
   final List<LibraryMovie> movies;
   final String emptyTitle;
   final String emptySubtitle;
+  final String collectionTitle;
+  final String collectionSubtitle;
+  final String savedMoviesLabel;
+  final String playableMoviesLabel;
+  final String swipeHint;
   final String removeActionLabel;
+  final String removeConfirmTitle;
+  final String removeConfirmMessage;
+  final String removeConfirmCancel;
+  final String removeConfirmAction;
   final ValueChanged<LibraryMovie> onMovieTap;
   final Future<bool> Function(LibraryMovie item) onMovieRemove;
 
@@ -30,58 +48,48 @@ class LibraryContentView extends StatelessWidget {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
       itemBuilder: (context, index) {
-        final item = movies[index];
-        return Dismissible(
+        if (index == 0) {
+          return LibraryHeader(
+            movies: movies,
+            title: collectionTitle,
+            subtitle: collectionSubtitle,
+            savedMoviesLabel: savedMoviesLabel,
+            playableMoviesLabel: playableMoviesLabel,
+          );
+        }
+
+        final item = movies[index - 1];
+        return LibrarySwipeActionTile(
           key: ValueKey(item.id),
-          direction: DismissDirection.endToStart,
-          background: _LibraryDeleteBackground(label: removeActionLabel),
-          confirmDismiss: (_) => onMovieRemove(item),
-          child: LibraryMovieCard(item: item, onTap: () => onMovieTap(item)),
+          removeActionLabel: removeActionLabel,
+          confirmTitle: removeConfirmTitle,
+          confirmMessage: removeConfirmMessage,
+          confirmCancelLabel: removeConfirmCancel,
+          confirmActionLabel: removeConfirmAction,
+          onRemove: () => onMovieRemove(item),
+          child: LibraryMovieCard(
+            item: item,
+            savedDateText: _formatSavedDate(context, item.createdAt),
+            swipeHint: swipeHint,
+            onTap: () => onMovieTap(item),
+          ),
         );
       },
-      separatorBuilder: (_, _) => const SizedBox(height: 12),
-      itemCount: movies.length,
+      separatorBuilder: (_, index) => SizedBox(height: index == 0 ? 16 : 12),
+      itemCount: movies.length + 1,
     );
   }
-}
 
-class _LibraryDeleteBackground extends StatelessWidget {
-  const _LibraryDeleteBackground({required this.label});
+  String _formatSavedDate(BuildContext context, DateTime? date) {
+    if (date == null) {
+      return '';
+    }
 
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.danger,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.delete_outline_rounded,
-                color: AppColors.white,
-                size: 26,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: AppTypography.captionMedium.copyWith(
-                  color: AppColors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+    return '$day/$month/$year';
   }
 }

@@ -229,11 +229,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get authSignInSubtitle =>
-      'Khi đăng nhập, bạn đồng ý với điều khoản sử dụng\nvà chính sách quyền riêng tư của iMovie';
+      'Khi đăng nhập, bạn đồng ý với điều khoản sử dụng và chính sách quyền riêng tư của iMovie';
 
   @override
   String get authSignUpSubtitle =>
-      'Tạo tài khoản để cá nhân hóa gợi ý phim\ndành riêng cho bạn';
+      'Tạo tài khoản để cá nhân hóa gợi ý phim dành riêng cho bạn';
 
   @override
   String get authEmailLabel => 'Email';
@@ -315,6 +315,32 @@ class AppLocalizationsVi extends AppLocalizations {
   String get browseSearchHint => 'Phim, series, diễn viên';
 
   @override
+  String get browseHeroTitle => 'Tìm phim hợp gu của bạn';
+
+  @override
+  String get browseHeroSubtitle =>
+      'Lọc nhanh theo thể loại, quốc gia và năm phát hành.';
+
+  @override
+  String get browseStatCatalog => 'Danh mục';
+
+  @override
+  String get browseStatGenres => 'Thể loại';
+
+  @override
+  String get browseStatPopular => 'Đang có';
+
+  @override
+  String browseMovieCount(int count) {
+    return '$count phim';
+  }
+
+  @override
+  String browseSearchCount(int count) {
+    return '$count kết quả';
+  }
+
+  @override
   String get browsePopularSection => 'Phổ biến';
 
   @override
@@ -331,6 +357,43 @@ class AppLocalizationsVi extends AppLocalizations {
       'Thêm phim từ màn chi tiết để xem lại nhanh hơn.';
 
   @override
+  String get libraryCollectionTitle => 'Bộ sưu tập cá nhân';
+
+  @override
+  String get libraryCollectionSubtitle =>
+      'Những bộ phim bạn đã lưu để quay lại bất cứ lúc nào.';
+
+  @override
+  String get libraryStatsMovies => 'Phim đã lưu';
+
+  @override
+  String get libraryStatsPlayable => 'Có thể xem';
+
+  @override
+  String get libraryStatsUpdated => 'Mới cập nhật';
+
+  @override
+  String librarySavedAt(String date) {
+    return 'Đã lưu $date';
+  }
+
+  @override
+  String get librarySwipeHint => 'Vuốt sang trái để xóa';
+
+  @override
+  String get libraryRemoveConfirmTitle => 'Xóa khỏi tủ phim?';
+
+  @override
+  String get libraryRemoveConfirmMessage =>
+      'Phim này sẽ bị xóa khỏi tủ phim của bạn. Bạn vẫn có thể thêm lại từ màn chi tiết phim.';
+
+  @override
+  String get libraryRemoveConfirmCancel => 'Hủy';
+
+  @override
+  String get libraryRemoveConfirmAction => 'Xóa';
+
+  @override
   String get libraryRemoveAction => 'Xóa';
 
   @override
@@ -344,6 +407,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get profileChangeAvatar => 'Đổi ảnh đại diện';
+
+  @override
+  String get profileChangeCover => 'Đổi ảnh bìa';
 
   @override
   String get profileFullNameLabel => 'Họ và tên';
@@ -401,6 +467,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileEpisodes => 'Tập';
 
   @override
+  String get profileStatsPosts => 'Bài viết';
+
+  @override
+  String get profileStatsFollowers => 'Follower';
+
+  @override
+  String get profileStatsFollowing => 'Đã follow';
+
+  @override
   String get profileMainSettings => 'Cài đặt chính';
 
   @override
@@ -413,7 +488,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileSettingsCommunity => 'Cộng đồng';
 
   @override
-  String get profileSettingsMyPosts => 'Bài viết của tôi';
+  String get profileSettingsMyPosts => 'Hồ sơ của tôi';
 
   @override
   String get profileSettingsNotifications => 'Thông báo';
@@ -444,6 +519,126 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get profileSettingsAbout => 'Giới thiệu';
+
+  @override
+  String get profileContactTitle => 'Thông tin liên hệ';
+
+  @override
+  String get profileContactSubtitle =>
+      'Các kênh liên hệ trực tiếp với Nguyễn Quốc Trung.';
+
+  @override
+  String get profileContactOpenAction => 'Mở';
+
+  @override
+  String get profileContactCopyAction => 'Sao chép';
+
+  @override
+  String get profileContactCopied => 'Đã sao chép thông tin liên hệ.';
+
+  @override
+  String get profileContactOpenError => 'Không thể mở kênh liên hệ này.';
+
+  @override
+  String get profileContactZaloTitle => 'Zalo';
+
+  @override
+  String get profileContactFacebookTitle => 'Facebook';
+
+  @override
+  String get profileContactGmailTitle => 'Gmail';
+
+  @override
+  String get profileContactFacebookSubtitle =>
+      'Nguyễn Quốc Trung (Shinjitsu Kudo)';
+
+  @override
+  String get profileContactGmailSubtitle => 'nqtrungit1999@gmail.com';
+
+  @override
+  String get profileContactZaloSubtitle => '+84975182035';
+
+  @override
+  String get notificationsTitle => 'Thông báo';
+
+  @override
+  String get notificationsEmptyTitle => 'Chưa có thông báo mới';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'Bài viết, tin, bình luận và cảm xúc mới sẽ hiện ở đây.';
+
+  @override
+  String get notificationsHeaderSubtitle =>
+      'Theo dõi mọi tương tác cộng đồng của bạn.';
+
+  @override
+  String get notificationsReadAll => 'Đọc tất cả';
+
+  @override
+  String get notificationsLoadError => 'Không thể tải thông báo.';
+
+  @override
+  String notificationsHeaderTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thông báo chưa đọc',
+      one: '1 thông báo chưa đọc',
+      zero: 'Bạn đã xem hết',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileAboutTitle => 'Tác giả';
+
+  @override
+  String get profileAboutSubtitle =>
+      'Màn hình giới thiệu người xây dựng iMovie.';
+
+  @override
+  String get profileAboutRole => 'Mobile Developer';
+
+  @override
+  String get profileAboutCompany => 'Công ty';
+
+  @override
+  String get profileAboutHandle => 'Tài khoản';
+
+  @override
+  String get profileAboutFocusTitle => 'Chuyên môn';
+
+  @override
+  String get profileAboutFocusSubtitle =>
+      'Flutter, GraphQL, Maps, Firebase, RESTful API, Clean Architecture và trải nghiệm sản phẩm mobile.';
+
+  @override
+  String get profileAboutFocusFlutter => 'Flutter';
+
+  @override
+  String get profileAboutFocusArchitecture => 'Bloc';
+
+  @override
+  String get profileAboutFocusBackend => 'Supabase';
+
+  @override
+  String get profileAboutFocusGraphql => 'GraphQL';
+
+  @override
+  String get profileAboutFocusMaps => 'Maps';
+
+  @override
+  String get profileAboutFocusFirebase => 'Firebase';
+
+  @override
+  String get profileAboutFocusRestfulApi => 'RESTful API';
+
+  @override
+  String get profileAboutFocusCleanArchitecture => 'Clean Architecture';
+
+  @override
+  String get profileAboutFocusProduct => 'Product UI';
 
   @override
   String get profileSettingsInviteFriends => 'Mời bạn bè';
@@ -523,6 +718,63 @@ class AppLocalizationsVi extends AppLocalizations {
   String get communityTitle => 'Cộng đồng';
 
   @override
+  String get communityProfileTitle => 'Hồ sơ';
+
+  @override
+  String get communityUserFallbackName => 'Người dùng iMovie';
+
+  @override
+  String get communityFollowAction => 'Theo dõi';
+
+  @override
+  String get communityFollowingAction => 'Đã follow';
+
+  @override
+  String get communityFollowersLabel => 'Follower';
+
+  @override
+  String get communityFollowingLabel => 'Đã follow';
+
+  @override
+  String get communityFollowersTitle => 'Follower';
+
+  @override
+  String get communityFollowingTitle => 'Đã follow';
+
+  @override
+  String get communityFollowersEmptyTitle => 'Chưa có Follower';
+
+  @override
+  String get communityFollowersEmptySubtitle =>
+      'Follower của bạn sẽ xuất hiện ở đây.';
+
+  @override
+  String get communityFollowingEmptyTitle => 'Chưa follow ai';
+
+  @override
+  String get communityFollowingEmptySubtitle =>
+      'Những người bạn đã follow sẽ xuất hiện ở đây.';
+
+  @override
+  String get communityPostsLabel => 'Bài viết';
+
+  @override
+  String get communityStoriesMetricLabel => 'Tin';
+
+  @override
+  String get communityFollowSuccess => 'Đã follow người dùng này.';
+
+  @override
+  String get communityUnfollowSuccess => 'Đã bỏ follow người dùng này.';
+
+  @override
+  String get communityProfileEmptyTitle => 'Chưa có bài viết';
+
+  @override
+  String get communityProfileEmptySubtitle =>
+      'Các bài viết được chia sẻ của người dùng này sẽ hiển thị tại đây.';
+
+  @override
   String get communityMyPostsTitle => 'Bài viết của tôi';
 
   @override
@@ -548,6 +800,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get communityStoryChangeImageAction => 'Đổi ảnh';
+
+  @override
+  String get communityStoryDoneEditingAction => 'Ẩn bàn phím';
 
   @override
   String get communityStoryImageRequired => 'Vui lòng chọn ảnh để tạo tin.';
@@ -645,6 +900,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get communityPublishAction => 'Đăng bài';
+
+  @override
+  String get communityCancelAction => 'Hủy';
 
   @override
   String get communityUpdateAction => 'Cập nhật bài viết';

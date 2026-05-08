@@ -14,11 +14,33 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/author_avatar.jpeg
+  AssetGenImage get authorAvatar =>
+      const AssetGenImage('assets/images/author_avatar.jpeg');
+
+  /// File path: assets/images/contact_facebook.png
+  AssetGenImage get contactFacebook =>
+      const AssetGenImage('assets/images/contact_facebook.png');
+
+  /// File path: assets/images/contact_gmail.png
+  AssetGenImage get contactGmail =>
+      const AssetGenImage('assets/images/contact_gmail.png');
+
+  /// File path: assets/images/contact_zalo.png
+  AssetGenImage get contactZalo =>
+      const AssetGenImage('assets/images/contact_zalo.png');
+
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [logo];
+  List<AssetGenImage> get values => [
+    authorAvatar,
+    contactFacebook,
+    contactGmail,
+    contactZalo,
+    logo,
+  ];
 }
 
 class Assets {

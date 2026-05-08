@@ -28,6 +28,9 @@ class BrowseCubit extends BaseCubit<BrowseState> {
   final GetCountriesUseCase _getCountriesUseCase;
   final SearchMoviesUseCase _searchMoviesUseCase;
   Timer? _searchDebounce;
+  int _searchRequestId = 0;
+
+  static const _searchDebounceDuration = Duration(milliseconds: 500);
 
   @override
   Future<void> initData() async {
@@ -115,6 +118,7 @@ class BrowseCubit extends BaseCubit<BrowseState> {
   void onKeywordChanged(String value) {
     final keyword = value.trim();
     _searchDebounce?.cancel();
+    final requestId = ++_searchRequestId;
 
     if (keyword.isEmpty) {
       emit(
@@ -131,20 +135,15 @@ class BrowseCubit extends BaseCubit<BrowseState> {
       return;
     }
 
-    emit(
-      state.copyWith(
-        keyword: keyword,
-        searchLoading: true,
-        searchLoadingMore: false,
-        searchResults: const [],
-        searchPage: 1,
-        searchTotalItems: 0,
-        failure: null,
-      ),
-    );
+    emit(state.copyWith(keyword: keyword, failure: null));
     _searchDebounce = Timer(
-      const Duration(milliseconds: 450),
-      () => _search(keyword: keyword, page: 1, showLoading: false),
+      _searchDebounceDuration,
+      () => _search(
+        keyword: keyword,
+        page: 1,
+        showLoading: true,
+        requestId: requestId,
+      ),
     );
   }
 
@@ -172,7 +171,12 @@ class BrowseCubit extends BaseCubit<BrowseState> {
 
     _searchDebounce?.cancel();
     if (state.hasKeyword) {
-      await _search(keyword: state.keyword, page: 1, showLoading: false);
+      await _search(
+        keyword: state.keyword,
+        page: 1,
+        showLoading: true,
+        requestId: ++_searchRequestId,
+      );
     }
   }
 
@@ -185,6 +189,7 @@ class BrowseCubit extends BaseCubit<BrowseState> {
       keyword: state.keyword,
       page: state.searchPage + 1,
       showLoading: false,
+      requestId: _searchRequestId,
     );
   }
 
@@ -192,6 +197,7 @@ class BrowseCubit extends BaseCubit<BrowseState> {
     required String keyword,
     required int page,
     required bool showLoading,
+    int? requestId,
   }) async {
     if (page == 1 && showLoading) {
       emit(
@@ -215,6 +221,10 @@ class BrowseCubit extends BaseCubit<BrowseState> {
         year: state.searchYear.apiValue,
       ),
     );
+    if (requestId != null && requestId != _searchRequestId) {
+      return false;
+    }
+
     return result.map(
       success: (feed) {
         emit(

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
@@ -53,6 +54,14 @@ class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
   }
 
   @override
+  bool buildWhen(GenreMoviesState previous, GenreMoviesState current) {
+    return previous.pageStatus != current.pageStatus ||
+        previous.processing != current.processing ||
+        previous.failure != current.failure ||
+        previous.title != current.title;
+  }
+
+  @override
   Widget buildPage(
     BuildContext context,
     GenreMoviesCubit cubit,
@@ -60,8 +69,14 @@ class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
   ) {
     return Column(
       children: [
-        BlocSelector<GenreMoviesCubit, GenreMoviesState, GenreMoviesState>(
-          selector: (state) => state,
+        BlocBuilder<GenreMoviesCubit, GenreMoviesState>(
+          buildWhen: (previous, current) =>
+              previous.movies.length != current.movies.length ||
+              previous.totalItems != current.totalItems ||
+              previous.sortType != current.sortType ||
+              previous.country != current.country ||
+              previous.year != current.year ||
+              previous.countries != current.countries,
           builder: (context, state) {
             return _GenreFilterBar(
               resultSummary: state.resultSummary,
@@ -72,30 +87,28 @@ class GenreMoviesPage extends BasePage<GenreMoviesCubit, GenreMoviesState>
           },
         ),
         Expanded(
-          child:
-              BlocSelector<
-                GenreMoviesCubit,
-                GenreMoviesState,
-                GenreMoviesState
-              >(
-                selector: (state) => state,
-                builder: (context, state) {
-                  return _GenreMoviesListView(
-                    movies: state.movies,
-                    movieViewData: state.movieViewData,
-                    hasMore: state.hasMore,
-                    onRefresh: cubit.refresh,
-                    onLoadMore: () async {
-                      final success = await cubit.loadMore();
-                      return success
-                          ? IMovieLoadMoreResult.success(
-                              hasMore: cubit.state.hasMore,
-                            )
-                          : const IMovieLoadMoreResult.failure();
-                    },
-                  );
+          child: BlocBuilder<GenreMoviesCubit, GenreMoviesState>(
+            buildWhen: (previous, current) =>
+                previous.movies != current.movies ||
+                previous.totalItems != current.totalItems ||
+                previous.loadingMore != current.loadingMore,
+            builder: (context, state) {
+              return _GenreMoviesListView(
+                movies: state.movies,
+                movieViewData: state.movieViewData,
+                hasMore: state.hasMore,
+                onRefresh: cubit.refresh,
+                onLoadMore: () async {
+                  final success = await cubit.loadMore();
+                  return success
+                      ? IMovieLoadMoreResult.success(
+                          hasMore: cubit.state.hasMore,
+                        )
+                      : const IMovieLoadMoreResult.failure();
                 },
-              ),
+              );
+            },
+          ),
         ),
       ],
     );

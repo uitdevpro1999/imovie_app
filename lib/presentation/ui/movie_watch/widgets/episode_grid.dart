@@ -138,7 +138,7 @@ class _EpisodeGroupSelector extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           menuMaxHeight: 320,
           icon: const Icon(
-            Icons.keyboard_arrow_down_rounded,
+            FluentIcons.chevron_down_24_regular,
             color: AppColors.grayscale300,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 14),

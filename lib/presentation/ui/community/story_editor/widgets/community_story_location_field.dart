@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
@@ -39,21 +40,28 @@ class _CommunityStoryLocationFieldState
     return BlocConsumer<CommunityStoryEditorCubit, CommunityStoryEditorState>(
       listenWhen: (previous, current) =>
           previous.locationName != current.locationName,
+      buildWhen: (previous, current) =>
+          previous.resolvingLocation != current.resolvingLocation,
       listener: (context, state) {
         if (_controller.text != state.locationName) {
           _controller.text = state.locationName;
         }
       },
       builder: (context, state) {
+        final borderRadius = BorderRadius.circular(18);
         return TextField(
           controller: _controller,
           onChanged: context
               .read<CommunityStoryEditorCubit>()
               .updateLocationName,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => FocusScope.of(context).unfocus(),
+          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+          cursorColor: AppColors.yellow500,
           style: AppTypography.body2Regular.copyWith(color: AppColors.white),
           decoration: InputDecoration(
             prefixIcon: const Icon(
-              Icons.place_outlined,
+              FluentIcons.location_24_regular,
               color: AppColors.yellow500,
             ),
             suffixIcon: state.resolvingLocation
@@ -68,12 +76,15 @@ class _CommunityStoryLocationFieldState
                   )
                 : IconButton(
                     tooltip: l10n.communityUseCurrentLocation,
-                    onPressed: () => context
-                        .read<CommunityStoryEditorCubit>()
-                        .resolveCurrentLocation(
-                          failureMessage: l10n.communityLocationError,
-                        ),
-                    icon: const Icon(Icons.my_location_rounded),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      context
+                          .read<CommunityStoryEditorCubit>()
+                          .resolveCurrentLocation(
+                            failureMessage: l10n.communityLocationError,
+                          );
+                    },
+                    icon: const Icon(FluentIcons.my_location_24_regular),
                     color: AppColors.yellow500,
                   ),
             hintText: l10n.communityLocationHint,
@@ -83,8 +94,18 @@ class _CommunityStoryLocationFieldState
             filled: true,
             fillColor: AppColors.grayscale900,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
+              borderRadius: borderRadius,
+              borderSide: const BorderSide(color: AppColors.grayscale800),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: borderRadius,
+              borderSide: const BorderSide(color: AppColors.grayscale800),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: borderRadius,
+              borderSide: BorderSide(
+                color: AppColors.yellow500.withValues(alpha: 0.78),
+              ),
             ),
           ),
         );

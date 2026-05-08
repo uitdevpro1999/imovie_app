@@ -5,6 +5,7 @@ class AppProfile {
     required this.fullName,
     required this.phone,
     required this.avatarUrl,
+    required this.coverUrl,
   });
 
   final String id;
@@ -12,6 +13,7 @@ class AppProfile {
   final String fullName;
   final String phone;
   final String avatarUrl;
+  final String coverUrl;
 
   AppProfile copyWith({
     String? id,
@@ -19,6 +21,7 @@ class AppProfile {
     String? fullName,
     String? phone,
     String? avatarUrl,
+    String? coverUrl,
   }) {
     return AppProfile(
       id: id ?? this.id,
@@ -26,6 +29,7 @@ class AppProfile {
       fullName: fullName ?? this.fullName,
       phone: phone ?? this.phone,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      coverUrl: coverUrl ?? this.coverUrl,
     );
   }
 }

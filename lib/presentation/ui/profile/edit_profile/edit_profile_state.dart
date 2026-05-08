@@ -20,10 +20,14 @@ abstract class EditProfileState with _$EditProfileState implements BaseState {
     Uint8List? pendingAvatarBytes,
     @Default('') String pendingAvatarFileName,
     @Default('') String pendingAvatarContentType,
+    Uint8List? pendingCoverBytes,
+    @Default('') String pendingCoverFileName,
+    @Default('') String pendingCoverContentType,
     String? actionMessage,
   }) = _EditProfileState;
 
   bool get hasPendingAvatar => pendingAvatarBytes != null;
+  bool get hasPendingCover => pendingCoverBytes != null;
 
   @override
   EditProfileState copyWithBase({

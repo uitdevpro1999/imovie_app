@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/core/di/service_locator.dart';
 import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/ui/main/main_cubit.dart';
+import 'package:imovie_app/presentation/ui/notifications/notification_center_cubit.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {
@@ -18,18 +20,24 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late final MainCubit _mainCubit;
+  late final NotificationCenterCubit _notificationCenterCubit;
 
   @override
   void initState() {
     super.initState();
     _mainCubit = sl<MainCubit>();
+    _notificationCenterCubit = sl<NotificationCenterCubit>();
     _mainCubit.load();
+    _notificationCenterCubit.initialize();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _mainCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _mainCubit),
+        BlocProvider.value(value: _notificationCenterCubit),
+      ],
       child: AutoTabsRouter(
         lazyLoad: true,
         duration: Duration.zero,
@@ -102,28 +110,30 @@ class _MainBottomNavigationBar extends StatelessWidget {
               unselectedLabelStyle: textStyle,
               items: [
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.home_outlined),
-                  activeIcon: const Icon(Icons.home_rounded),
+                  icon: const Icon(FluentIcons.home_24_regular),
+                  activeIcon: const Icon(FluentIcons.home_24_filled),
                   label: l10n.homeBottomNavHome,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.search_rounded),
-                  activeIcon: const Icon(Icons.search_rounded),
+                  icon: const Icon(FluentIcons.search_24_regular),
+                  activeIcon: const Icon(FluentIcons.search_24_regular),
                   label: l10n.homeBottomNavBrowse,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.groups_2_outlined),
-                  activeIcon: const Icon(Icons.groups_2_rounded),
+                  icon: const Icon(FluentIcons.people_community_24_regular),
+                  activeIcon: const Icon(
+                    FluentIcons.people_community_24_filled,
+                  ),
                   label: l10n.homeBottomNavCommunity,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.bookmark_border_rounded),
-                  activeIcon: const Icon(Icons.bookmark_rounded),
+                  icon: const Icon(FluentIcons.bookmark_24_regular),
+                  activeIcon: const Icon(FluentIcons.bookmark_24_filled),
                   label: l10n.homeBottomNavLibrary,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.person_outline_rounded),
-                  activeIcon: const Icon(Icons.person_rounded),
+                  icon: const Icon(FluentIcons.person_24_regular),
+                  activeIcon: const Icon(FluentIcons.person_24_filled),
                   label: l10n.homeBottomNavProfile,
                 ),
               ],

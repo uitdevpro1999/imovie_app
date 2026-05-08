@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 
@@ -31,7 +32,7 @@ class IMovieLanguageCheckboxTile extends StatelessWidget {
             ),
             child: selected
                 ? const Icon(
-                    Icons.check_rounded,
+                    FluentIcons.checkmark_24_regular,
                     size: 16,
                     color: AppColors.white,
                   )

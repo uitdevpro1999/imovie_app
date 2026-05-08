@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
@@ -61,13 +62,23 @@ class MovieWatchPage extends BasePage<MovieWatchCubit, MovieWatchState>
   }
 
   @override
+  bool buildWhen(MovieWatchState previous, MovieWatchState current) {
+    return previous.pageStatus != current.pageStatus ||
+        previous.processing != current.processing ||
+        previous.failure != current.failure;
+  }
+
+  @override
   Widget buildPage(
     BuildContext context,
     MovieWatchCubit cubit,
     MovieWatchState state,
   ) {
-    return BlocSelector<MovieWatchCubit, MovieWatchState, MovieWatchState>(
-      selector: (state) => state,
+    return BlocBuilder<MovieWatchCubit, MovieWatchState>(
+      buildWhen: (previous, current) =>
+          previous.detail != current.detail ||
+          previous.selectedServerIndex != current.selectedServerIndex ||
+          previous.selectedEpisodeIndex != current.selectedEpisodeIndex,
       builder: (context, state) {
         return _MovieWatchSuccessView(
           state: state,

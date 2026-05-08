@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AboutPage]
+class AboutRoute extends PageRouteInfo<void> {
+  const AboutRoute({List<PageRouteInfo>? children})
+    : super(AboutRoute.name, initialChildren: children);
+
+  static const String name = 'AboutRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AboutPage();
+    },
+  );
+}
+
+/// generated route for
 /// [AppSplashPage]
 class AppSplashRoute extends PageRouteInfo<void> {
   const AppSplashRoute({List<PageRouteInfo>? children})
@@ -169,6 +185,83 @@ class CommunityComposeRouteArgs {
 }
 
 /// generated route for
+/// [CommunityFollowListPage]
+class CommunityFollowListRoute
+    extends PageRouteInfo<CommunityFollowListRouteArgs> {
+  CommunityFollowListRoute({
+    Key? key,
+    String userId = '',
+    String listType = CommunityFollowListSlugs.followers,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CommunityFollowListRoute.name,
+         args: CommunityFollowListRouteArgs(
+           key: key,
+           userId: userId,
+           listType: listType,
+         ),
+         rawPathParams: {'userId': userId, 'listType': listType},
+         initialChildren: children,
+       );
+
+  static const String name = 'CommunityFollowListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<CommunityFollowListRouteArgs>(
+        orElse: () => CommunityFollowListRouteArgs(
+          userId: pathParams.getString('userId', ''),
+          listType: pathParams.getString(
+            'listType',
+            CommunityFollowListSlugs.followers,
+          ),
+        ),
+      );
+      return WrappedRoute(
+        child: CommunityFollowListPage(
+          key: args.key,
+          userId: args.userId,
+          listType: args.listType,
+        ),
+      );
+    },
+  );
+}
+
+class CommunityFollowListRouteArgs {
+  const CommunityFollowListRouteArgs({
+    this.key,
+    this.userId = '',
+    this.listType = CommunityFollowListSlugs.followers,
+  });
+
+  final Key? key;
+
+  final String userId;
+
+  final String listType;
+
+  @override
+  String toString() {
+    return 'CommunityFollowListRouteArgs{key: $key, userId: $userId, listType: $listType}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommunityFollowListRouteArgs) return false;
+    return key == other.key &&
+        userId == other.userId &&
+        listType == other.listType;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ userId.hashCode ^ listType.hashCode;
+}
+
+/// generated route for
 /// [CommunityMinePage]
 class CommunityMineRoute extends PageRouteInfo<void> {
   const CommunityMineRoute({List<PageRouteInfo>? children})
@@ -236,6 +329,111 @@ class CommunityRouteArgs {
 }
 
 /// generated route for
+/// [CommunityPostDetailPage]
+class CommunityPostDetailRoute
+    extends PageRouteInfo<CommunityPostDetailRouteArgs> {
+  CommunityPostDetailRoute({
+    Key? key,
+    required String postId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CommunityPostDetailRoute.name,
+         args: CommunityPostDetailRouteArgs(key: key, postId: postId),
+         initialChildren: children,
+       );
+
+  static const String name = 'CommunityPostDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CommunityPostDetailRouteArgs>();
+      return WrappedRoute(
+        child: CommunityPostDetailPage(key: args.key, postId: args.postId),
+      );
+    },
+  );
+}
+
+class CommunityPostDetailRouteArgs {
+  const CommunityPostDetailRouteArgs({this.key, required this.postId});
+
+  final Key? key;
+
+  final String postId;
+
+  @override
+  String toString() {
+    return 'CommunityPostDetailRouteArgs{key: $key, postId: $postId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommunityPostDetailRouteArgs) return false;
+    return key == other.key && postId == other.postId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ postId.hashCode;
+}
+
+/// generated route for
+/// [CommunityProfilePage]
+class CommunityProfileRoute extends PageRouteInfo<CommunityProfileRouteArgs> {
+  CommunityProfileRoute({
+    Key? key,
+    String userId = '',
+    List<PageRouteInfo>? children,
+  }) : super(
+         CommunityProfileRoute.name,
+         args: CommunityProfileRouteArgs(key: key, userId: userId),
+         rawPathParams: {'userId': userId},
+         initialChildren: children,
+       );
+
+  static const String name = 'CommunityProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<CommunityProfileRouteArgs>(
+        orElse: () => CommunityProfileRouteArgs(
+          userId: pathParams.getString('userId', ''),
+        ),
+      );
+      return WrappedRoute(
+        child: CommunityProfilePage(key: args.key, userId: args.userId),
+      );
+    },
+  );
+}
+
+class CommunityProfileRouteArgs {
+  const CommunityProfileRouteArgs({this.key, this.userId = ''});
+
+  final Key? key;
+
+  final String userId;
+
+  @override
+  String toString() {
+    return 'CommunityProfileRouteArgs{key: $key, userId: $userId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommunityProfileRouteArgs) return false;
+    return key == other.key && userId == other.userId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ userId.hashCode;
+}
+
+/// generated route for
 /// [CommunityStoryEditorPage]
 class CommunityStoryEditorRoute extends PageRouteInfo<void> {
   const CommunityStoryEditorRoute({List<PageRouteInfo>? children})
@@ -247,6 +445,72 @@ class CommunityStoryEditorRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return WrappedRoute(child: const CommunityStoryEditorPage());
+    },
+  );
+}
+
+/// generated route for
+/// [CommunityStoryViewerPage]
+class CommunityStoryViewerRoute
+    extends PageRouteInfo<CommunityStoryViewerRouteArgs> {
+  CommunityStoryViewerRoute({
+    Key? key,
+    required String storyId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CommunityStoryViewerRoute.name,
+         args: CommunityStoryViewerRouteArgs(key: key, storyId: storyId),
+         initialChildren: children,
+       );
+
+  static const String name = 'CommunityStoryViewerRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CommunityStoryViewerRouteArgs>();
+      return WrappedRoute(
+        child: CommunityStoryViewerPage(key: args.key, storyId: args.storyId),
+      );
+    },
+  );
+}
+
+class CommunityStoryViewerRouteArgs {
+  const CommunityStoryViewerRouteArgs({this.key, required this.storyId});
+
+  final Key? key;
+
+  final String storyId;
+
+  @override
+  String toString() {
+    return 'CommunityStoryViewerRouteArgs{key: $key, storyId: $storyId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CommunityStoryViewerRouteArgs) return false;
+    return key == other.key && storyId == other.storyId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ storyId.hashCode;
+}
+
+/// generated route for
+/// [ContactPage]
+class ContactRoute extends PageRouteInfo<void> {
+  const ContactRoute({List<PageRouteInfo>? children})
+    : super(ContactRoute.name, initialChildren: children);
+
+  static const String name = 'ContactRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ContactPage();
     },
   );
 }
@@ -668,6 +932,22 @@ class MovieWatchRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ slug.hashCode ^ initialDetail.hashCode;
+}
+
+/// generated route for
+/// [NotificationsPage]
+class NotificationsRoute extends PageRouteInfo<void> {
+  const NotificationsRoute({List<PageRouteInfo>? children})
+    : super(NotificationsRoute.name, initialChildren: children);
+
+  static const String name = 'NotificationsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return WrappedRoute(child: const NotificationsPage());
+    },
+  );
 }
 
 /// generated route for

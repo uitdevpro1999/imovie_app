@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 
@@ -224,7 +225,7 @@ class _IMovieLeadingIcon extends StatelessWidget {
         dimension: size,
         child: Center(
           child: Icon(
-            Icons.play_arrow_rounded,
+            FluentIcons.play_24_filled,
             size: size == 24 ? 20 : 18,
             color: color,
           ),

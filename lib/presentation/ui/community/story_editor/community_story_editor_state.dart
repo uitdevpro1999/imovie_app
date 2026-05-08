@@ -21,6 +21,7 @@ abstract class CommunityStoryEditorState
     XFile? selectedImage,
     @Default('') String storyText,
     @Default('') String locationName,
+    @Default('') String locationFullName,
     @Default('') String selectedMovieTitle,
     @Default('') String selectedMovieSlug,
     @Default('') String selectedMoviePosterUrl,

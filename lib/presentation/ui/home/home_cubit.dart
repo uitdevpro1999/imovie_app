@@ -2,9 +2,11 @@ import 'package:imovie_app/core/bloc/base_cubit.dart';
 import 'package:imovie_app/core/bloc/base_state.dart';
 import 'package:imovie_app/core/usecase/use_case.dart';
 import 'package:imovie_app/domain/entities/home/home_movie.dart';
+import 'package:imovie_app/domain/entities/movie_detail/movie_detail.dart';
 import 'package:imovie_app/domain/usecases/home/get_home_feed_use_case.dart';
 import 'package:imovie_app/domain/usecases/home/get_home_genres_use_case.dart';
 import 'package:imovie_app/domain/usecases/home/get_movie_list_use_case.dart';
+import 'package:imovie_app/domain/usecases/movie_detail/get_movie_detail_use_case.dart';
 import 'package:imovie_app/presentation/ui/home/home_state.dart';
 
 class HomeCubit extends BaseCubit<HomeState> {
@@ -14,14 +16,17 @@ class HomeCubit extends BaseCubit<HomeState> {
     required GetHomeFeedUseCase getHomeFeedUseCase,
     required GetHomeGenresUseCase getHomeGenresUseCase,
     required GetMovieListUseCase getMovieListUseCase,
+    required GetMovieDetailUseCase getMovieDetailUseCase,
   }) : _getHomeFeedUseCase = getHomeFeedUseCase,
        _getHomeGenresUseCase = getHomeGenresUseCase,
        _getMovieListUseCase = getMovieListUseCase,
+       _getMovieDetailUseCase = getMovieDetailUseCase,
        super(const HomeState());
 
   final GetHomeFeedUseCase _getHomeFeedUseCase;
   final GetHomeGenresUseCase _getHomeGenresUseCase;
   final GetMovieListUseCase _getMovieListUseCase;
+  final GetMovieDetailUseCase _getMovieDetailUseCase;
 
   @override
   Future<void> initData() async {
@@ -100,6 +105,33 @@ class HomeCubit extends BaseCubit<HomeState> {
   }
 
   Future<bool> refresh() => load(showLoading: false);
+
+  Future<MovieDetail?> loadMovieDetailForAction(String slug) async {
+    final normalizedSlug = slug.trim();
+    if (normalizedSlug.isEmpty) {
+      return null;
+    }
+
+    emit(state.copyWith(processing: true, failure: null));
+    final result = await _getMovieDetailUseCase(
+      GetMovieDetailParams(slug: normalizedSlug),
+    );
+    if (isClosed) {
+      return null;
+    }
+
+    return result.map(
+      success: (detail) {
+        emit(state.copyWith(processing: false, failure: null));
+        return detail;
+      },
+      failure: (failure) {
+        emit(state.copyWith(processing: false, failure: failure));
+        showFailureToast(failure);
+        return null;
+      },
+    );
+  }
 
   Future<List<HomeMovie>> _loadMovieList({
     required String slug,

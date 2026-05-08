@@ -10,6 +10,7 @@ import 'package:imovie_app/core/usecase/use_case.dart';
 import 'package:imovie_app/domain/entities/profile/app_profile.dart';
 import 'package:imovie_app/domain/usecases/profile/get_cached_profile_use_case.dart';
 import 'package:imovie_app/domain/usecases/profile/update_profile_avatar_use_case.dart';
+import 'package:imovie_app/domain/usecases/profile/update_profile_cover_use_case.dart';
 import 'package:imovie_app/domain/usecases/profile/update_profile_use_case.dart';
 import 'package:imovie_app/presentation/ui/main/main_cubit.dart';
 import 'package:imovie_app/presentation/ui/main/main_state.dart';
@@ -21,10 +22,12 @@ class EditProfileCubit extends BaseCubit<EditProfileState> {
     required GetCachedProfileUseCase getCachedProfileUseCase,
     required UpdateProfileUseCase updateProfileUseCase,
     required UpdateProfileAvatarUseCase updateProfileAvatarUseCase,
+    required UpdateProfileCoverUseCase updateProfileCoverUseCase,
   }) : _mainCubit = mainCubit,
        _getCachedProfileUseCase = getCachedProfileUseCase,
        _updateProfileUseCase = updateProfileUseCase,
        _updateProfileAvatarUseCase = updateProfileAvatarUseCase,
+       _updateProfileCoverUseCase = updateProfileCoverUseCase,
        super(const EditProfileState()) {
     _mainSubscription = _mainCubit.stream.listen(_syncMainState);
   }
@@ -33,6 +36,7 @@ class EditProfileCubit extends BaseCubit<EditProfileState> {
   final GetCachedProfileUseCase _getCachedProfileUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
   final UpdateProfileAvatarUseCase _updateProfileAvatarUseCase;
+  final UpdateProfileCoverUseCase _updateProfileCoverUseCase;
   late final StreamSubscription<MainState> _mainSubscription;
 
   @override
@@ -76,6 +80,7 @@ class EditProfileCubit extends BaseCubit<EditProfileState> {
     }
 
     final pendingAvatarBytes = state.pendingAvatarBytes;
+    final pendingCoverBytes = state.pendingCoverBytes;
     AppProfile? savedProfile = updatedProfile;
     if (pendingAvatarBytes != null) {
       final avatarResult = await _updateProfileAvatarUseCase(
@@ -97,6 +102,26 @@ class EditProfileCubit extends BaseCubit<EditProfileState> {
       }
     }
 
+    if (pendingCoverBytes != null) {
+      final coverResult = await _updateProfileCoverUseCase(
+        UpdateProfileCoverParams(
+          bytes: pendingCoverBytes,
+          fileName: state.pendingCoverFileName,
+          contentType: state.pendingCoverContentType,
+        ),
+      );
+      savedProfile = coverResult.map<AppProfile?>(
+        success: (profile) => profile,
+        failure: (failure) {
+          _emitSaveFailure(failure);
+          return null;
+        },
+      );
+      if (savedProfile == null) {
+        return false;
+      }
+    }
+
     emit(
       state.copyWith(
         processing: false,
@@ -105,16 +130,43 @@ class EditProfileCubit extends BaseCubit<EditProfileState> {
         pendingAvatarBytes: null,
         pendingAvatarFileName: '',
         pendingAvatarContentType: '',
+        pendingCoverBytes: null,
+        pendingCoverFileName: '',
+        pendingCoverContentType: '',
         actionMessage: successMessage,
       ),
     );
     appEventBus.emitProfile(
-      pendingAvatarBytes == null
-          ? AppProfileEvent.profileUpdated()
-          : AppProfileEvent.avatarUpdated(),
+      _eventForSavedProfile(
+        avatarChanged: pendingAvatarBytes != null,
+        coverChanged: pendingCoverBytes != null,
+      ),
     );
     showSuccessToast(successMessage);
     return true;
+  }
+
+  Future<void> selectCover({
+    required XFile file,
+    required String invalidFileMessage,
+  }) async {
+    final bytes = await file.readAsBytes();
+    if (bytes.isEmpty) {
+      final failure = AppFailure.unknown(invalidFileMessage);
+      emit(state.copyWith(failure: failure, actionMessage: null));
+      showFailureToast(failure);
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        pendingCoverBytes: bytes,
+        pendingCoverFileName: file.name,
+        pendingCoverContentType: _contentTypeFor(file),
+        failure: null,
+        actionMessage: null,
+      ),
+    );
   }
 
   Future<void> selectAvatar({
@@ -197,6 +249,22 @@ class EditProfileCubit extends BaseCubit<EditProfileState> {
         failure: null,
       ),
     );
+  }
+
+  AppProfileEvent _eventForSavedProfile({
+    required bool avatarChanged,
+    required bool coverChanged,
+  }) {
+    if (avatarChanged && coverChanged) {
+      return AppProfileEvent.mediaUpdated();
+    }
+    if (avatarChanged) {
+      return AppProfileEvent.avatarUpdated();
+    }
+    if (coverChanged) {
+      return AppProfileEvent.coverUpdated();
+    }
+    return AppProfileEvent.profileUpdated();
   }
 
   String _contentTypeFor(XFile file) {

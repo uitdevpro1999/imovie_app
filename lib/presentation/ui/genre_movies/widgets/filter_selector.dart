@@ -74,7 +74,7 @@ class _FilterSelector<T> extends StatelessWidget {
               ),
             ),
             const Icon(
-              Icons.keyboard_arrow_down_rounded,
+              FluentIcons.chevron_down_24_regular,
               color: AppColors.grayscale300,
             ),
           ],
@@ -170,7 +170,7 @@ class _SelectorSheetState<T> extends State<_SelectorSheet<T>> {
                         ),
                         if (selected)
                           const Icon(
-                            Icons.check_rounded,
+                            FluentIcons.checkmark_24_regular,
                             color: AppColors.yellow500,
                           ),
                       ],
@@ -224,7 +224,10 @@ class _SelectorSheetHeader extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close_rounded, color: AppColors.white),
+                  icon: const Icon(
+                    FluentIcons.dismiss_24_regular,
+                    color: AppColors.white,
+                  ),
                 ),
               ],
             ),

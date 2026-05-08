@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 
 class CommunityCreateActionButton extends StatelessWidget {
@@ -27,7 +28,7 @@ class CommunityCreateActionButton extends StatelessWidget {
               width: 40,
               height: 40,
               child: Icon(
-                Icons.add_rounded,
+                FluentIcons.add_24_regular,
                 color: AppColors.grayscale950,
                 size: 24,
               ),

@@ -6,7 +6,14 @@ import 'package:imovie_app/data/models/response/community/community_post_respons
 import 'package:imovie_app/domain/repositories/community_repository.dart';
 
 abstract interface class CommunityRemoteDataSource {
-  Future<List<CommunityStoryResponse>> getStories();
+  Future<List<String>> getFollowedUserIds();
+
+  Future<CommunityStoryResponse> getStoryById(String id);
+
+  Future<List<CommunityStoryResponse>> getStories({
+    required String userId,
+    required bool followedOnly,
+  });
 
   Future<CommunityStoryResponse> createStory({
     required CommunityImagePayload image,
@@ -25,11 +32,32 @@ abstract interface class CommunityRemoteDataSource {
 
   Future<void> deleteStory(String id);
 
+  Future<CommunityPostResponse> getPostById(String id);
+
   Future<List<CommunityPostResponse>> getPosts({
     required bool mineOnly,
+    required String userId,
     required int page,
     required int limit,
   });
+
+  Future<CommunityProfileResponse> getProfile(String userId);
+
+  Future<List<CommunityProfileResponse>> getFollowers({
+    required String userId,
+    required int page,
+    required int limit,
+  });
+
+  Future<List<CommunityProfileResponse>> getFollowing({
+    required String userId,
+    required int page,
+    required int limit,
+  });
+
+  Future<CommunityProfileResponse> followUser(String userId);
+
+  Future<CommunityProfileResponse> unfollowUser(String userId);
 
   Future<CommunityPostResponse> createPost({
     required String content,
@@ -37,7 +65,7 @@ abstract interface class CommunityRemoteDataSource {
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<CommunityImagePayload> images,
   });
 
   Future<CommunityPostResponse> updatePost({
@@ -47,7 +75,8 @@ abstract interface class CommunityRemoteDataSource {
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<String> keptImageUrls,
+    required List<CommunityImagePayload> images,
   });
 
   Future<void> deletePost(String id);
@@ -69,17 +98,58 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
   static const _commentsTable = 'community_comments';
   static const _reactionsTable = 'community_reactions';
   static const _storiesTable = 'community_stories';
+  static const _followsTable = 'community_follows';
   static const _profilesTable = 'profiles';
+  static const _publicProfilesView = 'community_public_profiles';
   static const _postImagesBucket = 'community-posts';
   static const _storyImagesBucket = 'community-stories';
+  static const _maxPostImages = 5;
 
   final SupabaseDataService dataService;
 
   @override
-  Future<List<CommunityStoryResponse>> getStories() async {
+  Future<List<String>> getFollowedUserIds() async {
     final user = _currentUser();
+    return _visibleStoryUserIds(user.id);
+  }
+
+  @override
+  Future<CommunityStoryResponse> getStoryById(String id) async {
+    final user = _currentUser();
+    final normalizedId = id.trim();
+    if (normalizedId.isEmpty) {
+      throw AppException(AppFailure.unknown('Community story id is empty.'));
+    }
+
+    final row = await dataService.selectSingle(
+      table: _storiesTable,
+      equals: {'id': normalizedId},
+    );
+    return CommunityStoryResponse.fromJson(json: row, currentUserId: user.id);
+  }
+
+  @override
+  Future<List<CommunityStoryResponse>> getStories({
+    required String userId,
+    required bool followedOnly,
+  }) async {
+    final user = _currentUser();
+    final normalizedUserId = userId.trim();
+    final visibleUserIds = normalizedUserId.isNotEmpty
+        ? <String>[normalizedUserId]
+        : followedOnly
+        ? await _visibleStoryUserIds(user.id)
+        : const <String>[];
+    if ((normalizedUserId.isNotEmpty || followedOnly) &&
+        visibleUserIds.isEmpty) {
+      return const [];
+    }
+
     final rows = await dataService.selectList(
       table: _storiesTable,
+      inFilters: visibleUserIds.isEmpty
+          ? const {}
+          : {'user_id': visibleUserIds},
       greaterThan: {'expires_at': DateTime.now().toUtc().toIso8601String()},
       orderBy: 'created_at',
       ascending: false,
@@ -174,19 +244,45 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
   }
 
   @override
+  Future<CommunityPostResponse> getPostById(String id) async {
+    final user = _currentUser();
+    final normalizedId = id.trim();
+    if (normalizedId.isEmpty) {
+      throw AppException(AppFailure.unknown('Community post id is empty.'));
+    }
+
+    final row = await dataService.selectSingle(
+      table: _postsTable,
+      equals: {'id': normalizedId},
+    );
+    final reactedPostIds = await _reactedPostIds(user.id, [normalizedId]);
+    return CommunityPostResponse.fromJson(
+      json: row,
+      currentUserId: user.id,
+      reactedPostIds: reactedPostIds,
+    );
+  }
+
+  @override
   Future<List<CommunityPostResponse>> getPosts({
     required bool mineOnly,
+    required String userId,
     required int page,
     required int limit,
   }) async {
     final user = _currentUser();
+    final normalizedUserId = userId.trim();
     final normalizedPage = page < 1 ? 1 : page;
     final normalizedLimit = limit < 1 ? 1 : limit;
     final from = (normalizedPage - 1) * normalizedLimit;
     final to = from + normalizedLimit - 1;
     final postRows = await dataService.selectList(
       table: _postsTable,
-      equals: mineOnly ? {'user_id': user.id} : const {},
+      equals: normalizedUserId.isNotEmpty
+          ? {'user_id': normalizedUserId}
+          : mineOnly
+          ? {'user_id': user.id}
+          : const {},
       orderBy: 'created_at',
       ascending: false,
       rangeFrom: from,
@@ -211,40 +307,131 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
   }
 
   @override
+  Future<CommunityProfileResponse> getProfile(String userId) async {
+    final user = _currentUser();
+    final normalizedUserId = userId.trim();
+    if (normalizedUserId.isEmpty) {
+      throw AppException(
+        AppFailure.unknown('Community profile user id is empty.'),
+      );
+    }
+
+    return _profileForUser(
+      targetUserId: normalizedUserId,
+      currentUserId: user.id,
+    );
+  }
+
+  @override
+  Future<List<CommunityProfileResponse>> getFollowers({
+    required String userId,
+    required int page,
+    required int limit,
+  }) async {
+    return _followProfiles(
+      userId: userId,
+      page: page,
+      limit: limit,
+      filterColumn: 'following_id',
+      profileIdColumn: 'follower_id',
+    );
+  }
+
+  @override
+  Future<List<CommunityProfileResponse>> getFollowing({
+    required String userId,
+    required int page,
+    required int limit,
+  }) async {
+    return _followProfiles(
+      userId: userId,
+      page: page,
+      limit: limit,
+      filterColumn: 'follower_id',
+      profileIdColumn: 'following_id',
+    );
+  }
+
+  @override
+  Future<CommunityProfileResponse> followUser(String userId) async {
+    final user = _currentUser();
+    final normalizedUserId = userId.trim();
+    if (normalizedUserId.isEmpty || normalizedUserId == user.id) {
+      return _profileForUser(targetUserId: user.id, currentUserId: user.id);
+    }
+
+    await dataService.upsertAndSelectSingle(
+      table: _followsTable,
+      values: {'follower_id': user.id, 'following_id': normalizedUserId},
+      onConflict: 'follower_id,following_id',
+    );
+    return _profileForUser(
+      targetUserId: normalizedUserId,
+      currentUserId: user.id,
+    );
+  }
+
+  @override
+  Future<CommunityProfileResponse> unfollowUser(String userId) async {
+    final user = _currentUser();
+    final normalizedUserId = userId.trim();
+    if (normalizedUserId.isEmpty || normalizedUserId == user.id) {
+      return _profileForUser(targetUserId: user.id, currentUserId: user.id);
+    }
+
+    await dataService.delete(
+      table: _followsTable,
+      equals: {'follower_id': user.id, 'following_id': normalizedUserId},
+    );
+    return _profileForUser(
+      targetUserId: normalizedUserId,
+      currentUserId: user.id,
+    );
+  }
+
+  @override
   Future<CommunityPostResponse> createPost({
     required String content,
     required String movieTitle,
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<CommunityImagePayload> images,
   }) async {
     final user = _currentUser();
     final author = await _currentAuthor(user);
-    final imageUrl = image == null
-        ? ''
-        : await _uploadPostImage(user.id, image);
-    final json = await dataService.insertAndSelectSingle(
-      table: _postsTable,
-      values: {
-        'user_id': user.id,
-        'author_name': author.name,
-        'author_avatar_url': author.avatarUrl,
-        'content': content.trim(),
-        'image_url': imageUrl,
-        'movie_title': movieTitle.trim(),
-        'movie_slug': movieSlug.trim(),
-        'movie_poster_url': moviePosterUrl.trim(),
-        'location_name': locationName.trim(),
-      },
+    final uploadedImageUrls = await _uploadPostImages(
+      userId: user.id,
+      images: images,
     );
 
-    AppLogger.info('Created community post.', name: 'Supabase.Community');
-    return CommunityPostResponse.fromJson(
-      json: json,
-      currentUserId: user.id,
-      reactedPostIds: const {},
-    );
+    try {
+      final json = await dataService.insertAndSelectSingle(
+        table: _postsTable,
+        values: {
+          'user_id': user.id,
+          'author_name': author.name,
+          'author_avatar_url': author.avatarUrl,
+          'content': content.trim(),
+          'image_url': uploadedImageUrls.isEmpty ? '' : uploadedImageUrls.first,
+          'image_urls': uploadedImageUrls,
+          'movie_title': movieTitle.trim(),
+          'movie_slug': movieSlug.trim(),
+          'movie_poster_url': moviePosterUrl.trim(),
+          'location_name': locationName.trim(),
+        },
+      );
+
+      AppLogger.info('Created community post.', name: 'Supabase.Community');
+      return CommunityPostResponse.fromJson(
+        json: json,
+        currentUserId: user.id,
+        reactedPostIds: const {},
+      );
+    } catch (_) {
+      await _deletePostImagesByUrls(uploadedImageUrls);
+      rethrow;
+    }
   }
 
   @override
@@ -255,26 +442,34 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<String> keptImageUrls,
+    required List<CommunityImagePayload> images,
   }) async {
     final user = _currentUser();
-    final oldImageUrl = image == null
-        ? ''
-        : await _ownedPostImageUrl(postId: id, userId: user.id);
+    final oldImageUrls = await _ownedPostImageUrls(postId: id, userId: user.id);
+    final oldImageUrlSet = oldImageUrls.toSet();
+    final normalizedKeptImageUrls = keptImageUrls
+        .map((url) => url.trim())
+        .where((url) => url.isNotEmpty && oldImageUrlSet.contains(url))
+        .toList(growable: false);
+    final uploadedImageUrls = await _uploadPostImages(
+      userId: user.id,
+      images: images,
+    );
+    final nextImageUrls = <String>[
+      ...normalizedKeptImageUrls,
+      ...uploadedImageUrls,
+    ].take(_maxPostImages).toList(growable: false);
     final payload = <String, dynamic>{
       'content': content.trim(),
+      'image_url': nextImageUrls.isEmpty ? '' : nextImageUrls.first,
+      'image_urls': nextImageUrls,
       'movie_title': movieTitle.trim(),
       'movie_slug': movieSlug.trim(),
       'movie_poster_url': moviePosterUrl.trim(),
       'location_name': locationName.trim(),
       'updated_at': DateTime.now().toUtc().toIso8601String(),
     };
-    var uploadedImageUrl = '';
-
-    if (image != null) {
-      uploadedImageUrl = await _uploadPostImage(user.id, image);
-      payload['image_url'] = uploadedImageUrl;
-    }
 
     try {
       final json = await dataService.updateAndSelectSingle(
@@ -283,10 +478,10 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
         equals: {'id': id, 'user_id': user.id},
       );
       final reactedPostIds = await _reactedPostIds(user.id, [id]);
-
-      if (image != null && oldImageUrl.trim().isNotEmpty) {
-        await _deletePostImageByUrl(oldImageUrl);
-      }
+      final nextImageUrlSet = nextImageUrls.toSet();
+      await _deletePostImagesByUrls(
+        oldImageUrls.where((url) => !nextImageUrlSet.contains(url)).toList(),
+      );
 
       AppLogger.info('Updated community post.', name: 'Supabase.Community');
       return CommunityPostResponse.fromJson(
@@ -295,7 +490,7 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
         reactedPostIds: reactedPostIds,
       );
     } catch (_) {
-      await _deletePostImageByUrl(uploadedImageUrl);
+      await _deletePostImagesByUrls(uploadedImageUrls);
       rethrow;
     }
   }
@@ -303,12 +498,12 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
   @override
   Future<void> deletePost(String id) async {
     final user = _currentUser();
-    final imageUrl = await _ownedPostImageUrl(postId: id, userId: user.id);
+    final imageUrls = await _ownedPostImageUrls(postId: id, userId: user.id);
     await dataService.delete(
       table: _postsTable,
       equals: {'id': id, 'user_id': user.id},
     );
-    await _deletePostImageByUrl(imageUrl);
+    await _deletePostImagesByUrls(imageUrls);
     AppLogger.info('Deleted community post.', name: 'Supabase.Community');
   }
 
@@ -319,6 +514,7 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
       table: _commentsTable,
       equals: {'post_id': postId},
       orderBy: 'created_at',
+      ascending: false,
     );
 
     return rows
@@ -424,15 +620,194 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
         .toSet();
   }
 
-  Future<String> _uploadPostImage(
-    String userId,
-    CommunityImagePayload image,
-  ) async {
+  Future<List<String>> _visibleStoryUserIds(String currentUserId) async {
+    final followedRows = await dataService.selectList(
+      table: _followsTable,
+      columns: 'following_id',
+      equals: {'follower_id': currentUserId},
+    );
+    final userIds = <String>{currentUserId};
+    for (final row in followedRows) {
+      final followingId = row['following_id']?.toString() ?? '';
+      if (followingId.trim().isNotEmpty) {
+        userIds.add(followingId);
+      }
+    }
+
+    return userIds.toList(growable: false);
+  }
+
+  Future<CommunityProfileResponse> _profileForUser({
+    required String targetUserId,
+    required String currentUserId,
+  }) async {
+    final profileRow =
+        await dataService.selectMaybeSingle(
+          table: _publicProfilesView,
+          equals: {'id': targetUserId},
+        ) ??
+        await _communityAuthorRow(targetUserId) ??
+        {'id': targetUserId};
+    final isMe = targetUserId == currentUserId;
+    final isFollowing = isMe
+        ? false
+        : await _isFollowing(
+            followerId: currentUserId,
+            followingId: targetUserId,
+          );
+    final followerCount = await _rowCount(
+      table: _followsTable,
+      equals: {'following_id': targetUserId},
+    );
+    final followingCount = await _rowCount(
+      table: _followsTable,
+      equals: {'follower_id': targetUserId},
+    );
+    final postCount = await _rowCount(
+      table: _postsTable,
+      equals: {'user_id': targetUserId},
+    );
+    final storyCount = await _rowCount(
+      table: _storiesTable,
+      equals: {'user_id': targetUserId},
+      greaterThan: {'expires_at': DateTime.now().toUtc().toIso8601String()},
+    );
+
+    return CommunityProfileResponse.fromJson(
+      json: profileRow,
+      currentUserId: currentUserId,
+      isFollowing: isFollowing,
+      followerCount: followerCount,
+      followingCount: followingCount,
+      postCount: postCount,
+      storyCount: storyCount,
+    );
+  }
+
+  Future<List<CommunityProfileResponse>> _followProfiles({
+    required String userId,
+    required int page,
+    required int limit,
+    required String filterColumn,
+    required String profileIdColumn,
+  }) async {
+    final user = _currentUser();
+    final normalizedUserId = userId.trim().isEmpty ? user.id : userId.trim();
+    final normalizedPage = page < 1 ? 1 : page;
+    final normalizedLimit = limit < 1 ? 1 : limit;
+    final from = (normalizedPage - 1) * normalizedLimit;
+    final to = from + normalizedLimit - 1;
+    final rows = await dataService.selectList(
+      table: _followsTable,
+      columns: '$profileIdColumn, created_at',
+      equals: {filterColumn: normalizedUserId},
+      orderBy: 'created_at',
+      ascending: false,
+      rangeFrom: from,
+      rangeTo: to,
+    );
+    final profileIds = rows
+        .map((row) => row[profileIdColumn]?.toString().trim() ?? '')
+        .where((id) => id.isNotEmpty)
+        .toList(growable: false);
+    if (profileIds.isEmpty) {
+      return const [];
+    }
+
+    final profiles = <CommunityProfileResponse>[];
+    for (final profileId in profileIds) {
+      profiles.add(
+        await _profileForUser(targetUserId: profileId, currentUserId: user.id),
+      );
+    }
+    return profiles;
+  }
+
+  Future<Map<String, dynamic>?> _communityAuthorRow(String userId) async {
+    final postRows = await dataService.selectList(
+      table: _postsTable,
+      columns: 'user_id, author_name, author_avatar_url',
+      equals: {'user_id': userId},
+      orderBy: 'created_at',
+      ascending: false,
+      rangeFrom: 0,
+      rangeTo: 0,
+    );
+    if (postRows.isNotEmpty) {
+      return postRows.first;
+    }
+
+    final storyRows = await dataService.selectList(
+      table: _storiesTable,
+      columns: 'user_id, author_name, author_avatar_url',
+      equals: {'user_id': userId},
+      orderBy: 'created_at',
+      ascending: false,
+      rangeFrom: 0,
+      rangeTo: 0,
+    );
+    return storyRows.isEmpty ? null : storyRows.first;
+  }
+
+  Future<bool> _isFollowing({
+    required String followerId,
+    required String followingId,
+  }) async {
+    final row = await dataService.selectMaybeSingle(
+      table: _followsTable,
+      columns: 'follower_id',
+      equals: {'follower_id': followerId, 'following_id': followingId},
+    );
+    return row != null;
+  }
+
+  Future<int> _rowCount({
+    required String table,
+    required Map<String, Object?> equals,
+    Map<String, Object?> greaterThan = const {},
+  }) async {
+    final rows = await dataService.selectList(
+      table: table,
+      columns: 'id',
+      equals: equals,
+      greaterThan: greaterThan,
+    );
+    return rows.length;
+  }
+
+  Future<List<String>> _uploadPostImages({
+    required String userId,
+    required List<CommunityImagePayload> images,
+  }) async {
+    final uploadedUrls = <String>[];
+    for (
+      var index = 0;
+      index < images.length && index < _maxPostImages;
+      index++
+    ) {
+      uploadedUrls.add(
+        await _uploadPostImage(
+          userId: userId,
+          image: images[index],
+          index: index,
+        ),
+      );
+    }
+
+    return uploadedUrls;
+  }
+
+  Future<String> _uploadPostImage({
+    required String userId,
+    required CommunityImagePayload image,
+    required int index,
+  }) async {
     final extension = _extensionFor(
       fileName: image.fileName,
       contentType: image.contentType,
     );
-    final path = '$userId/${DateTime.now().microsecondsSinceEpoch}$extension';
+    final path =
+        '$userId/${DateTime.now().microsecondsSinceEpoch}_$index$extension';
     await dataService.uploadBinary(
       bucket: _postImagesBucket,
       path: path,
@@ -467,38 +842,62 @@ class SupabaseCommunityRemoteDataSource implements CommunityRemoteDataSource {
     );
   }
 
-  Future<String> _ownedPostImageUrl({
+  Future<List<String>> _ownedPostImageUrls({
     required String postId,
     required String userId,
   }) async {
     final row = await dataService.selectMaybeSingle(
       table: _postsTable,
-      columns: 'image_url',
+      columns: 'image_url, image_urls',
       equals: {'id': postId, 'user_id': userId},
     );
 
-    return row?['image_url']?.toString() ?? '';
+    if (row == null) {
+      return const [];
+    }
+
+    return _postImageUrls(row);
   }
 
-  Future<void> _deletePostImageByUrl(String imageUrl) async {
-    final path = _postImagePathFromUrl(imageUrl);
-    if (path == null) {
+  Future<void> _deletePostImagesByUrls(List<String> imageUrls) async {
+    final paths = imageUrls
+        .map(_postImagePathFromUrl)
+        .whereType<String>()
+        .toSet()
+        .toList(growable: false);
+    if (paths.isEmpty) {
       return;
     }
 
     try {
       await dataService.removeStorageObjects(
         bucket: _postImagesBucket,
-        paths: [path],
+        paths: paths,
       );
     } catch (error, stackTrace) {
       AppLogger.warning(
-        'Unable to delete community post image from storage.',
+        'Unable to delete community post images from storage.',
         name: 'Supabase.Community',
         error: error,
         stackTrace: stackTrace,
       );
     }
+  }
+
+  List<String> _postImageUrls(Map<String, dynamic> row) {
+    final imageUrls = row['image_urls'];
+    final parsedUrls = imageUrls is Iterable
+        ? imageUrls
+              .map((item) => item?.toString().trim() ?? '')
+              .where((item) => item.isNotEmpty)
+              .toList(growable: false)
+        : const <String>[];
+    if (parsedUrls.isNotEmpty) {
+      return parsedUrls;
+    }
+
+    final legacyUrl = row['image_url']?.toString().trim() ?? '';
+    return legacyUrl.isEmpty ? const <String>[] : <String>[legacyUrl];
   }
 
   Future<void> _deleteStoryImageByPath(String imagePath) async {
@@ -624,7 +1023,20 @@ class UnconfiguredCommunityRemoteDataSource
   const UnconfiguredCommunityRemoteDataSource();
 
   @override
-  Future<List<CommunityStoryResponse>> getStories() async {
+  Future<List<String>> getFollowedUserIds() async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<CommunityStoryResponse> getStoryById(String id) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<List<CommunityStoryResponse>> getStories({
+    required String userId,
+    required bool followedOnly,
+  }) async {
     throw const AppException(_configurationFailure);
   }
 
@@ -652,11 +1064,50 @@ class UnconfiguredCommunityRemoteDataSource
   }
 
   @override
+  Future<CommunityPostResponse> getPostById(String id) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
   Future<List<CommunityPostResponse>> getPosts({
     required bool mineOnly,
+    required String userId,
     required int page,
     required int limit,
   }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<CommunityProfileResponse> getProfile(String userId) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<List<CommunityProfileResponse>> getFollowers({
+    required String userId,
+    required int page,
+    required int limit,
+  }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<List<CommunityProfileResponse>> getFollowing({
+    required String userId,
+    required int page,
+    required int limit,
+  }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<CommunityProfileResponse> followUser(String userId) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<CommunityProfileResponse> unfollowUser(String userId) async {
     throw const AppException(_configurationFailure);
   }
 
@@ -667,7 +1118,7 @@ class UnconfiguredCommunityRemoteDataSource
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<CommunityImagePayload> images,
   }) async {
     throw const AppException(_configurationFailure);
   }
@@ -680,7 +1131,8 @@ class UnconfiguredCommunityRemoteDataSource
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<String> keptImageUrls,
+    required List<CommunityImagePayload> images,
   }) async {
     throw const AppException(_configurationFailure);
   }

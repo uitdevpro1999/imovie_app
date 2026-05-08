@@ -6,11 +6,13 @@ import 'package:imovie_app/domain/repositories/community_repository.dart';
 class GetCommunityPostsParams {
   const GetCommunityPostsParams({
     required this.mineOnly,
+    this.userId = '',
     required this.page,
     required this.limit,
   });
 
   final bool mineOnly;
+  final String userId;
   final int page;
   final int limit;
 }
@@ -25,6 +27,7 @@ class GetCommunityPostsUseCase
   Future<Result<List<CommunityPost>>> call(GetCommunityPostsParams params) {
     return repository.getPosts(
       mineOnly: params.mineOnly,
+      userId: params.userId,
       page: params.page,
       limit: params.limit,
     );

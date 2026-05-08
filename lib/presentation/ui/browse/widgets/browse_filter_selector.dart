@@ -74,7 +74,7 @@ class _BrowseFilterSelector<T> extends StatelessWidget {
               ),
             ),
             const Icon(
-              Icons.keyboard_arrow_down_rounded,
+              FluentIcons.chevron_down_24_regular,
               color: AppColors.grayscale300,
             ),
           ],
@@ -171,7 +171,7 @@ class _BrowseSelectorSheetState<T> extends State<_BrowseSelectorSheet<T>> {
                         ),
                         if (selected)
                           const Icon(
-                            Icons.check_rounded,
+                            FluentIcons.checkmark_24_regular,
                             color: AppColors.yellow500,
                           ),
                       ],
@@ -225,7 +225,10 @@ class _BrowseSelectorSheetHeader extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close_rounded, color: AppColors.white),
+                  icon: const Icon(
+                    FluentIcons.dismiss_24_regular,
+                    color: AppColors.white,
+                  ),
                 ),
               ],
             ),

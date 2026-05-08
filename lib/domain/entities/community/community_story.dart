@@ -51,4 +51,37 @@ class CommunityStory {
 
     return DateTime.now().toUtc().isAfter(expiry.toUtc());
   }
+
+  CommunityStory copyWith({
+    String? authorName,
+    String? authorAvatarUrl,
+    String? caption,
+    String? movieTitle,
+    String? movieSlug,
+    String? moviePosterUrl,
+    String? locationName,
+  }) {
+    return CommunityStory(
+      id: id,
+      userId: userId,
+      authorName: authorName ?? this.authorName,
+      authorAvatarUrl: authorAvatarUrl ?? this.authorAvatarUrl,
+      imageUrl: imageUrl,
+      imagePath: imagePath,
+      caption: caption ?? this.caption,
+      movieTitle: movieTitle ?? this.movieTitle,
+      movieSlug: movieSlug ?? this.movieSlug,
+      moviePosterUrl: moviePosterUrl ?? this.moviePosterUrl,
+      locationName: locationName ?? this.locationName,
+      textPositionX: textPositionX,
+      textPositionY: textPositionY,
+      moviePositionX: moviePositionX,
+      moviePositionY: moviePositionY,
+      locationPositionX: locationPositionX,
+      locationPositionY: locationPositionY,
+      isOwner: isOwner,
+      createdAt: createdAt,
+      expiresAt: expiresAt,
+    );
+  }
 }

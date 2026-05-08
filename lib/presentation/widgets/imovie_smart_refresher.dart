@@ -54,15 +54,18 @@ class _IMovieSmartRefresherState extends State<IMovieSmartRefresher> {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _refreshController,
-      enablePullDown: IMovieRefreshConfig.enablePullDown,
-      enablePullUp: widget.enablePullUp,
-      header: IMovieRefreshConfig.header,
-      footer: IMovieRefreshConfig.footer(),
-      onRefresh: _handleRefresh,
-      onLoading: widget.enablePullUp ? _handleLoadMore : null,
-      child: widget.child,
+    return RefreshConfiguration(
+      springDescription: IMovieRefreshConfig.springDescription,
+      child: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: IMovieRefreshConfig.enablePullDown,
+        enablePullUp: widget.enablePullUp,
+        header: IMovieRefreshConfig.header,
+        footer: IMovieRefreshConfig.footer(),
+        onRefresh: _handleRefresh,
+        onLoading: widget.enablePullUp ? _handleLoadMore : null,
+        child: widget.child,
+      ),
     );
   }
 

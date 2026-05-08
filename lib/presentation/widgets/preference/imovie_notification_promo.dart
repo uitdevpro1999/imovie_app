@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 
@@ -26,7 +27,7 @@ class IMovieNotificationPromo extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Icon(
-              Icons.notifications_active_outlined,
+              FluentIcons.alert_on_24_regular,
               color: AppColors.yellow600,
               size: 32,
             ),

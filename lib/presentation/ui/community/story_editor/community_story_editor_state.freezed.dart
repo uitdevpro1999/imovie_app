@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CommunityStoryEditorState {
 
- PageStatus get pageStatus; bool get processing; bool get resolvingLocation; bool get searchingMovies; AppFailure? get failure; XFile? get selectedImage; String get storyText; String get locationName; String get selectedMovieTitle; String get selectedMovieSlug; String get selectedMoviePosterUrl; double get textPositionX; double get textPositionY; double get moviePositionX; double get moviePositionY; double get locationPositionX; double get locationPositionY; List<HomeMovie> get movieSearchResults;
+ PageStatus get pageStatus; bool get processing; bool get resolvingLocation; bool get searchingMovies; AppFailure? get failure; XFile? get selectedImage; String get storyText; String get locationName; String get locationFullName; String get selectedMovieTitle; String get selectedMovieSlug; String get selectedMoviePosterUrl; double get textPositionX; double get textPositionY; double get moviePositionX; double get moviePositionY; double get locationPositionX; double get locationPositionY; List<HomeMovie> get movieSearchResults;
 /// Create a copy of CommunityStoryEditorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CommunityStoryEditorStateCopyWith<CommunityStoryEditorState> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommunityStoryEditorState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.resolvingLocation, resolvingLocation) || other.resolvingLocation == resolvingLocation)&&(identical(other.searchingMovies, searchingMovies) || other.searchingMovies == searchingMovies)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.selectedImage, selectedImage) || other.selectedImage == selectedImage)&&(identical(other.storyText, storyText) || other.storyText == storyText)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.selectedMovieTitle, selectedMovieTitle) || other.selectedMovieTitle == selectedMovieTitle)&&(identical(other.selectedMovieSlug, selectedMovieSlug) || other.selectedMovieSlug == selectedMovieSlug)&&(identical(other.selectedMoviePosterUrl, selectedMoviePosterUrl) || other.selectedMoviePosterUrl == selectedMoviePosterUrl)&&(identical(other.textPositionX, textPositionX) || other.textPositionX == textPositionX)&&(identical(other.textPositionY, textPositionY) || other.textPositionY == textPositionY)&&(identical(other.moviePositionX, moviePositionX) || other.moviePositionX == moviePositionX)&&(identical(other.moviePositionY, moviePositionY) || other.moviePositionY == moviePositionY)&&(identical(other.locationPositionX, locationPositionX) || other.locationPositionX == locationPositionX)&&(identical(other.locationPositionY, locationPositionY) || other.locationPositionY == locationPositionY)&&const DeepCollectionEquality().equals(other.movieSearchResults, movieSearchResults));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommunityStoryEditorState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.resolvingLocation, resolvingLocation) || other.resolvingLocation == resolvingLocation)&&(identical(other.searchingMovies, searchingMovies) || other.searchingMovies == searchingMovies)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.selectedImage, selectedImage) || other.selectedImage == selectedImage)&&(identical(other.storyText, storyText) || other.storyText == storyText)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationFullName, locationFullName) || other.locationFullName == locationFullName)&&(identical(other.selectedMovieTitle, selectedMovieTitle) || other.selectedMovieTitle == selectedMovieTitle)&&(identical(other.selectedMovieSlug, selectedMovieSlug) || other.selectedMovieSlug == selectedMovieSlug)&&(identical(other.selectedMoviePosterUrl, selectedMoviePosterUrl) || other.selectedMoviePosterUrl == selectedMoviePosterUrl)&&(identical(other.textPositionX, textPositionX) || other.textPositionX == textPositionX)&&(identical(other.textPositionY, textPositionY) || other.textPositionY == textPositionY)&&(identical(other.moviePositionX, moviePositionX) || other.moviePositionX == moviePositionX)&&(identical(other.moviePositionY, moviePositionY) || other.moviePositionY == moviePositionY)&&(identical(other.locationPositionX, locationPositionX) || other.locationPositionX == locationPositionX)&&(identical(other.locationPositionY, locationPositionY) || other.locationPositionY == locationPositionY)&&const DeepCollectionEquality().equals(other.movieSearchResults, movieSearchResults));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,resolvingLocation,searchingMovies,failure,selectedImage,storyText,locationName,selectedMovieTitle,selectedMovieSlug,selectedMoviePosterUrl,textPositionX,textPositionY,moviePositionX,moviePositionY,locationPositionX,locationPositionY,const DeepCollectionEquality().hash(movieSearchResults));
+int get hashCode => Object.hashAll([runtimeType,pageStatus,processing,resolvingLocation,searchingMovies,failure,selectedImage,storyText,locationName,locationFullName,selectedMovieTitle,selectedMovieSlug,selectedMoviePosterUrl,textPositionX,textPositionY,moviePositionX,moviePositionY,locationPositionX,locationPositionY,const DeepCollectionEquality().hash(movieSearchResults)]);
 
 @override
 String toString() {
-  return 'CommunityStoryEditorState(pageStatus: $pageStatus, processing: $processing, resolvingLocation: $resolvingLocation, searchingMovies: $searchingMovies, failure: $failure, selectedImage: $selectedImage, storyText: $storyText, locationName: $locationName, selectedMovieTitle: $selectedMovieTitle, selectedMovieSlug: $selectedMovieSlug, selectedMoviePosterUrl: $selectedMoviePosterUrl, textPositionX: $textPositionX, textPositionY: $textPositionY, moviePositionX: $moviePositionX, moviePositionY: $moviePositionY, locationPositionX: $locationPositionX, locationPositionY: $locationPositionY, movieSearchResults: $movieSearchResults)';
+  return 'CommunityStoryEditorState(pageStatus: $pageStatus, processing: $processing, resolvingLocation: $resolvingLocation, searchingMovies: $searchingMovies, failure: $failure, selectedImage: $selectedImage, storyText: $storyText, locationName: $locationName, locationFullName: $locationFullName, selectedMovieTitle: $selectedMovieTitle, selectedMovieSlug: $selectedMovieSlug, selectedMoviePosterUrl: $selectedMoviePosterUrl, textPositionX: $textPositionX, textPositionY: $textPositionY, moviePositionX: $moviePositionX, moviePositionY: $moviePositionY, locationPositionX: $locationPositionX, locationPositionY: $locationPositionY, movieSearchResults: $movieSearchResults)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CommunityStoryEditorStateCopyWith<$Res>  {
   factory $CommunityStoryEditorStateCopyWith(CommunityStoryEditorState value, $Res Function(CommunityStoryEditorState) _then) = _$CommunityStoryEditorStateCopyWithImpl;
 @useResult
 $Res call({
- PageStatus pageStatus, bool processing, bool resolvingLocation, bool searchingMovies, AppFailure? failure, XFile? selectedImage, String storyText, String locationName, String selectedMovieTitle, String selectedMovieSlug, String selectedMoviePosterUrl, double textPositionX, double textPositionY, double moviePositionX, double moviePositionY, double locationPositionX, double locationPositionY, List<HomeMovie> movieSearchResults
+ PageStatus pageStatus, bool processing, bool resolvingLocation, bool searchingMovies, AppFailure? failure, XFile? selectedImage, String storyText, String locationName, String locationFullName, String selectedMovieTitle, String selectedMovieSlug, String selectedMoviePosterUrl, double textPositionX, double textPositionY, double moviePositionX, double moviePositionY, double locationPositionX, double locationPositionY, List<HomeMovie> movieSearchResults
 });
 
 
@@ -62,7 +62,7 @@ class _$CommunityStoryEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of CommunityStoryEditorState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? resolvingLocation = null,Object? searchingMovies = null,Object? failure = freezed,Object? selectedImage = freezed,Object? storyText = null,Object? locationName = null,Object? selectedMovieTitle = null,Object? selectedMovieSlug = null,Object? selectedMoviePosterUrl = null,Object? textPositionX = null,Object? textPositionY = null,Object? moviePositionX = null,Object? moviePositionY = null,Object? locationPositionX = null,Object? locationPositionY = null,Object? movieSearchResults = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? resolvingLocation = null,Object? searchingMovies = null,Object? failure = freezed,Object? selectedImage = freezed,Object? storyText = null,Object? locationName = null,Object? locationFullName = null,Object? selectedMovieTitle = null,Object? selectedMovieSlug = null,Object? selectedMoviePosterUrl = null,Object? textPositionX = null,Object? textPositionY = null,Object? moviePositionX = null,Object? moviePositionY = null,Object? locationPositionX = null,Object? locationPositionY = null,Object? movieSearchResults = null,}) {
   return _then(_self.copyWith(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
@@ -72,6 +72,7 @@ as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nu
 as AppFailure?,selectedImage: freezed == selectedImage ? _self.selectedImage : selectedImage // ignore: cast_nullable_to_non_nullable
 as XFile?,storyText: null == storyText ? _self.storyText : storyText // ignore: cast_nullable_to_non_nullable
 as String,locationName: null == locationName ? _self.locationName : locationName // ignore: cast_nullable_to_non_nullable
+as String,locationFullName: null == locationFullName ? _self.locationFullName : locationFullName // ignore: cast_nullable_to_non_nullable
 as String,selectedMovieTitle: null == selectedMovieTitle ? _self.selectedMovieTitle : selectedMovieTitle // ignore: cast_nullable_to_non_nullable
 as String,selectedMovieSlug: null == selectedMovieSlug ? _self.selectedMovieSlug : selectedMovieSlug // ignore: cast_nullable_to_non_nullable
 as String,selectedMoviePosterUrl: null == selectedMoviePosterUrl ? _self.selectedMoviePosterUrl : selectedMoviePosterUrl // ignore: cast_nullable_to_non_nullable
@@ -179,10 +180,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  bool resolvingLocation,  bool searchingMovies,  AppFailure? failure,  XFile? selectedImage,  String storyText,  String locationName,  String selectedMovieTitle,  String selectedMovieSlug,  String selectedMoviePosterUrl,  double textPositionX,  double textPositionY,  double moviePositionX,  double moviePositionY,  double locationPositionX,  double locationPositionY,  List<HomeMovie> movieSearchResults)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  bool resolvingLocation,  bool searchingMovies,  AppFailure? failure,  XFile? selectedImage,  String storyText,  String locationName,  String locationFullName,  String selectedMovieTitle,  String selectedMovieSlug,  String selectedMoviePosterUrl,  double textPositionX,  double textPositionY,  double moviePositionX,  double moviePositionY,  double locationPositionX,  double locationPositionY,  List<HomeMovie> movieSearchResults)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CommunityStoryEditorState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.searchingMovies,_that.failure,_that.selectedImage,_that.storyText,_that.locationName,_that.selectedMovieTitle,_that.selectedMovieSlug,_that.selectedMoviePosterUrl,_that.textPositionX,_that.textPositionY,_that.moviePositionX,_that.moviePositionY,_that.locationPositionX,_that.locationPositionY,_that.movieSearchResults);case _:
+return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.searchingMovies,_that.failure,_that.selectedImage,_that.storyText,_that.locationName,_that.locationFullName,_that.selectedMovieTitle,_that.selectedMovieSlug,_that.selectedMoviePosterUrl,_that.textPositionX,_that.textPositionY,_that.moviePositionX,_that.moviePositionY,_that.locationPositionX,_that.locationPositionY,_that.movieSearchResults);case _:
   return orElse();
 
 }
@@ -200,10 +201,10 @@ return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  bool resolvingLocation,  bool searchingMovies,  AppFailure? failure,  XFile? selectedImage,  String storyText,  String locationName,  String selectedMovieTitle,  String selectedMovieSlug,  String selectedMoviePosterUrl,  double textPositionX,  double textPositionY,  double moviePositionX,  double moviePositionY,  double locationPositionX,  double locationPositionY,  List<HomeMovie> movieSearchResults)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  bool resolvingLocation,  bool searchingMovies,  AppFailure? failure,  XFile? selectedImage,  String storyText,  String locationName,  String locationFullName,  String selectedMovieTitle,  String selectedMovieSlug,  String selectedMoviePosterUrl,  double textPositionX,  double textPositionY,  double moviePositionX,  double moviePositionY,  double locationPositionX,  double locationPositionY,  List<HomeMovie> movieSearchResults)  $default,) {final _that = this;
 switch (_that) {
 case _CommunityStoryEditorState():
-return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.searchingMovies,_that.failure,_that.selectedImage,_that.storyText,_that.locationName,_that.selectedMovieTitle,_that.selectedMovieSlug,_that.selectedMoviePosterUrl,_that.textPositionX,_that.textPositionY,_that.moviePositionX,_that.moviePositionY,_that.locationPositionX,_that.locationPositionY,_that.movieSearchResults);case _:
+return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.searchingMovies,_that.failure,_that.selectedImage,_that.storyText,_that.locationName,_that.locationFullName,_that.selectedMovieTitle,_that.selectedMovieSlug,_that.selectedMoviePosterUrl,_that.textPositionX,_that.textPositionY,_that.moviePositionX,_that.moviePositionY,_that.locationPositionX,_that.locationPositionY,_that.movieSearchResults);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,10 +221,10 @@ return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  bool resolvingLocation,  bool searchingMovies,  AppFailure? failure,  XFile? selectedImage,  String storyText,  String locationName,  String selectedMovieTitle,  String selectedMovieSlug,  String selectedMoviePosterUrl,  double textPositionX,  double textPositionY,  double moviePositionX,  double moviePositionY,  double locationPositionX,  double locationPositionY,  List<HomeMovie> movieSearchResults)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  bool resolvingLocation,  bool searchingMovies,  AppFailure? failure,  XFile? selectedImage,  String storyText,  String locationName,  String locationFullName,  String selectedMovieTitle,  String selectedMovieSlug,  String selectedMoviePosterUrl,  double textPositionX,  double textPositionY,  double moviePositionX,  double moviePositionY,  double locationPositionX,  double locationPositionY,  List<HomeMovie> movieSearchResults)?  $default,) {final _that = this;
 switch (_that) {
 case _CommunityStoryEditorState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.searchingMovies,_that.failure,_that.selectedImage,_that.storyText,_that.locationName,_that.selectedMovieTitle,_that.selectedMovieSlug,_that.selectedMoviePosterUrl,_that.textPositionX,_that.textPositionY,_that.moviePositionX,_that.moviePositionY,_that.locationPositionX,_that.locationPositionY,_that.movieSearchResults);case _:
+return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.searchingMovies,_that.failure,_that.selectedImage,_that.storyText,_that.locationName,_that.locationFullName,_that.selectedMovieTitle,_that.selectedMovieSlug,_that.selectedMoviePosterUrl,_that.textPositionX,_that.textPositionY,_that.moviePositionX,_that.moviePositionY,_that.locationPositionX,_that.locationPositionY,_that.movieSearchResults);case _:
   return null;
 
 }
@@ -235,7 +236,7 @@ return $default(_that.pageStatus,_that.processing,_that.resolvingLocation,_that.
 
 
 class _CommunityStoryEditorState extends CommunityStoryEditorState {
-  const _CommunityStoryEditorState({this.pageStatus = PageStatus.loaded, this.processing = false, this.resolvingLocation = false, this.searchingMovies = false, this.failure, this.selectedImage, this.storyText = '', this.locationName = '', this.selectedMovieTitle = '', this.selectedMovieSlug = '', this.selectedMoviePosterUrl = '', this.textPositionX = 0.5, this.textPositionY = 0.45, this.moviePositionX = 0.28, this.moviePositionY = 0.78, this.locationPositionX = 0.32, this.locationPositionY = 0.88, final  List<HomeMovie> movieSearchResults = const <HomeMovie>[]}): _movieSearchResults = movieSearchResults,super._();
+  const _CommunityStoryEditorState({this.pageStatus = PageStatus.loaded, this.processing = false, this.resolvingLocation = false, this.searchingMovies = false, this.failure, this.selectedImage, this.storyText = '', this.locationName = '', this.locationFullName = '', this.selectedMovieTitle = '', this.selectedMovieSlug = '', this.selectedMoviePosterUrl = '', this.textPositionX = 0.5, this.textPositionY = 0.45, this.moviePositionX = 0.28, this.moviePositionY = 0.78, this.locationPositionX = 0.32, this.locationPositionY = 0.88, final  List<HomeMovie> movieSearchResults = const <HomeMovie>[]}): _movieSearchResults = movieSearchResults,super._();
   
 
 @override@JsonKey() final  PageStatus pageStatus;
@@ -246,6 +247,7 @@ class _CommunityStoryEditorState extends CommunityStoryEditorState {
 @override final  XFile? selectedImage;
 @override@JsonKey() final  String storyText;
 @override@JsonKey() final  String locationName;
+@override@JsonKey() final  String locationFullName;
 @override@JsonKey() final  String selectedMovieTitle;
 @override@JsonKey() final  String selectedMovieSlug;
 @override@JsonKey() final  String selectedMoviePosterUrl;
@@ -273,16 +275,16 @@ _$CommunityStoryEditorStateCopyWith<_CommunityStoryEditorState> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommunityStoryEditorState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.resolvingLocation, resolvingLocation) || other.resolvingLocation == resolvingLocation)&&(identical(other.searchingMovies, searchingMovies) || other.searchingMovies == searchingMovies)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.selectedImage, selectedImage) || other.selectedImage == selectedImage)&&(identical(other.storyText, storyText) || other.storyText == storyText)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.selectedMovieTitle, selectedMovieTitle) || other.selectedMovieTitle == selectedMovieTitle)&&(identical(other.selectedMovieSlug, selectedMovieSlug) || other.selectedMovieSlug == selectedMovieSlug)&&(identical(other.selectedMoviePosterUrl, selectedMoviePosterUrl) || other.selectedMoviePosterUrl == selectedMoviePosterUrl)&&(identical(other.textPositionX, textPositionX) || other.textPositionX == textPositionX)&&(identical(other.textPositionY, textPositionY) || other.textPositionY == textPositionY)&&(identical(other.moviePositionX, moviePositionX) || other.moviePositionX == moviePositionX)&&(identical(other.moviePositionY, moviePositionY) || other.moviePositionY == moviePositionY)&&(identical(other.locationPositionX, locationPositionX) || other.locationPositionX == locationPositionX)&&(identical(other.locationPositionY, locationPositionY) || other.locationPositionY == locationPositionY)&&const DeepCollectionEquality().equals(other._movieSearchResults, _movieSearchResults));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommunityStoryEditorState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.resolvingLocation, resolvingLocation) || other.resolvingLocation == resolvingLocation)&&(identical(other.searchingMovies, searchingMovies) || other.searchingMovies == searchingMovies)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.selectedImage, selectedImage) || other.selectedImage == selectedImage)&&(identical(other.storyText, storyText) || other.storyText == storyText)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationFullName, locationFullName) || other.locationFullName == locationFullName)&&(identical(other.selectedMovieTitle, selectedMovieTitle) || other.selectedMovieTitle == selectedMovieTitle)&&(identical(other.selectedMovieSlug, selectedMovieSlug) || other.selectedMovieSlug == selectedMovieSlug)&&(identical(other.selectedMoviePosterUrl, selectedMoviePosterUrl) || other.selectedMoviePosterUrl == selectedMoviePosterUrl)&&(identical(other.textPositionX, textPositionX) || other.textPositionX == textPositionX)&&(identical(other.textPositionY, textPositionY) || other.textPositionY == textPositionY)&&(identical(other.moviePositionX, moviePositionX) || other.moviePositionX == moviePositionX)&&(identical(other.moviePositionY, moviePositionY) || other.moviePositionY == moviePositionY)&&(identical(other.locationPositionX, locationPositionX) || other.locationPositionX == locationPositionX)&&(identical(other.locationPositionY, locationPositionY) || other.locationPositionY == locationPositionY)&&const DeepCollectionEquality().equals(other._movieSearchResults, _movieSearchResults));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,resolvingLocation,searchingMovies,failure,selectedImage,storyText,locationName,selectedMovieTitle,selectedMovieSlug,selectedMoviePosterUrl,textPositionX,textPositionY,moviePositionX,moviePositionY,locationPositionX,locationPositionY,const DeepCollectionEquality().hash(_movieSearchResults));
+int get hashCode => Object.hashAll([runtimeType,pageStatus,processing,resolvingLocation,searchingMovies,failure,selectedImage,storyText,locationName,locationFullName,selectedMovieTitle,selectedMovieSlug,selectedMoviePosterUrl,textPositionX,textPositionY,moviePositionX,moviePositionY,locationPositionX,locationPositionY,const DeepCollectionEquality().hash(_movieSearchResults)]);
 
 @override
 String toString() {
-  return 'CommunityStoryEditorState(pageStatus: $pageStatus, processing: $processing, resolvingLocation: $resolvingLocation, searchingMovies: $searchingMovies, failure: $failure, selectedImage: $selectedImage, storyText: $storyText, locationName: $locationName, selectedMovieTitle: $selectedMovieTitle, selectedMovieSlug: $selectedMovieSlug, selectedMoviePosterUrl: $selectedMoviePosterUrl, textPositionX: $textPositionX, textPositionY: $textPositionY, moviePositionX: $moviePositionX, moviePositionY: $moviePositionY, locationPositionX: $locationPositionX, locationPositionY: $locationPositionY, movieSearchResults: $movieSearchResults)';
+  return 'CommunityStoryEditorState(pageStatus: $pageStatus, processing: $processing, resolvingLocation: $resolvingLocation, searchingMovies: $searchingMovies, failure: $failure, selectedImage: $selectedImage, storyText: $storyText, locationName: $locationName, locationFullName: $locationFullName, selectedMovieTitle: $selectedMovieTitle, selectedMovieSlug: $selectedMovieSlug, selectedMoviePosterUrl: $selectedMoviePosterUrl, textPositionX: $textPositionX, textPositionY: $textPositionY, moviePositionX: $moviePositionX, moviePositionY: $moviePositionY, locationPositionX: $locationPositionX, locationPositionY: $locationPositionY, movieSearchResults: $movieSearchResults)';
 }
 
 
@@ -293,7 +295,7 @@ abstract mixin class _$CommunityStoryEditorStateCopyWith<$Res> implements $Commu
   factory _$CommunityStoryEditorStateCopyWith(_CommunityStoryEditorState value, $Res Function(_CommunityStoryEditorState) _then) = __$CommunityStoryEditorStateCopyWithImpl;
 @override @useResult
 $Res call({
- PageStatus pageStatus, bool processing, bool resolvingLocation, bool searchingMovies, AppFailure? failure, XFile? selectedImage, String storyText, String locationName, String selectedMovieTitle, String selectedMovieSlug, String selectedMoviePosterUrl, double textPositionX, double textPositionY, double moviePositionX, double moviePositionY, double locationPositionX, double locationPositionY, List<HomeMovie> movieSearchResults
+ PageStatus pageStatus, bool processing, bool resolvingLocation, bool searchingMovies, AppFailure? failure, XFile? selectedImage, String storyText, String locationName, String locationFullName, String selectedMovieTitle, String selectedMovieSlug, String selectedMoviePosterUrl, double textPositionX, double textPositionY, double moviePositionX, double moviePositionY, double locationPositionX, double locationPositionY, List<HomeMovie> movieSearchResults
 });
 
 
@@ -310,7 +312,7 @@ class __$CommunityStoryEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of CommunityStoryEditorState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? resolvingLocation = null,Object? searchingMovies = null,Object? failure = freezed,Object? selectedImage = freezed,Object? storyText = null,Object? locationName = null,Object? selectedMovieTitle = null,Object? selectedMovieSlug = null,Object? selectedMoviePosterUrl = null,Object? textPositionX = null,Object? textPositionY = null,Object? moviePositionX = null,Object? moviePositionY = null,Object? locationPositionX = null,Object? locationPositionY = null,Object? movieSearchResults = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? resolvingLocation = null,Object? searchingMovies = null,Object? failure = freezed,Object? selectedImage = freezed,Object? storyText = null,Object? locationName = null,Object? locationFullName = null,Object? selectedMovieTitle = null,Object? selectedMovieSlug = null,Object? selectedMoviePosterUrl = null,Object? textPositionX = null,Object? textPositionY = null,Object? moviePositionX = null,Object? moviePositionY = null,Object? locationPositionX = null,Object? locationPositionY = null,Object? movieSearchResults = null,}) {
   return _then(_CommunityStoryEditorState(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
@@ -320,6 +322,7 @@ as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nu
 as AppFailure?,selectedImage: freezed == selectedImage ? _self.selectedImage : selectedImage // ignore: cast_nullable_to_non_nullable
 as XFile?,storyText: null == storyText ? _self.storyText : storyText // ignore: cast_nullable_to_non_nullable
 as String,locationName: null == locationName ? _self.locationName : locationName // ignore: cast_nullable_to_non_nullable
+as String,locationFullName: null == locationFullName ? _self.locationFullName : locationFullName // ignore: cast_nullable_to_non_nullable
 as String,selectedMovieTitle: null == selectedMovieTitle ? _self.selectedMovieTitle : selectedMovieTitle // ignore: cast_nullable_to_non_nullable
 as String,selectedMovieSlug: null == selectedMovieSlug ? _self.selectedMovieSlug : selectedMovieSlug // ignore: cast_nullable_to_non_nullable
 as String,selectedMoviePosterUrl: null == selectedMoviePosterUrl ? _self.selectedMoviePosterUrl : selectedMoviePosterUrl // ignore: cast_nullable_to_non_nullable

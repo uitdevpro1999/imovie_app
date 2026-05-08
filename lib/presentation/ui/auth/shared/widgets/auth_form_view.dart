@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
@@ -98,8 +99,8 @@ class AuthFormView extends StatelessWidget {
                 onPressed: onTogglePasswordVisibility,
                 icon: Icon(
                   passwordVisible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                      ? FluentIcons.eye_24_regular
+                      : FluentIcons.eye_off_24_regular,
                   color: AppColors.white,
                 ),
               ),
@@ -115,8 +116,8 @@ class AuthFormView extends StatelessWidget {
                   onPressed: onTogglePasswordVisibility,
                   icon: Icon(
                     passwordVisible
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
+                        ? FluentIcons.eye_24_regular
+                        : FluentIcons.eye_off_24_regular,
                     color: AppColors.white,
                   ),
                 ),

@@ -86,7 +86,10 @@ class _RatingSourceSheetHeader extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close_rounded, color: AppColors.white),
+                  icon: const Icon(
+                    FluentIcons.dismiss_24_regular,
+                    color: AppColors.white,
+                  ),
                 ),
               ],
             ),
@@ -154,7 +157,7 @@ class _RatingSourceTile extends StatelessWidget {
               ),
             ),
             const Icon(
-              Icons.chevron_right_rounded,
+              FluentIcons.chevron_right_24_regular,
               color: AppColors.grayscale500,
             ),
           ],

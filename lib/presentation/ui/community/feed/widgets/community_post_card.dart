@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
+import 'package:imovie_app/core/services/location_service.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
+import 'package:imovie_app/presentation/ui/community/feed/widgets/community_post_image_gallery.dart';
 import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
 
 enum CommunityPostMenuAction { edit, delete }
@@ -15,6 +18,7 @@ class CommunityPostCard extends StatelessWidget {
     required this.commentLabel,
     required this.editLabel,
     required this.deleteLabel,
+    required this.onAuthorTap,
     required this.onReactionTap,
     required this.onCommentTap,
     required this.onEditTap,
@@ -27,6 +31,7 @@ class CommunityPostCard extends StatelessWidget {
   final String commentLabel;
   final String editLabel;
   final String deleteLabel;
+  final VoidCallback onAuthorTap;
   final VoidCallback onReactionTap;
   final VoidCallback onCommentTap;
   final VoidCallback onEditTap;
@@ -56,6 +61,7 @@ class CommunityPostCard extends StatelessWidget {
               post: post,
               editLabel: editLabel,
               deleteLabel: deleteLabel,
+              onAuthorTap: onAuthorTap,
               onEditTap: onEditTap,
               onDeleteTap: onDeleteTap,
             ),
@@ -69,15 +75,11 @@ class CommunityPostCard extends StatelessWidget {
                 ),
               ),
             ],
-            if (post.imageUrl.trim().isNotEmpty) ...[
+            if (post.imageUrls.isNotEmpty) ...[
               const SizedBox(height: 14),
-              AspectRatio(
-                aspectRatio: 4 / 3,
-                child: IMovieRemoteImage(
-                  imageUrl: post.imageUrl,
-                  borderRadius: BorderRadius.circular(16),
-                  placeholderLabel: post.content,
-                ),
+              CommunityPostImageGallery(
+                imageUrls: post.imageUrls,
+                placeholderLabel: post.content,
               ),
             ],
             if (post.movieTitle.trim().isNotEmpty) ...[
@@ -91,8 +93,9 @@ class CommunityPostCard extends StatelessWidget {
             if (post.locationName.trim().isNotEmpty) ...[
               const SizedBox(height: 10),
               _CommunityMetaChip(
-                icon: Icons.place_outlined,
-                label: post.locationName,
+                icon: FluentIcons.location_24_regular,
+                label: LocationAddress.shortestLabel(post.locationName),
+                tooltip: post.locationName,
               ),
             ],
             const SizedBox(height: 14),
@@ -105,8 +108,8 @@ class CommunityPostCard extends StatelessWidget {
                 Expanded(
                   child: _CommunityActionButton(
                     icon: post.isReactedByMe
-                        ? Icons.favorite_rounded
-                        : Icons.favorite_border_rounded,
+                        ? FluentIcons.heart_24_filled
+                        : FluentIcons.heart_24_regular,
                     label: likeLabel,
                     color: post.isReactedByMe
                         ? AppColors.red400
@@ -118,7 +121,7 @@ class CommunityPostCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _CommunityActionButton(
-                    icon: Icons.mode_comment_outlined,
+                    icon: FluentIcons.comment_24_regular,
                     label: commentLabel,
                     color: AppColors.grayscale300,
                     onTap: onCommentTap,
@@ -138,6 +141,7 @@ class _CommunityPostHeader extends StatelessWidget {
     required this.post,
     required this.editLabel,
     required this.deleteLabel,
+    required this.onAuthorTap,
     required this.onEditTap,
     required this.onDeleteTap,
   });
@@ -145,6 +149,7 @@ class _CommunityPostHeader extends StatelessWidget {
   final CommunityPost post;
   final String editLabel;
   final String deleteLabel;
+  final VoidCallback onAuthorTap;
   final VoidCallback onEditTap;
   final VoidCallback onDeleteTap;
 
@@ -156,74 +161,86 @@ class _CommunityPostHeader extends StatelessWidget {
 
     return Row(
       children: [
-        Container(
-          width: 46,
-          height: 46,
-          padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: post.isOwner
-                  ? AppColors.yellow500
-                  : AppColors.grayscale700,
-            ),
-          ),
-          child: ClipOval(
-            child: DecoratedBox(
-              decoration: const BoxDecoration(color: AppColors.grayscale800),
-              child: post.authorAvatarUrl.trim().isEmpty
-                  ? Center(
-                      child: Text(
-                        initials,
-                        style: AppTypography.h4.copyWith(
-                          color: AppColors.yellow500,
+        Expanded(
+          child: InkWell(
+            onTap: onAuthorTap,
+            borderRadius: BorderRadius.circular(14),
+            child: Row(
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: post.isOwner
+                          ? AppColors.yellow500
+                          : AppColors.grayscale700,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: AppColors.grayscale800,
+                      ),
+                      child: post.authorAvatarUrl.trim().isEmpty
+                          ? Center(
+                              child: Text(
+                                initials,
+                                style: AppTypography.h4.copyWith(
+                                  color: AppColors.yellow500,
+                                ),
+                              ),
+                            )
+                          : IMovieRemoteImage(
+                              imageUrl: post.authorAvatarUrl,
+                              placeholderLabel: initials,
+                            ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.authorName.trim().isEmpty
+                            ? 'iMovie user'
+                            : post.authorName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.body2Medium.copyWith(
+                          color: AppColors.white,
                         ),
                       ),
-                    )
-                  : IMovieRemoteImage(
-                      imageUrl: post.authorAvatarUrl,
-                      placeholderLabel: initials,
-                    ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                post.authorName.trim().isEmpty
-                    ? 'iMovie user'
-                    : post.authorName,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.body2Medium.copyWith(
-                  color: AppColors.white,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.public_rounded,
-                    size: 13,
-                    color: AppColors.grayscale500,
-                  ),
-                  const SizedBox(width: 4),
-                  Flexible(
-                    child: Text(
-                      _timeLabel(post.createdAt),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.captionRegular1.copyWith(
-                        color: AppColors.grayscale400,
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            FluentIcons.globe_24_regular,
+                            size: 13,
+                            color: AppColors.grayscale500,
+                          ),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              _timeLabel(post.createdAt),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.captionRegular1.copyWith(
+                                color: AppColors.grayscale400,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
         if (post.isOwner)
@@ -241,7 +258,10 @@ class _CommunityPostHeader extends StatelessWidget {
                 color: AppColors.grayscale800,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.more_horiz_rounded, size: 20),
+              child: const Icon(
+                FluentIcons.more_horizontal_24_regular,
+                size: 20,
+              ),
             ),
             onSelected: (action) {
               switch (action) {
@@ -321,7 +341,7 @@ class _CommunityEngagementSummary extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.favorite_rounded,
+                FluentIcons.heart_24_filled,
                 size: 16,
                 color: post.isReactedByMe
                     ? AppColors.red400
@@ -388,7 +408,7 @@ class _CommunityMovieAttachment extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(
-                      Icons.movie_filter_rounded,
+                      FluentIcons.movies_and_tv_24_regular,
                       size: 16,
                       color: AppColors.yellow500,
                     ),
@@ -425,14 +445,19 @@ class _CommunityMovieAttachment extends StatelessWidget {
 }
 
 class _CommunityMetaChip extends StatelessWidget {
-  const _CommunityMetaChip({required this.icon, required this.label});
+  const _CommunityMetaChip({
+    required this.icon,
+    required this.label,
+    this.tooltip = '',
+  });
 
   final IconData icon;
   final String label;
+  final String tooltip;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
         color: AppColors.grayscale800,
@@ -454,6 +479,17 @@ class _CommunityMetaChip extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    final normalizedTooltip = tooltip.trim();
+    if (normalizedTooltip.isEmpty || normalizedTooltip == label.trim()) {
+      return chip;
+    }
+
+    return Tooltip(
+      message: normalizedTooltip,
+      triggerMode: TooltipTriggerMode.tap,
+      child: chip,
     );
   }
 }

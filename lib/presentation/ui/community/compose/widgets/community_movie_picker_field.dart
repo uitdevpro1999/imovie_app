@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
@@ -7,6 +8,21 @@ import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/ui/community/compose/community_compose_cubit.dart';
 import 'package:imovie_app/presentation/ui/community/compose/community_compose_state.dart';
 import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
+
+void _openCommunityMoviePicker(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppColors.grayscale950,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+    ),
+    builder: (_) => BlocProvider.value(
+      value: context.read<CommunityComposeCubit>(),
+      child: const _CommunityMoviePickerSheet(),
+    ),
+  );
+}
 
 class CommunityMoviePickerField extends StatelessWidget {
   const CommunityMoviePickerField({super.key});
@@ -21,12 +37,17 @@ class CommunityMoviePickerField extends StatelessWidget {
       builder: (context, state) {
         final hasMovie = state.selectedMovieTitle.trim().isNotEmpty;
         return Material(
-          color: AppColors.grayscale900,
-          borderRadius: BorderRadius.circular(14),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(18),
           child: InkWell(
-            onTap: () => _openPicker(context),
-            borderRadius: BorderRadius.circular(14),
-            child: Padding(
+            onTap: () => _openCommunityMoviePicker(context),
+            borderRadius: BorderRadius.circular(18),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: AppColors.grayscale900,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppColors.grayscale800),
+              ),
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
@@ -48,7 +69,7 @@ class CommunityMoviePickerField extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
-                        Icons.movie_outlined,
+                        FluentIcons.movies_and_tv_24_regular,
                         color: AppColors.yellow500,
                       ),
                     ),
@@ -87,12 +108,12 @@ class CommunityMoviePickerField extends StatelessWidget {
                       onPressed: context
                           .read<CommunityComposeCubit>()
                           .clearSelectedMovie,
-                      icon: const Icon(Icons.close_rounded),
+                      icon: const Icon(FluentIcons.dismiss_24_regular),
                       color: AppColors.grayscale300,
                     )
                   else
                     const Icon(
-                      Icons.chevron_right_rounded,
+                      FluentIcons.chevron_right_24_regular,
                       color: AppColors.grayscale400,
                     ),
                 ],
@@ -103,19 +124,89 @@ class CommunityMoviePickerField extends StatelessWidget {
       },
     );
   }
+}
 
-  void _openPicker(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColors.grayscale950,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      builder: (_) => BlocProvider.value(
-        value: context.read<CommunityComposeCubit>(),
-        child: const _CommunityMoviePickerSheet(),
-      ),
+class CommunityMoviePickerChip extends StatelessWidget {
+  const CommunityMoviePickerChip({super.key, required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CommunityComposeCubit, CommunityComposeState>(
+      buildWhen: (previous, current) =>
+          previous.selectedMovieTitle != current.selectedMovieTitle ||
+          previous.selectedMoviePosterUrl != current.selectedMoviePosterUrl,
+      builder: (context, state) {
+        final hasMovie = state.selectedMovieTitle.trim().isNotEmpty;
+        return Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(999),
+          child: InkWell(
+            onTap: () => _openCommunityMoviePicker(context),
+            borderRadius: BorderRadius.circular(999),
+            child: Ink(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppColors.black.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: AppColors.grayscale800),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (hasMovie &&
+                      state.selectedMoviePosterUrl.trim().isNotEmpty)
+                    IMovieRemoteImage(
+                      imageUrl: state.selectedMoviePosterUrl,
+                      width: 22,
+                      height: 28,
+                      borderRadius: BorderRadius.circular(6),
+                      placeholderLabel: state.selectedMovieTitle,
+                    )
+                  else
+                    const Icon(
+                      FluentIcons.movies_and_tv_24_regular,
+                      size: 16,
+                      color: AppColors.grayscale300,
+                    ),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      hasMovie ? state.selectedMovieTitle : label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.captionMedium.copyWith(
+                        color: hasMovie
+                            ? AppColors.white
+                            : AppColors.grayscale300,
+                      ),
+                    ),
+                  ),
+                  if (hasMovie) ...[
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: context
+                          .read<CommunityComposeCubit>()
+                          .clearSelectedMovie,
+                      child: const Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Icon(
+                          FluentIcons.dismiss_16_regular,
+                          size: 14,
+                          color: AppColors.grayscale300,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -155,6 +246,9 @@ class _CommunityMoviePickerSheetState
       child: SizedBox(
         height: sheetHeight,
         child: BlocBuilder<CommunityComposeCubit, CommunityComposeState>(
+          buildWhen: (previous, current) =>
+              previous.searchingMovies != current.searchingMovies ||
+              previous.movieSearchResults != current.movieSearchResults,
           builder: (context, state) {
             return Padding(
               padding: EdgeInsets.fromLTRB(
@@ -190,7 +284,7 @@ class _CommunityMoviePickerSheetState
                         .searchMovies,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(
-                        Icons.search_rounded,
+                        FluentIcons.search_24_regular,
                         color: AppColors.grayscale400,
                       ),
                       hintText: l10n.communityMovieSearchHint,
@@ -200,8 +294,22 @@ class _CommunityMoviePickerSheetState
                       filled: true,
                       fillColor: AppColors.grayscale900,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: AppColors.grayscale800,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: AppColors.grayscale800,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: AppColors.yellow500.withValues(alpha: 0.78),
+                        ),
                       ),
                     ),
                   ),
@@ -267,10 +375,10 @@ class _MovieSearchResultTile extends StatelessWidget {
 
     return Material(
       color: AppColors.grayscale900,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(

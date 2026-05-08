@@ -80,6 +80,23 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<Result<AppProfile>> updateCover({
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async {
+    return _runProfileRequest(
+      request: () => remoteDataSource.updateCover(
+        bytes: bytes,
+        fileName: fileName,
+        contentType: contentType,
+      ),
+      authMessage: 'Unable to update your cover image.',
+      unknownMessage: 'Unexpected error while updating your cover image.',
+    );
+  }
+
+  @override
   Future<Result<void>> clearCachedProfile() async {
     try {
       await localStorageService.remove(_cachedProfileKey);
@@ -163,6 +180,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       fullName: json['full_name']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       avatarUrl: json['avatar_url']?.toString() ?? '',
+      coverUrl: json['cover_url']?.toString() ?? '',
     );
   }
 
@@ -173,6 +191,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       'full_name': profile.fullName,
       'phone': profile.phone,
       'avatar_url': profile.avatarUrl,
+      'cover_url': profile.coverUrl,
     };
   }
 }

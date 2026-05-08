@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
 import 'package:imovie_app/domain/entities/community/community_story.dart';
-import 'package:imovie_app/presentation/ui/community/feed/widgets/community_composer_card.dart';
 import 'package:imovie_app/presentation/ui/community/feed/widgets/community_empty_view.dart';
+import 'package:imovie_app/presentation/ui/community/feed/widgets/community_inline_composer.dart';
 import 'package:imovie_app/presentation/ui/community/feed/widgets/community_post_card.dart';
 import 'package:imovie_app/presentation/ui/community/feed/widgets/community_story_section.dart';
 import 'package:imovie_app/presentation/widgets/imovie_smart_refresher.dart';
@@ -36,6 +38,7 @@ class CommunityFeedView extends StatelessWidget {
     required this.onCommentTap,
     required this.onEditTap,
     required this.onDeleteTap,
+    required this.onAuthorTap,
   });
 
   final bool showStories;
@@ -58,12 +61,13 @@ class CommunityFeedView extends StatelessWidget {
   final Future<bool> Function() onRefresh;
   final VoidCallback onCreateStoryTap;
   final ValueChanged<CommunityStory> onDeleteStoryTap;
-  final VoidCallback onCreateTap;
+  final FutureOr<void> Function() onCreateTap;
   final Future<IMovieLoadMoreResult> Function() onLoadMore;
   final ValueChanged<CommunityPost> onReactionTap;
   final ValueChanged<CommunityPost> onCommentTap;
   final ValueChanged<CommunityPost> onEditTap;
   final ValueChanged<CommunityPost> onDeleteTap;
+  final ValueChanged<String> onAuthorTap;
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +76,14 @@ class CommunityFeedView extends StatelessWidget {
         onRefresh: onRefresh,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 104),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 112),
           children: [
-            CommunityComposerCard(
+            CommunityInlineComposer(
               prompt: composerPrompt,
               createLabel: createLabel,
               movieLabel: movieHintLabel,
               imageLabel: imageActionLabel,
-              onTap: onCreateTap,
+              onSubmitted: onCreateTap,
             ),
             if (showStories) ...[
               const SizedBox(height: 18),
@@ -90,6 +94,7 @@ class CommunityFeedView extends StatelessWidget {
                 deleteLabel: deleteLabel,
                 onCreateTap: onCreateStoryTap,
                 onDeleteTap: onDeleteStoryTap,
+                onAuthorTap: onAuthorTap,
               ),
             ],
             const SizedBox(height: 18),
@@ -112,15 +117,15 @@ class CommunityFeedView extends StatelessWidget {
       hasMore: hasMore,
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 104),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 112),
         itemBuilder: (context, index) {
           if (index == 0) {
-            return CommunityComposerCard(
+            return CommunityInlineComposer(
               prompt: composerPrompt,
               createLabel: createLabel,
               movieLabel: movieHintLabel,
               imageLabel: imageActionLabel,
-              onTap: onCreateTap,
+              onSubmitted: onCreateTap,
             );
           }
 
@@ -132,6 +137,7 @@ class CommunityFeedView extends StatelessWidget {
               deleteLabel: deleteLabel,
               onCreateTap: onCreateStoryTap,
               onDeleteTap: onDeleteStoryTap,
+              onAuthorTap: onAuthorTap,
             );
           }
 
@@ -144,13 +150,14 @@ class CommunityFeedView extends StatelessWidget {
             commentLabel: commentLabel,
             editLabel: editLabel,
             deleteLabel: deleteLabel,
+            onAuthorTap: () => onAuthorTap(post.userId),
             onReactionTap: () => onReactionTap(post),
             onCommentTap: () => onCommentTap(post),
             onEditTap: () => onEditTap(post),
             onDeleteTap: () => onDeleteTap(post),
           );
         },
-        separatorBuilder: (_, _) => const SizedBox(height: 14),
+        separatorBuilder: (_, _) => const SizedBox(height: 16),
         itemCount: posts.length + (showStories ? 2 : 1),
       ),
     );

@@ -42,7 +42,7 @@ class _GenreFilterBar extends StatelessWidget {
                 ),
                 TextButton.icon(
                   onPressed: () => _openFilters(context),
-                  icon: const Icon(Icons.tune_rounded, size: 18),
+                  icon: const Icon(FluentIcons.options_24_regular, size: 18),
                   label: const Text('Bộ lọc'),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.yellow500,

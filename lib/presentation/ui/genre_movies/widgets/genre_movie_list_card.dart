@@ -120,7 +120,7 @@ class _Poster extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(
-                      Icons.star_rounded,
+                      FluentIcons.star_24_filled,
                       size: 12,
                       color: AppColors.yellow500,
                     ),

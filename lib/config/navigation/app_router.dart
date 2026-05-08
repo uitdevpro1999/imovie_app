@@ -12,7 +12,12 @@ import 'package:imovie_app/presentation/ui/browse/browse_page.dart';
 import 'package:imovie_app/presentation/ui/community/compose/community_compose_page.dart';
 import 'package:imovie_app/presentation/ui/community/feed/community_mine_page.dart';
 import 'package:imovie_app/presentation/ui/community/feed/community_page.dart';
+import 'package:imovie_app/presentation/ui/community/follow_list/community_follow_list_page.dart';
+import 'package:imovie_app/presentation/ui/community/follow_list/community_follow_list_type.dart';
+import 'package:imovie_app/presentation/ui/community/post_detail/community_post_detail_page.dart';
+import 'package:imovie_app/presentation/ui/community/profile/community_profile_page.dart';
 import 'package:imovie_app/presentation/ui/community/story_editor/community_story_editor_page.dart';
+import 'package:imovie_app/presentation/ui/community/story_viewer/community_story_viewer_page.dart';
 import 'package:imovie_app/presentation/ui/genre_movies/genre_movies_page.dart';
 import 'package:imovie_app/presentation/ui/genres/genres_page.dart';
 import 'package:imovie_app/presentation/ui/home/home_page.dart';
@@ -21,6 +26,9 @@ import 'package:imovie_app/presentation/ui/main/main_page.dart';
 import 'package:imovie_app/presentation/ui/movie_detail/movie_detail_page.dart';
 import 'package:imovie_app/presentation/ui/movie_list/movie_list_page.dart';
 import 'package:imovie_app/presentation/ui/movie_watch/movie_watch_page.dart';
+import 'package:imovie_app/presentation/ui/notifications/notifications_page.dart';
+import 'package:imovie_app/presentation/ui/profile/about/about_page.dart';
+import 'package:imovie_app/presentation/ui/profile/contact/contact_page.dart';
 import 'package:imovie_app/presentation/ui/profile/edit_profile/profile_page.dart';
 import 'package:imovie_app/presentation/ui/profile/change_password/change_password_page.dart';
 import 'package:imovie_app/presentation/ui/profile/language/language_page.dart';
@@ -56,14 +64,30 @@ class AppRouter extends RootStackRouter {
       ],
     ),
     AutoRoute(path: '/profile/edit', page: ProfileRoute.page),
+    AutoRoute(path: '/profile/about', page: AboutRoute.page),
+    AutoRoute(path: '/profile/contact', page: ContactRoute.page),
     AutoRoute(path: '/profile/change-password', page: ChangePasswordRoute.page),
     AutoRoute(path: '/profile/language', page: LanguageRoute.page),
     AutoRoute(path: '/community/mine', page: CommunityMineRoute.page),
+    AutoRoute(
+      path: '/community/profile/:userId/:listType',
+      page: CommunityFollowListRoute.page,
+    ),
+    AutoRoute(
+      path: '/community/profile/:userId',
+      page: CommunityProfileRoute.page,
+    ),
     AutoRoute(path: '/community/compose', page: CommunityComposeRoute.page),
+    AutoRoute(path: '/community/post/:postId', page: CommunityPostDetailRoute.page),
     AutoRoute(
       path: '/community/story-editor',
       page: CommunityStoryEditorRoute.page,
     ),
+    AutoRoute(
+      path: '/community/story/:storyId',
+      page: CommunityStoryViewerRoute.page,
+    ),
+    AutoRoute(path: '/notifications', page: NotificationsRoute.page),
     AutoRoute(path: '/sign-in', page: SignInRoute.page),
     AutoRoute(path: '/sign-up', page: SignUpRoute.page),
     AutoRoute(path: '/forgot-password', page: ForgotPasswordRoute.page),

@@ -20,6 +20,15 @@ class _HomeGenresSection extends StatelessWidget {
       children: [
         Row(
           children: [
+            Container(
+              width: 4,
+              height: 20,
+              decoration: BoxDecoration(
+                color: AppColors.red400,
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
                 title,
@@ -49,23 +58,41 @@ class _HomeGenresSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            for (final genre in state.visibleGenres)
-              InkWell(
-                borderRadius: BorderRadius.circular(999),
+        SizedBox(
+          height: 44,
+          child: ListView.separated(
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final genre = state.visibleGenres[index];
+              return InkWell(
+                borderRadius: BorderRadius.circular(14),
                 onTap: () => context.router.push(
                   GenreMoviesRoute(slug: genre.slug, title: genre.name),
                 ),
-                child: IMovieGenreChip(
-                  label: genre.name,
-                  backgroundColor: AppColors.grayscale900,
-                  textColor: AppColors.white,
+                child: Ink(
+                  decoration: BoxDecoration(
+                    color: AppColors.grayscale900,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.grayscale800),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Center(
+                    child: Text(
+                      genre.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.body2Medium.copyWith(
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-          ],
+              );
+            },
+            separatorBuilder: (_, _) => const SizedBox(width: 10),
+            itemCount: state.visibleGenres.length,
+          ),
         ),
       ],
     );

@@ -1,6 +1,77 @@
 import 'package:imovie_app/domain/entities/community/community_comment.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
+import 'package:imovie_app/domain/entities/community/community_profile.dart';
 import 'package:imovie_app/domain/entities/community/community_story.dart';
+
+class CommunityProfileResponse {
+  const CommunityProfileResponse({
+    required this.userId,
+    required this.displayName,
+    required this.avatarUrl,
+    required this.coverUrl,
+    required this.isMe,
+    required this.isFollowing,
+    required this.followerCount,
+    required this.followingCount,
+    required this.postCount,
+    required this.storyCount,
+  });
+
+  factory CommunityProfileResponse.fromJson({
+    required Map<String, dynamic> json,
+    required String currentUserId,
+    required bool isFollowing,
+    required int followerCount,
+    required int followingCount,
+    required int postCount,
+    required int storyCount,
+  }) {
+    final userId = json['id']?.toString() ?? json['user_id']?.toString() ?? '';
+    return CommunityProfileResponse(
+      userId: userId,
+      displayName: json['full_name']?.toString().trim().isNotEmpty == true
+          ? json['full_name'].toString()
+          : json['author_name']?.toString() ?? '',
+      avatarUrl:
+          json['avatar_url']?.toString() ??
+          json['author_avatar_url']?.toString() ??
+          '',
+      coverUrl: json['cover_url']?.toString() ?? '',
+      isMe: userId == currentUserId,
+      isFollowing: isFollowing,
+      followerCount: followerCount,
+      followingCount: followingCount,
+      postCount: postCount,
+      storyCount: storyCount,
+    );
+  }
+
+  final String userId;
+  final String displayName;
+  final String avatarUrl;
+  final String coverUrl;
+  final bool isMe;
+  final bool isFollowing;
+  final int followerCount;
+  final int followingCount;
+  final int postCount;
+  final int storyCount;
+
+  CommunityProfile toEntity() {
+    return CommunityProfile(
+      userId: userId,
+      displayName: displayName,
+      avatarUrl: avatarUrl,
+      coverUrl: coverUrl,
+      isMe: isMe,
+      isFollowing: isFollowing,
+      followerCount: followerCount,
+      followingCount: followingCount,
+      postCount: postCount,
+      storyCount: storyCount,
+    );
+  }
+}
 
 class CommunityStoryResponse {
   const CommunityStoryResponse({
@@ -120,7 +191,7 @@ class CommunityPostResponse {
     required this.authorName,
     required this.authorAvatarUrl,
     required this.content,
-    required this.imageUrl,
+    required this.imageUrls,
     required this.movieTitle,
     required this.movieSlug,
     required this.moviePosterUrl,
@@ -146,7 +217,7 @@ class CommunityPostResponse {
       authorName: json['author_name']?.toString() ?? '',
       authorAvatarUrl: json['author_avatar_url']?.toString() ?? '',
       content: json['content']?.toString() ?? '',
-      imageUrl: json['image_url']?.toString() ?? '',
+      imageUrls: _postImageUrls(json),
       movieTitle: json['movie_title']?.toString() ?? '',
       movieSlug: json['movie_slug']?.toString() ?? '',
       moviePosterUrl: json['movie_poster_url']?.toString() ?? '',
@@ -165,7 +236,7 @@ class CommunityPostResponse {
   final String authorName;
   final String authorAvatarUrl;
   final String content;
-  final String imageUrl;
+  final List<String> imageUrls;
   final String movieTitle;
   final String movieSlug;
   final String moviePosterUrl;
@@ -184,7 +255,7 @@ class CommunityPostResponse {
       authorName: authorName,
       authorAvatarUrl: authorAvatarUrl,
       content: content,
-      imageUrl: imageUrl,
+      imageUrls: imageUrls,
       movieTitle: movieTitle,
       movieSlug: movieSlug,
       moviePosterUrl: moviePosterUrl,
@@ -197,6 +268,22 @@ class CommunityPostResponse {
       updatedAt: updatedAt,
     );
   }
+}
+
+List<String> _postImageUrls(Map<String, dynamic> json) {
+  final imageUrls = json['image_urls'];
+  final parsedUrls = imageUrls is Iterable
+      ? imageUrls
+            .map((item) => item?.toString().trim() ?? '')
+            .where((item) => item.isNotEmpty)
+            .toList(growable: false)
+      : const <String>[];
+  if (parsedUrls.isNotEmpty) {
+    return parsedUrls;
+  }
+
+  final legacyUrl = json['image_url']?.toString().trim() ?? '';
+  return legacyUrl.isEmpty ? const <String>[] : <String>[legacyUrl];
 }
 
 class CommunityCommentResponse {

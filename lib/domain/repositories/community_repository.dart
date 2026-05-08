@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:imovie_app/core/result/result.dart';
 import 'package:imovie_app/domain/entities/community/community_comment.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
+import 'package:imovie_app/domain/entities/community/community_profile.dart';
 import 'package:imovie_app/domain/entities/community/community_story.dart';
 
 class CommunityImagePayload {
@@ -18,7 +19,14 @@ class CommunityImagePayload {
 }
 
 abstract interface class CommunityRepository {
-  Future<Result<List<CommunityStory>>> getStories();
+  Future<Result<CommunityStory>> getStoryById(String id);
+
+  Future<Result<List<CommunityStory>>> getStories({
+    required String userId,
+    required bool followedOnly,
+  });
+
+  Future<Result<List<String>>> getFollowedUserIds();
 
   Future<Result<CommunityStory>> createStory({
     required CommunityImagePayload image,
@@ -37,11 +45,32 @@ abstract interface class CommunityRepository {
 
   Future<Result<void>> deleteStory(String id);
 
+  Future<Result<CommunityPost>> getPostById(String id);
+
   Future<Result<List<CommunityPost>>> getPosts({
     required bool mineOnly,
+    required String userId,
     required int page,
     required int limit,
   });
+
+  Future<Result<CommunityProfile>> getProfile(String userId);
+
+  Future<Result<List<CommunityProfile>>> getFollowers({
+    required String userId,
+    required int page,
+    required int limit,
+  });
+
+  Future<Result<List<CommunityProfile>>> getFollowing({
+    required String userId,
+    required int page,
+    required int limit,
+  });
+
+  Future<Result<CommunityProfile>> followUser(String userId);
+
+  Future<Result<CommunityProfile>> unfollowUser(String userId);
 
   Future<Result<CommunityPost>> createPost({
     required String content,
@@ -49,7 +78,7 @@ abstract interface class CommunityRepository {
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<CommunityImagePayload> images,
   });
 
   Future<Result<CommunityPost>> updatePost({
@@ -59,7 +88,8 @@ abstract interface class CommunityRepository {
     required String movieSlug,
     required String moviePosterUrl,
     required String locationName,
-    CommunityImagePayload? image,
+    required List<String> keptImageUrls,
+    required List<CommunityImagePayload> images,
   });
 
   Future<Result<void>> deletePost(String id);

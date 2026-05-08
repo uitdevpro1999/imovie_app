@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/core/events/app_toast_event.dart';
@@ -50,19 +51,19 @@ abstract final class IMovieToast {
     return switch (type) {
       AppToastType.success => const _IMovieToastStyle(
         color: AppColors.green500,
-        icon: Icons.check_circle_outline_rounded,
+        icon: FluentIcons.checkmark_circle_24_regular,
       ),
       AppToastType.error => const _IMovieToastStyle(
         color: AppColors.red500,
-        icon: Icons.error_outline_rounded,
+        icon: FluentIcons.error_circle_24_regular,
       ),
       AppToastType.warning => const _IMovieToastStyle(
         color: AppColors.yellow500,
-        icon: Icons.warning_amber_rounded,
+        icon: FluentIcons.warning_24_regular,
       ),
       AppToastType.info => const _IMovieToastStyle(
         color: Color(0xFF38BDF8),
-        icon: Icons.info_outline_rounded,
+        icon: FluentIcons.info_24_regular,
       ),
     };
   }

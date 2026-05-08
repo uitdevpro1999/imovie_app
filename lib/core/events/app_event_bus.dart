@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:imovie_app/core/events/app_auth_event.dart';
 import 'package:imovie_app/core/events/app_community_event.dart';
+import 'package:imovie_app/core/events/app_notification_event.dart';
 import 'package:imovie_app/core/events/app_profile_event.dart';
 import 'package:imovie_app/core/events/app_library_event.dart';
 import 'package:imovie_app/core/events/app_toast_event.dart';
@@ -21,12 +22,16 @@ class AppEventBus {
       StreamController<AppLibraryEvent>.broadcast();
   final StreamController<AppCommunityEvent> _communityController =
       StreamController<AppCommunityEvent>.broadcast();
+  final StreamController<AppNotificationEvent> _notificationController =
+      StreamController<AppNotificationEvent>.broadcast();
 
   Stream<AppToastEvent> get toastStream => _toastController.stream;
   Stream<AppAuthEvent> get authStream => _authController.stream;
   Stream<AppProfileEvent> get profileStream => _profileController.stream;
   Stream<AppLibraryEvent> get libraryStream => _libraryController.stream;
   Stream<AppCommunityEvent> get communityStream => _communityController.stream;
+  Stream<AppNotificationEvent> get notificationStream =>
+      _notificationController.stream;
 
   void emitToast(AppToastEvent event) {
     if (event.message.trim().isEmpty) {
@@ -50,5 +55,9 @@ class AppEventBus {
 
   void emitCommunity(AppCommunityEvent event) {
     _communityController.add(event);
+  }
+
+  void emitNotification(AppNotificationEvent event) {
+    _notificationController.add(event);
   }
 }

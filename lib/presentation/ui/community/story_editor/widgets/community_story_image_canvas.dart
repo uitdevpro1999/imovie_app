@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
@@ -16,9 +17,11 @@ class CommunityStoryImageCanvas extends StatelessWidget {
     required this.moviePosterUrl,
     required this.moviePosition,
     required this.locationName,
+    required this.locationFullName,
     required this.locationPosition,
     required this.pickLabel,
     required this.changeLabel,
+    required this.removeLabel,
     required this.onPickTap,
     required this.onRemoveTap,
     required this.onTextPositionChanged,
@@ -33,9 +36,11 @@ class CommunityStoryImageCanvas extends StatelessWidget {
   final String moviePosterUrl;
   final Offset moviePosition;
   final String locationName;
+  final String locationFullName;
   final Offset locationPosition;
   final String pickLabel;
   final String changeLabel;
+  final String removeLabel;
   final VoidCallback onPickTap;
   final VoidCallback onRemoveTap;
   final ValueChanged<Offset> onTextPositionChanged;
@@ -45,107 +50,122 @@ class CommunityStoryImageCanvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final image = selectedImage;
-    return AspectRatio(
-      aspectRatio: 9 / 16,
-      child: Material(
-        color: AppColors.grayscale900,
-        borderRadius: BorderRadius.circular(24),
-        child: InkWell(
-          onTap: image == null ? onPickTap : null,
-          borderRadius: BorderRadius.circular(24),
-          child: Ink(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: AppColors.grayscale800),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final canvasSize = Size(
-                    constraints.maxWidth,
-                    constraints.maxHeight,
-                  );
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      if (image == null)
-                        _StoryImagePlaceholder(label: pickLabel)
-                      else
-                        _LocalStoryImage(image: image),
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              AppColors.black.withValues(alpha: 0.08),
-                              AppColors.black.withValues(alpha: 0.18),
-                              AppColors.black.withValues(alpha: 0.72),
-                            ],
-                          ),
-                        ),
-                      ),
-                      if (storyText.trim().isNotEmpty)
-                        _DraggableStoryOverlay(
-                          canvasSize: canvasSize,
-                          position: textPosition,
-                          onPositionChanged: onTextPositionChanged,
-                          child: _StoryTextOverlay(text: storyText.trim()),
-                        ),
-                      if (movieTitle.trim().isNotEmpty)
-                        _DraggableStoryOverlay(
-                          canvasSize: canvasSize,
-                          position: moviePosition,
-                          onPositionChanged: onMoviePositionChanged,
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: canvasSize.width - 28,
-                            ),
-                            child: _StoryMovieChip(
-                              title: movieTitle,
-                              posterUrl: moviePosterUrl,
+    final borderRadius = BorderRadius.circular(28);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.28),
+            blurRadius: 26,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: AspectRatio(
+        aspectRatio: 9 / 16,
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: borderRadius,
+          child: InkWell(
+            onTap: image == null ? onPickTap : null,
+            borderRadius: borderRadius,
+            child: Ink(
+              decoration: BoxDecoration(
+                color: AppColors.grayscale900,
+                borderRadius: borderRadius,
+                border: Border.all(color: AppColors.grayscale800),
+              ),
+              child: ClipRRect(
+                borderRadius: borderRadius,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final canvasSize = Size(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    );
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        if (image == null)
+                          _StoryImagePlaceholder(label: pickLabel)
+                        else
+                          _LocalStoryImage(image: image),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                AppColors.black.withValues(alpha: 0.04),
+                                AppColors.black.withValues(alpha: 0.14),
+                                AppColors.black.withValues(alpha: 0.76),
+                              ],
                             ),
                           ),
                         ),
-                      if (locationName.trim().isNotEmpty)
-                        _DraggableStoryOverlay(
-                          canvasSize: canvasSize,
-                          position: locationPosition,
-                          onPositionChanged: onLocationPositionChanged,
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: canvasSize.width - 28,
-                            ),
-                            child: _StoryMetaChip(
-                              icon: Icons.place_outlined,
-                              label: locationName,
-                            ),
+                        if (storyText.trim().isNotEmpty)
+                          _DraggableStoryOverlay(
+                            canvasSize: canvasSize,
+                            position: textPosition,
+                            onPositionChanged: onTextPositionChanged,
+                            child: _StoryTextOverlay(text: storyText.trim()),
                           ),
-                        ),
-                      if (image != null)
-                        Positioned(
-                          top: 12,
-                          right: 12,
-                          child: Row(
-                            children: [
-                              _CanvasActionButton(
-                                icon: Icons.image_search_rounded,
-                                tooltip: changeLabel,
-                                onTap: onPickTap,
+                        if (movieTitle.trim().isNotEmpty)
+                          _DraggableStoryOverlay(
+                            canvasSize: canvasSize,
+                            position: moviePosition,
+                            onPositionChanged: onMoviePositionChanged,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: canvasSize.width - 28,
                               ),
-                              const SizedBox(width: 8),
-                              _CanvasActionButton(
-                                icon: Icons.close_rounded,
-                                tooltip: changeLabel,
-                                onTap: onRemoveTap,
+                              child: _StoryMovieChip(
+                                title: movieTitle,
+                                posterUrl: moviePosterUrl,
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                    ],
-                  );
-                },
+                        if (locationName.trim().isNotEmpty)
+                          _DraggableStoryOverlay(
+                            canvasSize: canvasSize,
+                            position: locationPosition,
+                            onPositionChanged: onLocationPositionChanged,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: canvasSize.width - 28,
+                              ),
+                              child: _StoryMetaChip(
+                                icon: FluentIcons.location_24_regular,
+                                label: locationName,
+                                tooltip: locationFullName,
+                              ),
+                            ),
+                          ),
+                        if (image != null)
+                          Positioned(
+                            top: 14,
+                            right: 14,
+                            child: Row(
+                              children: [
+                                _CanvasActionButton(
+                                  icon: FluentIcons.image_search_24_regular,
+                                  tooltip: changeLabel,
+                                  onTap: onPickTap,
+                                ),
+                                const SizedBox(width: 8),
+                                _CanvasActionButton(
+                                  icon: FluentIcons.dismiss_24_regular,
+                                  tooltip: removeLabel,
+                                  onTap: onRemoveTap,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -155,7 +175,7 @@ class CommunityStoryImageCanvas extends StatelessWidget {
   }
 }
 
-class _DraggableStoryOverlay extends StatelessWidget {
+class _DraggableStoryOverlay extends StatefulWidget {
   const _DraggableStoryOverlay({
     required this.canvasSize,
     required this.position,
@@ -169,30 +189,70 @@ class _DraggableStoryOverlay extends StatelessWidget {
   final Widget child;
 
   @override
+  State<_DraggableStoryOverlay> createState() => _DraggableStoryOverlayState();
+}
+
+class _DraggableStoryOverlayState extends State<_DraggableStoryOverlay> {
+  late Offset _displayPosition;
+  bool _dragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayPosition = widget.position;
+  }
+
+  @override
+  void didUpdateWidget(covariant _DraggableStoryOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_dragging && oldWidget.position != widget.position) {
+      _displayPosition = widget.position;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: position.dx * canvasSize.width,
-      top: position.dy * canvasSize.height,
+      left: _displayPosition.dx * widget.canvasSize.width,
+      top: _displayPosition.dy * widget.canvasSize.height,
       child: FractionalTranslation(
         translation: const Offset(-0.5, -0.5),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
+          onPanStart: (_) {
+            _dragging = true;
+            _displayPosition = widget.position;
+          },
           onPanUpdate: (details) {
-            onPositionChanged(
+            final nextPosition = _clampedPosition(
               Offset(
-                (position.dx + details.delta.dx / canvasSize.width)
-                    .clamp(0.06, 0.94)
-                    .toDouble(),
-                (position.dy + details.delta.dy / canvasSize.height)
-                    .clamp(0.06, 0.94)
-                    .toDouble(),
+                _displayPosition.dx +
+                    details.delta.dx / widget.canvasSize.width,
+                _displayPosition.dy +
+                    details.delta.dy / widget.canvasSize.height,
               ),
             );
+            setState(() => _displayPosition = nextPosition);
+            widget.onPositionChanged(nextPosition);
           },
-          child: child,
+          onPanEnd: (_) => _finishDrag(),
+          onPanCancel: _finishDrag,
+          child: widget.child,
         ),
       ),
     );
+  }
+
+  Offset _clampedPosition(Offset position) {
+    return Offset(
+      position.dx.clamp(0.06, 0.94).toDouble(),
+      position.dy.clamp(0.06, 0.94).toDouble(),
+    );
+  }
+
+  void _finishDrag() {
+    _dragging = false;
+    widget.onPositionChanged(_displayPosition);
   }
 }
 
@@ -209,8 +269,9 @@ class _StoryTextOverlay extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.black.withValues(alpha: 0.22),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.white.withValues(alpha: 0.12)),
       ),
       child: Text(
         text,
@@ -281,7 +342,13 @@ class _StoryImagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(color: AppColors.grayscale800),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.grayscale800, AppColors.grayscale900],
+        ),
+      ),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -292,7 +359,7 @@ class _StoryImagePlaceholder extends StatelessWidget {
                 radius: 30,
                 backgroundColor: AppColors.yellow500,
                 child: Icon(
-                  Icons.add_photo_alternate_rounded,
+                  FluentIcons.image_add_24_regular,
                   color: AppColors.grayscale950,
                   size: 30,
                 ),
@@ -324,8 +391,8 @@ class _StoryMovieChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.58),
-        borderRadius: BorderRadius.circular(14),
+        color: AppColors.black.withValues(alpha: 0.62),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.white.withValues(alpha: 0.12)),
       ),
       child: Row(
@@ -341,7 +408,7 @@ class _StoryMovieChip extends StatelessWidget {
             )
           else
             const Icon(
-              Icons.movie_filter_rounded,
+              FluentIcons.movies_and_tv_24_regular,
               color: AppColors.yellow500,
               size: 18,
             ),
@@ -363,17 +430,22 @@ class _StoryMovieChip extends StatelessWidget {
 }
 
 class _StoryMetaChip extends StatelessWidget {
-  const _StoryMetaChip({required this.icon, required this.label});
+  const _StoryMetaChip({
+    required this.icon,
+    required this.label,
+    this.tooltip = '',
+  });
 
   final IconData icon;
   final String label;
+  final String tooltip;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.58),
+        color: AppColors.black.withValues(alpha: 0.62),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: AppColors.white.withValues(alpha: 0.12)),
       ),
@@ -395,6 +467,17 @@ class _StoryMetaChip extends StatelessWidget {
         ],
       ),
     );
+
+    final normalizedTooltip = tooltip.trim();
+    if (normalizedTooltip.isEmpty || normalizedTooltip == label.trim()) {
+      return chip;
+    }
+
+    return Tooltip(
+      message: normalizedTooltip,
+      triggerMode: TooltipTriggerMode.tap,
+      child: chip,
+    );
   }
 }
 
@@ -414,13 +497,13 @@ class _CanvasActionButton extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: AppColors.black.withValues(alpha: 0.64),
+        color: AppColors.black.withValues(alpha: 0.62),
         shape: const CircleBorder(),
         child: InkWell(
           customBorder: const CircleBorder(),
           onTap: onTap,
           child: SizedBox.square(
-            dimension: 38,
+            dimension: 40,
             child: Icon(icon, color: AppColors.white, size: 20),
           ),
         ),

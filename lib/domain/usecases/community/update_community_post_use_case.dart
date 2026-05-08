@@ -11,7 +11,8 @@ class UpdateCommunityPostParams {
     required this.movieSlug,
     required this.moviePosterUrl,
     required this.locationName,
-    this.image,
+    this.keptImageUrls = const [],
+    this.images = const [],
   });
 
   final String id;
@@ -20,7 +21,8 @@ class UpdateCommunityPostParams {
   final String movieSlug;
   final String moviePosterUrl;
   final String locationName;
-  final CommunityImagePayload? image;
+  final List<String> keptImageUrls;
+  final List<CommunityImagePayload> images;
 }
 
 class UpdateCommunityPostUseCase
@@ -38,7 +40,8 @@ class UpdateCommunityPostUseCase
       movieSlug: params.movieSlug,
       moviePosterUrl: params.moviePosterUrl,
       locationName: params.locationName,
-      image: params.image,
+      keptImageUrls: params.keptImageUrls,
+      images: params.images,
     );
   }
 }

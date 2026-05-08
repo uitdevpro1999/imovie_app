@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 
@@ -43,8 +44,8 @@ class ChangePasswordField extends StatelessWidget {
               onPressed: onToggleVisibility,
               icon: Icon(
                 obscureText
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
+                    ? FluentIcons.eye_off_24_regular
+                    : FluentIcons.eye_24_regular,
                 color: AppColors.white,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,6 +32,7 @@ import 'package:imovie_app/l10n/app_localizations_vi.dart';
 import 'package:imovie_app/presentation/app/app.dart';
 import 'package:imovie_app/presentation/ui/home/home_cubit.dart';
 import 'package:imovie_app/presentation/ui/library/widgets/library_content_view.dart';
+import 'package:imovie_app/presentation/ui/library/widgets/library_swipe_action_tile.dart';
 import 'package:imovie_app/presentation/ui/movie_detail/movie_detail_cubit.dart';
 import 'package:imovie_app/presentation/ui/movie_detail/movie_detail_page.dart';
 import 'package:imovie_app/presentation/ui/movie_watch/movie_watch_cubit.dart';
@@ -125,6 +127,7 @@ void main() {
         getHomeFeedUseCase: sl(),
         getHomeGenresUseCase: sl(),
         getMovieListUseCase: sl(),
+        getMovieDetailUseCase: sl(),
       ),
     );
     await appRouter.replaceAll([const AppSplashRoute()]);
@@ -301,7 +304,7 @@ void main() {
     await tester.tap(find.byTooltip(l10n.movieDetailActionWatchlist));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.bookmark_added_rounded), findsOneWidget);
+    expect(find.byIcon(FluentIcons.bookmark_24_filled), findsOneWidget);
   });
 
   test('loads actor images from peoples profile path', () async {
@@ -336,6 +339,10 @@ void main() {
               emptyTitle: 'Empty',
               emptySubtitle: 'Add movies',
               removeActionLabel: 'Xóa',
+              removeConfirmTitle: 'Xóa khỏi tủ phim?',
+              removeConfirmMessage: 'Bạn chắc chắn muốn xóa phim này?',
+              removeConfirmCancel: 'Hủy',
+              removeConfirmAction: 'Xóa',
               onMovieTap: (_) {},
               onMovieRemove: (item) async {
                 removed = true;
@@ -350,13 +357,26 @@ void main() {
       ),
     );
 
-    expect(find.byType(Dismissible), findsOneWidget);
+    expect(find.byType(LibrarySwipeActionTile), findsOneWidget);
 
-    await tester.drag(find.byType(Dismissible), const Offset(-600, 0));
+    await tester.drag(
+      find.byType(LibrarySwipeActionTile),
+      const Offset(-160, 0),
+    );
+    await tester.pumpAndSettle();
+
+    expect(removed, isFalse);
+
+    await tester.tap(find.text('Xóa'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Xóa khỏi tủ phim?'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Xóa'));
     await tester.pumpAndSettle();
 
     expect(removed, isTrue);
-    expect(find.byType(Dismissible), findsNothing);
+    expect(find.byType(LibrarySwipeActionTile), findsNothing);
     expect(find.text('Empty'), findsOneWidget);
   });
 

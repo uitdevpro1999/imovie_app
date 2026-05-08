@@ -45,6 +45,18 @@ class CommunityPage extends BasePage<CommunityCubit, CommunityState>
   }
 
   @override
+  bool buildWhen(CommunityState previous, CommunityState current) {
+    return previous.pageStatus != current.pageStatus ||
+        previous.processing != current.processing ||
+        previous.failure != current.failure ||
+        previous.mineOnly != current.mineOnly ||
+        previous.stories != current.stories ||
+        previous.posts != current.posts ||
+        previous.hasMore != current.hasMore ||
+        previous.loadingMore != current.loadingMore;
+  }
+
+  @override
   Widget buildPage(
     BuildContext context,
     CommunityCubit cubit,
@@ -78,7 +90,7 @@ class CommunityPage extends BasePage<CommunityCubit, CommunityState>
         story: story,
         successMessage: l10n.communityDeleteStorySuccess,
       ),
-      onCreateTap: () => context.router.root.push(CommunityComposeRoute()),
+      onCreateTap: () async {},
       onLoadMore: () async {
         final success = await cubit.loadMore();
         return success
@@ -93,6 +105,7 @@ class CommunityPage extends BasePage<CommunityCubit, CommunityState>
         post: post,
         successMessage: l10n.communityDeleteSuccess,
       ),
+      onAuthorTap: (userId) => _openProfile(context, userId),
     );
   }
 
@@ -143,8 +156,38 @@ class CommunityPage extends BasePage<CommunityCubit, CommunityState>
       ),
       builder: (_) => BlocProvider.value(
         value: cubit,
-        child: CommunityCommentsSheet(post: post),
+        child: BlocBuilder<CommunityCubit, CommunityState>(
+          buildWhen: (previous, current) =>
+              previous.commentsByPost[post.id] !=
+                  current.commentsByPost[post.id] ||
+              previous.loadingCommentPostIds.contains(post.id) !=
+                  current.loadingCommentPostIds.contains(post.id),
+          builder: (context, state) {
+            return CommunityCommentsSheet(
+              post: post,
+              comments: state.commentsByPost[post.id] ?? const [],
+              loading: state.loadingCommentPostIds.contains(post.id),
+              onLoad: () => cubit.loadComments(post.id),
+              onSubmit: (content) => cubit.addComment(
+                post: post,
+                content: content,
+                emptyMessage: AppLocalizations.of(
+                  context,
+                )!.communityCommentEmptyError,
+              ),
+            );
+          },
+        ),
       ),
     );
+  }
+
+  void _openProfile(BuildContext context, String userId) {
+    final normalizedUserId = userId.trim();
+    if (normalizedUserId.isEmpty) {
+      return;
+    }
+
+    context.router.root.push(CommunityProfileRoute(userId: normalizedUserId));
   }
 }

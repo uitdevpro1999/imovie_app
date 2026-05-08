@@ -10,7 +10,7 @@ class CreateCommunityPostParams {
     required this.movieSlug,
     required this.moviePosterUrl,
     required this.locationName,
-    this.image,
+    this.images = const [],
   });
 
   final String content;
@@ -18,7 +18,7 @@ class CreateCommunityPostParams {
   final String movieSlug;
   final String moviePosterUrl;
   final String locationName;
-  final CommunityImagePayload? image;
+  final List<CommunityImagePayload> images;
 }
 
 class CreateCommunityPostUseCase
@@ -35,7 +35,7 @@ class CreateCommunityPostUseCase
       movieSlug: params.movieSlug,
       moviePosterUrl: params.moviePosterUrl,
       locationName: params.locationName,
-      image: params.image,
+      images: params.images,
     );
   }
 }

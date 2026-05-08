@@ -231,11 +231,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authSignInSubtitle =>
-      'By signing in, you agree to iMovie conditions of\nUse and Privacy Policy';
+      'By signing in, you agree to iMovie conditions of Use and Privacy Policy';
 
   @override
   String get authSignUpSubtitle =>
-      'Create account in a second, this need to personalize\nrecommendations for you';
+      'Create account in a second, this need to personalize recommendations for you';
 
   @override
   String get authEmailLabel => 'Email';
@@ -318,6 +318,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get browseSearchHint => 'Movies, series, actors';
 
   @override
+  String get browseHeroTitle => 'Find movies that fit your mood';
+
+  @override
+  String get browseHeroSubtitle =>
+      'Filter quickly by genre, country, and release year.';
+
+  @override
+  String get browseStatCatalog => 'Catalog';
+
+  @override
+  String get browseStatGenres => 'Genres';
+
+  @override
+  String get browseStatPopular => 'Available';
+
+  @override
+  String browseMovieCount(int count) {
+    return '$count movies';
+  }
+
+  @override
+  String browseSearchCount(int count) {
+    return '$count results';
+  }
+
+  @override
   String get browsePopularSection => 'Popular';
 
   @override
@@ -334,6 +360,43 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add movies from the detail screen to find them here.';
 
   @override
+  String get libraryCollectionTitle => 'Personal collection';
+
+  @override
+  String get libraryCollectionSubtitle =>
+      'Movies you saved so you can return to them anytime.';
+
+  @override
+  String get libraryStatsMovies => 'Saved movies';
+
+  @override
+  String get libraryStatsPlayable => 'Ready to watch';
+
+  @override
+  String get libraryStatsUpdated => 'Recently added';
+
+  @override
+  String librarySavedAt(String date) {
+    return 'Saved $date';
+  }
+
+  @override
+  String get librarySwipeHint => 'Swipe left to remove';
+
+  @override
+  String get libraryRemoveConfirmTitle => 'Remove from library?';
+
+  @override
+  String get libraryRemoveConfirmMessage =>
+      'This movie will be removed from your library. You can still add it again from the movie detail screen.';
+
+  @override
+  String get libraryRemoveConfirmCancel => 'Cancel';
+
+  @override
+  String get libraryRemoveConfirmAction => 'Remove';
+
+  @override
   String get libraryRemoveAction => 'Remove';
 
   @override
@@ -347,6 +410,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileChangeAvatar => 'Change avatar';
+
+  @override
+  String get profileChangeCover => 'Change cover';
 
   @override
   String get profileFullNameLabel => 'Full name';
@@ -404,6 +470,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEpisodes => 'Episodes';
 
   @override
+  String get profileStatsPosts => 'Posts';
+
+  @override
+  String get profileStatsFollowers => 'Followers';
+
+  @override
+  String get profileStatsFollowing => 'Following';
+
+  @override
   String get profileMainSettings => 'Main settings';
 
   @override
@@ -416,7 +491,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSettingsCommunity => 'Community';
 
   @override
-  String get profileSettingsMyPosts => 'My posts';
+  String get profileSettingsMyPosts => 'My profile';
 
   @override
   String get profileSettingsNotifications => 'Notifications';
@@ -447,6 +522,126 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileSettingsAbout => 'About';
+
+  @override
+  String get profileContactTitle => 'Contact info';
+
+  @override
+  String get profileContactSubtitle =>
+      'Direct channels to contact Nguyen Quoc Trung.';
+
+  @override
+  String get profileContactOpenAction => 'Open';
+
+  @override
+  String get profileContactCopyAction => 'Copy';
+
+  @override
+  String get profileContactCopied => 'Contact information copied.';
+
+  @override
+  String get profileContactOpenError => 'Unable to open this contact channel.';
+
+  @override
+  String get profileContactZaloTitle => 'Zalo';
+
+  @override
+  String get profileContactFacebookTitle => 'Facebook';
+
+  @override
+  String get profileContactGmailTitle => 'Gmail';
+
+  @override
+  String get profileContactFacebookSubtitle =>
+      'Nguyen Quoc Trung (Shinjitsu Kudo)';
+
+  @override
+  String get profileContactGmailSubtitle => 'nqtrungit1999@gmail.com';
+
+  @override
+  String get profileContactZaloSubtitle => '+84975182035';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmptyTitle => 'Nothing new yet';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'New posts, stories, comments, and reactions will show up here.';
+
+  @override
+  String get notificationsHeaderSubtitle =>
+      'Stay in sync with your community activity.';
+
+  @override
+  String get notificationsReadAll => 'Read all';
+
+  @override
+  String get notificationsLoadError => 'Unable to load notifications.';
+
+  @override
+  String notificationsHeaderTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unread notifications',
+      one: '1 unread notification',
+      zero: 'All caught up',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileAboutTitle => 'Author';
+
+  @override
+  String get profileAboutSubtitle =>
+      'Introduction screen for the creator behind iMovie.';
+
+  @override
+  String get profileAboutRole => 'Mobile Developer';
+
+  @override
+  String get profileAboutCompany => 'Company';
+
+  @override
+  String get profileAboutHandle => 'Handle';
+
+  @override
+  String get profileAboutFocusTitle => 'Focus';
+
+  @override
+  String get profileAboutFocusSubtitle =>
+      'Flutter, GraphQL, Maps, Firebase, RESTful API, Clean Architecture, and polished mobile product experiences.';
+
+  @override
+  String get profileAboutFocusFlutter => 'Flutter';
+
+  @override
+  String get profileAboutFocusArchitecture => 'Bloc';
+
+  @override
+  String get profileAboutFocusBackend => 'Supabase';
+
+  @override
+  String get profileAboutFocusGraphql => 'GraphQL';
+
+  @override
+  String get profileAboutFocusMaps => 'Maps';
+
+  @override
+  String get profileAboutFocusFirebase => 'Firebase';
+
+  @override
+  String get profileAboutFocusRestfulApi => 'RESTful API';
+
+  @override
+  String get profileAboutFocusCleanArchitecture => 'Clean Architecture';
+
+  @override
+  String get profileAboutFocusProduct => 'Product UI';
 
   @override
   String get profileSettingsInviteFriends => 'Invite friends';
@@ -526,6 +721,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get communityTitle => 'Community';
 
   @override
+  String get communityProfileTitle => 'Profile';
+
+  @override
+  String get communityUserFallbackName => 'iMovie user';
+
+  @override
+  String get communityFollowAction => 'Follow';
+
+  @override
+  String get communityFollowingAction => 'Following';
+
+  @override
+  String get communityFollowersLabel => 'Followers';
+
+  @override
+  String get communityFollowingLabel => 'Following';
+
+  @override
+  String get communityFollowersTitle => 'Followers';
+
+  @override
+  String get communityFollowingTitle => 'Following';
+
+  @override
+  String get communityFollowersEmptyTitle => 'No followers yet';
+
+  @override
+  String get communityFollowersEmptySubtitle =>
+      'People who follow you will appear here.';
+
+  @override
+  String get communityFollowingEmptyTitle => 'Not following anyone yet';
+
+  @override
+  String get communityFollowingEmptySubtitle =>
+      'People you follow will appear here.';
+
+  @override
+  String get communityPostsLabel => 'Posts';
+
+  @override
+  String get communityStoriesMetricLabel => 'Stories';
+
+  @override
+  String get communityFollowSuccess => 'You are now following this user.';
+
+  @override
+  String get communityUnfollowSuccess => 'You unfollowed this user.';
+
+  @override
+  String get communityProfileEmptyTitle => 'No posts yet';
+
+  @override
+  String get communityProfileEmptySubtitle =>
+      'This user\'s shared posts will appear here.';
+
+  @override
   String get communityMyPostsTitle => 'My posts';
 
   @override
@@ -551,6 +803,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get communityStoryChangeImageAction => 'Change image';
+
+  @override
+  String get communityStoryDoneEditingAction => 'Hide keyboard';
 
   @override
   String get communityStoryImageRequired =>
@@ -651,6 +906,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get communityPublishAction => 'Publish';
+
+  @override
+  String get communityCancelAction => 'Cancel';
 
   @override
   String get communityUpdateAction => 'Update post';

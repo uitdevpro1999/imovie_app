@@ -8,7 +8,10 @@ class _DetailHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: math.max(300.0, 300.h),
+      height: math.max(
+        _movieDetailHeroBaseHeight,
+        _movieDetailHeroBaseHeight.h,
+      ),
       width: double.infinity,
       child: Stack(
         fit: StackFit.expand,

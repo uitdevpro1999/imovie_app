@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsState {
 
- PageStatus get pageStatus; bool get processing; AppFailure? get failure; AppProfile? get profile; bool get isAuthenticated;
+ PageStatus get pageStatus; bool get processing; AppFailure? get failure; AppProfile? get profile; CommunityProfile? get communityProfile; bool get isAuthenticated; bool get communityStatsLoading;
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.communityProfile, communityProfile) || other.communityProfile == communityProfile)&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.communityStatsLoading, communityStatsLoading) || other.communityStatsLoading == communityStatsLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,profile,isAuthenticated);
+int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,profile,communityProfile,isAuthenticated,communityStatsLoading);
 
 @override
 String toString() {
-  return 'SettingsState(pageStatus: $pageStatus, processing: $processing, failure: $failure, profile: $profile, isAuthenticated: $isAuthenticated)';
+  return 'SettingsState(pageStatus: $pageStatus, processing: $processing, failure: $failure, profile: $profile, communityProfile: $communityProfile, isAuthenticated: $isAuthenticated, communityStatsLoading: $communityStatsLoading)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SettingsStateCopyWith<$Res>  {
   factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
 @useResult
 $Res call({
- PageStatus pageStatus, bool processing, AppFailure? failure, AppProfile? profile, bool isAuthenticated
+ PageStatus pageStatus, bool processing, AppFailure? failure, AppProfile? profile, CommunityProfile? communityProfile, bool isAuthenticated, bool communityStatsLoading
 });
 
 
@@ -62,13 +62,15 @@ class _$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? profile = freezed,Object? isAuthenticated = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? profile = freezed,Object? communityProfile = freezed,Object? isAuthenticated = null,Object? communityStatsLoading = null,}) {
   return _then(_self.copyWith(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
-as AppProfile?,isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
+as AppProfile?,communityProfile: freezed == communityProfile ? _self.communityProfile : communityProfile // ignore: cast_nullable_to_non_nullable
+as CommunityProfile?,isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
+as bool,communityStatsLoading: null == communityStatsLoading ? _self.communityStatsLoading : communityStatsLoading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -166,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  AppProfile? profile,  bool isAuthenticated)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  AppProfile? profile,  CommunityProfile? communityProfile,  bool isAuthenticated,  bool communityStatsLoading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SettingsState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_that.isAuthenticated);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_that.communityProfile,_that.isAuthenticated,_that.communityStatsLoading);case _:
   return orElse();
 
 }
@@ -187,10 +189,10 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  AppProfile? profile,  bool isAuthenticated)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  AppProfile? profile,  CommunityProfile? communityProfile,  bool isAuthenticated,  bool communityStatsLoading)  $default,) {final _that = this;
 switch (_that) {
 case _SettingsState():
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_that.isAuthenticated);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_that.communityProfile,_that.isAuthenticated,_that.communityStatsLoading);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +209,10 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  AppProfile? profile,  bool isAuthenticated)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PageStatus pageStatus,  bool processing,  AppFailure? failure,  AppProfile? profile,  CommunityProfile? communityProfile,  bool isAuthenticated,  bool communityStatsLoading)?  $default,) {final _that = this;
 switch (_that) {
 case _SettingsState() when $default != null:
-return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_that.isAuthenticated);case _:
+return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_that.communityProfile,_that.isAuthenticated,_that.communityStatsLoading);case _:
   return null;
 
 }
@@ -222,14 +224,16 @@ return $default(_that.pageStatus,_that.processing,_that.failure,_that.profile,_t
 
 
 class _SettingsState extends SettingsState {
-  const _SettingsState({this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.profile, this.isAuthenticated = false}): super._();
+  const _SettingsState({this.pageStatus = PageStatus.initial, this.processing = false, this.failure, this.profile, this.communityProfile, this.isAuthenticated = false, this.communityStatsLoading = false}): super._();
   
 
 @override@JsonKey() final  PageStatus pageStatus;
 @override@JsonKey() final  bool processing;
 @override final  AppFailure? failure;
 @override final  AppProfile? profile;
+@override final  CommunityProfile? communityProfile;
 @override@JsonKey() final  bool isAuthenticated;
+@override@JsonKey() final  bool communityStatsLoading;
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
@@ -241,16 +245,16 @@ _$SettingsStateCopyWith<_SettingsState> get copyWith => __$SettingsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&(identical(other.pageStatus, pageStatus) || other.pageStatus == pageStatus)&&(identical(other.processing, processing) || other.processing == processing)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.communityProfile, communityProfile) || other.communityProfile == communityProfile)&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.communityStatsLoading, communityStatsLoading) || other.communityStatsLoading == communityStatsLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,profile,isAuthenticated);
+int get hashCode => Object.hash(runtimeType,pageStatus,processing,failure,profile,communityProfile,isAuthenticated,communityStatsLoading);
 
 @override
 String toString() {
-  return 'SettingsState(pageStatus: $pageStatus, processing: $processing, failure: $failure, profile: $profile, isAuthenticated: $isAuthenticated)';
+  return 'SettingsState(pageStatus: $pageStatus, processing: $processing, failure: $failure, profile: $profile, communityProfile: $communityProfile, isAuthenticated: $isAuthenticated, communityStatsLoading: $communityStatsLoading)';
 }
 
 
@@ -261,7 +265,7 @@ abstract mixin class _$SettingsStateCopyWith<$Res> implements $SettingsStateCopy
   factory _$SettingsStateCopyWith(_SettingsState value, $Res Function(_SettingsState) _then) = __$SettingsStateCopyWithImpl;
 @override @useResult
 $Res call({
- PageStatus pageStatus, bool processing, AppFailure? failure, AppProfile? profile, bool isAuthenticated
+ PageStatus pageStatus, bool processing, AppFailure? failure, AppProfile? profile, CommunityProfile? communityProfile, bool isAuthenticated, bool communityStatsLoading
 });
 
 
@@ -278,13 +282,15 @@ class __$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? profile = freezed,Object? isAuthenticated = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pageStatus = null,Object? processing = null,Object? failure = freezed,Object? profile = freezed,Object? communityProfile = freezed,Object? isAuthenticated = null,Object? communityStatsLoading = null,}) {
   return _then(_SettingsState(
 pageStatus: null == pageStatus ? _self.pageStatus : pageStatus // ignore: cast_nullable_to_non_nullable
 as PageStatus,processing: null == processing ? _self.processing : processing // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as AppFailure?,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
-as AppProfile?,isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
+as AppProfile?,communityProfile: freezed == communityProfile ? _self.communityProfile : communityProfile // ignore: cast_nullable_to_non_nullable
+as CommunityProfile?,isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
+as bool,communityStatsLoading: null == communityStatsLoading ? _self.communityStatsLoading : communityStatsLoading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

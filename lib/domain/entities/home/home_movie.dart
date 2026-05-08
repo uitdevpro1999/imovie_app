@@ -26,6 +26,9 @@ abstract class HomeMovie with _$HomeMovie {
 
   String get yearLabel => year > 0 ? year.toString() : 'N/A';
 
+  bool get isTrailerOnly =>
+      episodeLabel.trim().toLowerCase().contains('trailer');
+
   String get subtitleLabel {
     if (episodeLabel.trim().isNotEmpty) {
       return episodeLabel;

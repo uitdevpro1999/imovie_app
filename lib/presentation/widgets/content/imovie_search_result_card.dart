@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
@@ -15,6 +16,7 @@ class IMovieSearchResultCard extends StatelessWidget {
     this.titleColor = AppColors.textPrimary,
     this.textColor = AppColors.textSecondary,
     this.tagColor = AppColors.surfaceAlt,
+    this.borderColor,
   });
 
   final String imageUrl;
@@ -26,6 +28,7 @@ class IMovieSearchResultCard extends StatelessWidget {
   final Color titleColor;
   final Color textColor;
   final Color tagColor;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,7 @@ class IMovieSearchResultCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(24),
+        border: borderColor == null ? null : Border.all(color: borderColor!),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -67,7 +71,7 @@ class IMovieSearchResultCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
-                        Icons.star_rounded,
+                        FluentIcons.star_24_filled,
                         size: 16,
                         color: AppColors.yellow500,
                       ),

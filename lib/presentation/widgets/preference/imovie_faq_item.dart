@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 
@@ -30,7 +31,9 @@ class IMovieFaqItem extends StatelessWidget {
               Expanded(child: Text(question, style: AppTypography.body2Medium)),
               const SizedBox(width: 12),
               Icon(
-                expanded ? Icons.remove_rounded : Icons.add_rounded,
+                expanded
+                    ? FluentIcons.subtract_24_regular
+                    : FluentIcons.add_24_regular,
                 color: AppColors.textPrimary,
               ),
             ],

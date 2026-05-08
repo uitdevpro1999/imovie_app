@@ -6,6 +6,8 @@ import 'package:imovie_app/config/flavors/app_environment.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
 import 'package:imovie_app/core/di/service_locator.dart';
 import 'package:imovie_app/core/logger/app_logger.dart';
+import 'package:imovie_app/core/services/community_realtime_service.dart';
+import 'package:imovie_app/core/services/push_notification_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
@@ -46,5 +48,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 
   await configureDependencies(bootstrap: appBootstrap);
+  await sl<CommunityRealtimeService>().initialize();
+  await sl<PushNotificationService>().initialize();
   runApp(await builder());
 }

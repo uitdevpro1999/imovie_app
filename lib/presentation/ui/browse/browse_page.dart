@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
@@ -43,9 +44,27 @@ class BrowsePage extends BasePage<BrowseCubit, BrowseState>
   }
 
   @override
+  bool buildWhen(BrowseState previous, BrowseState current) {
+    return previous.pageStatus != current.pageStatus ||
+        previous.processing != current.processing ||
+        previous.failure != current.failure;
+  }
+
+  @override
   Widget buildPage(BuildContext context, BrowseCubit cubit, BrowseState state) {
-    return BlocSelector<BrowseCubit, BrowseState, BrowseState>(
-      selector: (state) => state,
+    return BlocBuilder<BrowseCubit, BrowseState>(
+      buildWhen: (previous, current) =>
+          previous.feed != current.feed ||
+          previous.genres != current.genres ||
+          previous.countries != current.countries ||
+          previous.keyword != current.keyword ||
+          previous.searchLoading != current.searchLoading ||
+          previous.searchLoadingMore != current.searchLoadingMore ||
+          previous.searchResults != current.searchResults ||
+          previous.searchTotalItems != current.searchTotalItems ||
+          previous.searchSortType != current.searchSortType ||
+          previous.searchCountry != current.searchCountry ||
+          previous.searchYear != current.searchYear,
       builder: (context, state) {
         return _BrowseSuccessView(
           state: state,

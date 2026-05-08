@@ -3,6 +3,28 @@ import 'package:geolocator/geolocator.dart';
 
 abstract interface class LocationService {
   Future<String> getCurrentAddress();
+
+  Future<LocationAddress> getCurrentLocationAddress();
+}
+
+class LocationAddress {
+  const LocationAddress({required this.shortLabel, required this.fullLabel});
+
+  final String shortLabel;
+  final String fullLabel;
+
+  static String shortestLabel(String value) {
+    final parts = value
+        .split(',')
+        .map((part) => part.trim())
+        .where((part) => part.isNotEmpty)
+        .toList(growable: false);
+    if (parts.length <= 2) {
+      return value.trim();
+    }
+
+    return parts.take(2).join(', ');
+  }
 }
 
 class DeviceLocationService implements LocationService {
@@ -10,6 +32,12 @@ class DeviceLocationService implements LocationService {
 
   @override
   Future<String> getCurrentAddress() async {
+    final address = await getCurrentLocationAddress();
+    return address.shortLabel;
+  }
+
+  @override
+  Future<LocationAddress> getCurrentLocationAddress() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       throw StateError('Location service is disabled.');
@@ -35,16 +63,20 @@ class DeviceLocationService implements LocationService {
       position.longitude,
     );
     if (places.isEmpty) {
-      return '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}';
+      final coordinates =
+          '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}';
+      return LocationAddress(shortLabel: coordinates, fullLabel: coordinates);
     }
 
     return _formatPlacemark(places.first);
   }
 
-  String _formatPlacemark(Placemark place) {
-    final parts =
+  LocationAddress _formatPlacemark(Placemark place) {
+    final fullParts =
         [
               place.street,
+              place.subLocality,
+              place.locality,
               place.subAdministrativeArea,
               place.administrativeArea,
               place.country,
@@ -52,8 +84,26 @@ class DeviceLocationService implements LocationService {
             .whereType<String>()
             .map((part) => part.trim())
             .where((part) => part.isNotEmpty)
+            .toSet()
             .toList(growable: false);
 
-    return parts.join(', ');
+    final shortParts =
+        [
+              place.subAdministrativeArea,
+              place.locality,
+              place.administrativeArea,
+              place.country,
+            ]
+            .whereType<String>()
+            .map((part) => part.trim())
+            .where((part) => part.isNotEmpty)
+            .toSet()
+            .toList(growable: false);
+
+    final fullLabel = fullParts.join(', ');
+    final shortLabel = shortParts.isEmpty
+        ? LocationAddress.shortestLabel(fullLabel)
+        : shortParts.take(2).join(', ');
+    return LocationAddress(shortLabel: shortLabel, fullLabel: fullLabel);
   }
 }

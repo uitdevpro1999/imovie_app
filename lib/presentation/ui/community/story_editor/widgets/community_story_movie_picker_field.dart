@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
@@ -21,12 +22,20 @@ class CommunityStoryMoviePickerField extends StatelessWidget {
       builder: (context, state) {
         final hasMovie = state.selectedMovieTitle.trim().isNotEmpty;
         return Material(
-          color: AppColors.grayscale900,
-          borderRadius: BorderRadius.circular(14),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(18),
           child: InkWell(
-            onTap: () => _openPicker(context),
-            borderRadius: BorderRadius.circular(14),
-            child: Padding(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              _openPicker(context);
+            },
+            borderRadius: BorderRadius.circular(18),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: AppColors.grayscale900,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppColors.grayscale800),
+              ),
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
@@ -48,7 +57,7 @@ class CommunityStoryMoviePickerField extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
-                        Icons.movie_outlined,
+                        FluentIcons.movies_and_tv_24_regular,
                         color: AppColors.yellow500,
                       ),
                     ),
@@ -84,15 +93,18 @@ class CommunityStoryMoviePickerField extends StatelessWidget {
                   if (hasMovie)
                     IconButton(
                       tooltip: l10n.communityMovieClearAction,
-                      onPressed: context
-                          .read<CommunityStoryEditorCubit>()
-                          .clearSelectedMovie,
-                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        context
+                            .read<CommunityStoryEditorCubit>()
+                            .clearSelectedMovie();
+                      },
+                      icon: const Icon(FluentIcons.dismiss_24_regular),
                       color: AppColors.grayscale300,
                     )
                   else
                     const Icon(
-                      Icons.chevron_right_rounded,
+                      FluentIcons.chevron_right_24_regular,
                       color: AppColors.grayscale400,
                     ),
                 ],
@@ -154,6 +166,9 @@ class _StoryMoviePickerSheetState extends State<_StoryMoviePickerSheet> {
         height: sheetHeight,
         child:
             BlocBuilder<CommunityStoryEditorCubit, CommunityStoryEditorState>(
+              buildWhen: (previous, current) =>
+                  previous.searchingMovies != current.searchingMovies ||
+                  previous.movieSearchResults != current.movieSearchResults,
               builder: (context, state) {
                 return Padding(
                   padding: EdgeInsets.fromLTRB(
@@ -191,7 +206,7 @@ class _StoryMoviePickerSheetState extends State<_StoryMoviePickerSheet> {
                             .searchMovies,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(
-                            Icons.search_rounded,
+                            FluentIcons.search_24_regular,
                             color: AppColors.grayscale400,
                           ),
                           hintText: l10n.communityMovieSearchHint,
@@ -201,8 +216,24 @@ class _StoryMoviePickerSheetState extends State<_StoryMoviePickerSheet> {
                           filled: true,
                           fillColor: AppColors.grayscale900,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: AppColors.grayscale800,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: AppColors.grayscale800,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: AppColors.yellow500.withValues(
+                                alpha: 0.78,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -268,10 +299,10 @@ class _MovieSearchResultTile extends StatelessWidget {
 
     return Material(
       color: AppColors.grayscale900,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(

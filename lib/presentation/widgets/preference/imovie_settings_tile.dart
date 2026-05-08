@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 
@@ -80,7 +81,7 @@ class IMovieSettingsTile extends StatelessWidget {
                   const SizedBox(width: 8),
                 ],
                 Icon(
-                  Icons.chevron_right_rounded,
+                  FluentIcons.chevron_right_24_regular,
                   size: 20,
                   color: resolvedChevronColor,
                 ),

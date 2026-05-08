@@ -68,7 +68,10 @@ class _GenreFilterSheetState extends State<_GenreFilterSheet> {
               ),
               IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.close_rounded, color: AppColors.white),
+                icon: const Icon(
+                  FluentIcons.dismiss_24_regular,
+                  color: AppColors.white,
+                ),
               ),
             ],
           ),

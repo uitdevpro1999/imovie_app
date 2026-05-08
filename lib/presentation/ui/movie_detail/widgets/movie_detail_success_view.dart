@@ -22,7 +22,7 @@ class _MovieDetailSuccessView extends StatelessWidget {
             children: [
               _DetailHero(detail: detail),
               Transform.translate(
-                offset: const Offset(0, -24),
+                offset: const Offset(0, -_movieDetailContentOverlap),
                 child: Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
@@ -87,14 +87,14 @@ class _MovieDetailSuccessView extends StatelessWidget {
                               columns;
                           final actions = [
                             _MovieDetailActionData(
-                              icon: Icons.movie_creation_outlined,
+                              icon: FluentIcons.movies_and_tv_24_regular,
                               label: l10n.movieDetailActionTrailer,
                               onTap: () => _openTrailer(context),
                             ),
                             _MovieDetailActionData(
                               icon: state.addedToLibrary
-                                  ? Icons.bookmark_added_rounded
-                                  : Icons.bookmark_add_outlined,
+                                  ? FluentIcons.bookmark_24_filled
+                                  : FluentIcons.bookmark_add_24_regular,
                               label: state.addedToLibrary
                                   ? l10n.movieDetailActionInLibrary
                                   : l10n.movieDetailActionWatchlist,
@@ -107,12 +107,12 @@ class _MovieDetailSuccessView extends StatelessWidget {
                               ),
                             ),
                             _MovieDetailActionData(
-                              icon: Icons.star_border_rounded,
+                              icon: FluentIcons.star_24_regular,
                               label: l10n.movieDetailActionRate,
                               onTap: () => unawaited(_openRating(context)),
                             ),
                             _MovieDetailActionData(
-                              icon: Icons.share_outlined,
+                              icon: FluentIcons.share_24_regular,
                               label: l10n.movieDetailActionShare,
                             ),
                           ];
@@ -347,13 +347,13 @@ class _MovieDetailSuccessView extends StatelessWidget {
         type: _RatingSourceType.imdb,
         title: 'IMDb',
         subtitle: l10n.movieDetailRatingSourceImdbSubtitle,
-        icon: Icons.star_rate_rounded,
+        icon: FluentIcons.star_24_filled,
       ),
       _RatingSource(
         type: _RatingSourceType.tmdb,
         title: 'TMDb',
         subtitle: l10n.movieDetailRatingSourceTmdbSubtitle,
-        icon: Icons.movie_filter_rounded,
+        icon: FluentIcons.movies_and_tv_24_regular,
       ),
     ];
   }
@@ -456,7 +456,7 @@ class _MovieDetailSuccessView extends StatelessWidget {
 
   void _openTrailer(BuildContext context) {
     final detail = state.detail!;
-    final videoId = YoutubePlayer.convertUrlToId(detail.trailerUrl);
+    final videoId = IMovieTrailerPopup.videoIdFromUrl(detail.trailerUrl);
     if (videoId == null || videoId.trim().isEmpty) {
       appEventBus.emitToast(
         AppToastEvent.warning(

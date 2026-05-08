@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
@@ -21,16 +22,20 @@ import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
 import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
 import 'package:imovie_app/presentation/widgets/imovie_content_widgets.dart';
 import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
+import 'package:imovie_app/presentation/widgets/imovie_trailer_popup.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 part 'widgets/detail_hero.dart';
 part 'widgets/info_row.dart';
+part 'widgets/movie_detail_scaffold.dart';
 part 'widgets/movie_detail_success_view.dart';
 part 'widgets/pill_label.dart';
 part 'widgets/quick_action.dart';
 part 'widgets/rating_source_sheet.dart';
 part 'widgets/trailer_popup.dart';
+
+const double _movieDetailHeroBaseHeight = 300;
+const double _movieDetailContentOverlap = 24;
 
 @RoutePage()
 class MovieDetailPage extends BasePage<MovieDetailCubit, MovieDetailState>
@@ -54,15 +59,7 @@ class MovieDetailPage extends BasePage<MovieDetailCubit, MovieDetailState>
 
   @override
   Widget wrapPage(BuildContext context, MovieDetailState state, Widget child) {
-    return Scaffold(
-      backgroundColor: AppColors.grayscale950,
-      extendBodyBehindAppBar: true,
-      appBar: IMovieAppBar(
-        backgroundColor: Colors.transparent,
-        titleWidget: const SizedBox.shrink(),
-      ),
-      body: child,
-    );
+    return _MovieDetailScaffold(child: child);
   }
 
   @override

@@ -157,10 +157,17 @@ class MainCubit extends BaseCubit<MainState> {
   }
 
   Future<void> _handleProfileEvent(AppProfileEvent event) async {
+    final bustAvatarCache =
+        event.changeType == AppProfileChangeType.avatar ||
+        event.changeType == AppProfileChangeType.media;
+    final bustCoverCache =
+        event.changeType == AppProfileChangeType.cover ||
+        event.changeType == AppProfileChangeType.media;
     await _emitCachedProfile(
       force: true,
       processing: event.reloadRemote,
-      bustAvatarCache: event.changeType == AppProfileChangeType.avatar,
+      bustAvatarCache: bustAvatarCache,
+      bustCoverCache: bustCoverCache,
     );
 
     if (event.reloadRemote) {
@@ -172,6 +179,7 @@ class MainCubit extends BaseCubit<MainState> {
     bool force = false,
     bool processing = true,
     bool bustAvatarCache = false,
+    bool bustCoverCache = false,
   }) async {
     if (!force && state.profile != null) {
       return;
@@ -182,9 +190,13 @@ class MainCubit extends BaseCubit<MainState> {
       return;
     }
 
-    final profile = bustAvatarCache
-        ? _bustAvatarCache(cachedProfile)
-        : cachedProfile;
+    var profile = cachedProfile;
+    if (bustAvatarCache) {
+      profile = profile.copyWith(avatarUrl: _bustImageUrl(profile.avatarUrl));
+    }
+    if (bustCoverCache) {
+      profile = profile.copyWith(coverUrl: _bustImageUrl(profile.coverUrl));
+    }
     emit(
       state.copyWith(
         pageStatus: PageStatus.loaded,
@@ -230,10 +242,10 @@ class MainCubit extends BaseCubit<MainState> {
     await _clearCachedProfileUseCase(const NoParams());
   }
 
-  AppProfile _bustAvatarCache(AppProfile profile) {
-    final uri = Uri.tryParse(profile.avatarUrl);
+  String _bustImageUrl(String imageUrl) {
+    final uri = Uri.tryParse(imageUrl);
     if (uri == null) {
-      return profile;
+      return imageUrl;
     }
 
     final updated = uri.replace(
@@ -242,7 +254,7 @@ class MainCubit extends BaseCubit<MainState> {
         'v': DateTime.now().millisecondsSinceEpoch.toString(),
       },
     );
-    return profile.copyWith(avatarUrl: updated.toString());
+    return updated.toString();
   }
 
   @override

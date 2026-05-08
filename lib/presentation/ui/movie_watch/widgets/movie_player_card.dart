@@ -52,15 +52,12 @@ class _PlayerShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: math.max(220, MediaQuery.sizeOf(context).width * 9 / 16),
-      decoration: BoxDecoration(
-        color: AppColors.grayscale900,
-        borderRadius: BorderRadius.circular(20),
+      child: ClipRect(
+        child: ColoredBox(color: AppColors.grayscale900, child: child),
       ),
-      clipBehavior: Clip.antiAlias,
-      child: child,
     );
   }
 }

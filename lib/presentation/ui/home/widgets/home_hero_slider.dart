@@ -13,10 +13,14 @@ class HomeHeroSlider extends StatefulWidget {
     super.key,
     required this.movies,
     required this.relatedMovies,
+    required this.onPlayMovie,
+    required this.onOpenTrailer,
   });
 
   final List<HomeMovieViewData> movies;
   final List<HomeMovie> relatedMovies;
+  final ValueChanged<HomeMovie> onPlayMovie;
+  final ValueChanged<HomeMovie> onOpenTrailer;
 
   @override
   State<HomeHeroSlider> createState() => _HomeHeroSliderState();
@@ -33,7 +37,7 @@ class _HomeHeroSliderState extends State<HomeHeroSlider> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(viewportFraction: 0.92);
     _startAutoSlideTimer();
   }
 
@@ -92,7 +96,7 @@ class _HomeHeroSliderState extends State<HomeHeroSlider> {
     return Column(
       children: [
         SizedBox(
-          height: 205,
+          height: HomeHeroBanner.heightFor(context),
           child: PageView.builder(
             controller: _pageController,
             itemCount: movies.length,
@@ -104,10 +108,14 @@ class _HomeHeroSliderState extends State<HomeHeroSlider> {
             itemBuilder: (context, index) {
               final movie = movies[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: GestureDetector(
                   onTap: () => _openMovie(context, movie.movie),
-                  child: HomeHeroBanner(movie: movie),
+                  child: HomeHeroBanner(
+                    movie: movie,
+                    onPlayTap: () => widget.onPlayMovie(movie.movie),
+                    onTrailerTap: () => widget.onOpenTrailer(movie.movie),
+                  ),
                 ),
               );
             },

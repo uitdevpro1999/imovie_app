@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:imovie_app/core/bloc/base_cubit.dart';
@@ -25,6 +27,16 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
   final SearchMoviesUseCase _searchMoviesUseCase;
   final LocationService _locationService;
   final ImagePicker _imagePicker = ImagePicker();
+  Timer? _movieSearchDebounce;
+  int _movieSearchRequestId = 0;
+
+  static const _movieSearchDebounceDuration = Duration(milliseconds: 500);
+
+  @override
+  Future<void> close() {
+    _movieSearchDebounce?.cancel();
+    return super.close();
+  }
 
   Future<void> pickImage() async {
     final image = await _imagePicker.pickImage(
@@ -45,7 +57,7 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
   }
 
   void updateLocationName(String value) {
-    emit(state.copyWith(locationName: value));
+    emit(state.copyWith(locationName: value, locationFullName: value));
   }
 
   void updateTextPosition(Offset position) {
@@ -78,8 +90,14 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
   Future<void> resolveCurrentLocation({required String failureMessage}) async {
     emit(state.copyWith(resolvingLocation: true, failure: null));
     try {
-      final address = await _locationService.getCurrentAddress();
-      emit(state.copyWith(resolvingLocation: false, locationName: address));
+      final address = await _locationService.getCurrentLocationAddress();
+      emit(
+        state.copyWith(
+          resolvingLocation: false,
+          locationName: address.shortLabel,
+          locationFullName: address.fullLabel,
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(resolvingLocation: false));
       showErrorToast(failureMessage);
@@ -88,6 +106,9 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
 
   Future<void> searchMovies(String keyword) async {
     final normalizedKeyword = keyword.trim();
+    _movieSearchDebounce?.cancel();
+    final requestId = ++_movieSearchRequestId;
+
     if (normalizedKeyword.length < 2) {
       emit(
         state.copyWith(movieSearchResults: const [], searchingMovies: false),
@@ -95,10 +116,25 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
       return;
     }
 
+    emit(state.copyWith(failure: null));
+    _movieSearchDebounce = Timer(_movieSearchDebounceDuration, () {
+      unawaited(_runMovieSearch(normalizedKeyword, requestId));
+    });
+  }
+
+  Future<void> _runMovieSearch(String keyword, int requestId) async {
+    if (isClosed || requestId != _movieSearchRequestId) {
+      return;
+    }
+
     emit(state.copyWith(searchingMovies: true, failure: null));
     final result = await _searchMoviesUseCase(
-      SearchMoviesParams(keyword: normalizedKeyword),
+      SearchMoviesParams(keyword: keyword),
     );
+    if (isClosed || requestId != _movieSearchRequestId) {
+      return;
+    }
+
     result.map(
       success: (feed) {
         emit(
@@ -160,7 +196,7 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
         movieTitle: state.selectedMovieTitle,
         movieSlug: state.selectedMovieSlug,
         moviePosterUrl: state.selectedMoviePosterUrl,
-        locationName: state.locationName,
+        locationName: _submitLocationName(),
         textPositionX: state.textPositionX,
         textPositionY: state.textPositionY,
         moviePositionX: state.moviePositionX,
@@ -215,6 +251,16 @@ class CommunityStoryEditorCubit extends BaseCubit<CommunityStoryEditorState> {
 
   double _normalizedPosition(double value) {
     return value.clamp(0.0, 1.0);
+  }
+
+  String _submitLocationName() {
+    final normalizedLocation = state.locationName.trim();
+    if (normalizedLocation.isEmpty) {
+      return '';
+    }
+
+    final fullLocation = state.locationFullName.trim();
+    return fullLocation.isEmpty ? normalizedLocation : fullLocation;
   }
 }
 

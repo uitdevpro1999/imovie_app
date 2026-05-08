@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:imovie_app/core/bloc/base_cubit.dart';
 import 'package:imovie_app/core/error/app_failure.dart';
@@ -26,10 +28,14 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
        super(
          CommunityComposeState(
            initialPost: initialPost,
-           locationName: initialPost?.locationName ?? '',
+           locationName: LocationAddress.shortestLabel(
+             initialPost?.locationName ?? '',
+           ),
+           locationFullName: initialPost?.locationName ?? '',
            selectedMovieTitle: initialPost?.movieTitle ?? '',
            selectedMovieSlug: initialPost?.movieSlug ?? '',
            selectedMoviePosterUrl: initialPost?.moviePosterUrl ?? '',
+           existingImageUrls: initialPost?.imageUrls ?? const <String>[],
          ),
        );
 
@@ -38,23 +44,77 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
   final SearchMoviesUseCase _searchMoviesUseCase;
   final LocationService _locationService;
   final ImagePicker _imagePicker = ImagePicker();
+  Timer? _movieSearchDebounce;
+  int _movieSearchRequestId = 0;
+
+  static const maxPostImages = 5;
+  static const _movieSearchDebounceDuration = Duration(milliseconds: 500);
+
+  @override
+  Future<void> close() {
+    _movieSearchDebounce?.cancel();
+    return super.close();
+  }
 
   Future<void> pickImage() async {
-    final image = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
+    await pickImages();
+  }
+
+  Future<void> pickImages() async {
+    final remainingSlots =
+        maxPostImages -
+        state.existingImageUrls.length -
+        state.selectedImages.length;
+    if (remainingSlots <= 0) {
+      return;
+    }
+
+    final images = await _imagePicker.pickMultiImage(
       imageQuality: 82,
+      limit: remainingSlots,
     );
-    if (image != null) {
-      emit(state.copyWith(selectedImage: image));
+    if (images.isNotEmpty) {
+      emit(
+        state.copyWith(
+          selectedImages: [
+            ...state.selectedImages,
+            ...images.take(remainingSlots),
+          ],
+        ),
+      );
     }
   }
 
   void removeImage() {
-    emit(state.copyWith(selectedImage: null));
+    emit(state.copyWith(selectedImages: const []));
+  }
+
+  void removeSelectedImage(XFile image) {
+    emit(
+      state.copyWith(
+        selectedImages: state.selectedImages
+            .where((item) => item.path != image.path)
+            .toList(growable: false),
+      ),
+    );
+  }
+
+  void removeExistingImageUrl(String imageUrl) {
+    final normalizedImageUrl = imageUrl.trim();
+    emit(
+      state.copyWith(
+        existingImageUrls: state.existingImageUrls
+            .where((item) => item.trim() != normalizedImageUrl)
+            .toList(growable: false),
+      ),
+    );
   }
 
   Future<void> searchMovies(String keyword) async {
     final normalizedKeyword = keyword.trim();
+    _movieSearchDebounce?.cancel();
+    final requestId = ++_movieSearchRequestId;
+
     if (normalizedKeyword.length < 2) {
       emit(
         state.copyWith(movieSearchResults: const [], searchingMovies: false),
@@ -62,10 +122,25 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
       return;
     }
 
+    emit(state.copyWith(failure: null));
+    _movieSearchDebounce = Timer(_movieSearchDebounceDuration, () {
+      unawaited(_runMovieSearch(normalizedKeyword, requestId));
+    });
+  }
+
+  Future<void> _runMovieSearch(String keyword, int requestId) async {
+    if (isClosed || requestId != _movieSearchRequestId) {
+      return;
+    }
+
     emit(state.copyWith(searchingMovies: true, failure: null));
     final result = await _searchMoviesUseCase(
-      SearchMoviesParams(keyword: normalizedKeyword),
+      SearchMoviesParams(keyword: keyword),
     );
+    if (isClosed || requestId != _movieSearchRequestId) {
+      return;
+    }
+
     result.map(
       success: (feed) {
         emit(
@@ -102,11 +177,21 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
     );
   }
 
+  void updateLocationName(String value) {
+    emit(state.copyWith(locationName: value, locationFullName: value));
+  }
+
   Future<void> resolveCurrentLocation({required String failureMessage}) async {
     emit(state.copyWith(resolvingLocation: true, failure: null));
     try {
-      final address = await _locationService.getCurrentAddress();
-      emit(state.copyWith(resolvingLocation: false, locationName: address));
+      final address = await _locationService.getCurrentLocationAddress();
+      emit(
+        state.copyWith(
+          resolvingLocation: false,
+          locationName: address.shortLabel,
+          locationFullName: address.fullLabel,
+        ),
+      );
     } catch (error) {
       emit(state.copyWith(resolvingLocation: false));
       showErrorToast(failureMessage);
@@ -119,7 +204,9 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
     required CommunityComposeMessages messages,
   }) async {
     final normalizedContent = content.trim();
-    if (normalizedContent.isEmpty && state.selectedImage == null) {
+    if (normalizedContent.isEmpty &&
+        state.selectedImages.isEmpty &&
+        state.existingImageUrls.isEmpty) {
       final failure = AppFailure.unknown(messages.emptyContent);
       emit(state.copyWith(failure: failure));
       showFailureToast(failure);
@@ -127,7 +214,7 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
     }
 
     emit(state.copyWith(processing: true, failure: null));
-    final image = await _imagePayload();
+    final images = await _imagePayloads();
     final result = state.initialPost == null
         ? await _createCommunityPostUseCase(
             CreateCommunityPostParams(
@@ -135,8 +222,8 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
               movieTitle: state.selectedMovieTitle,
               movieSlug: state.selectedMovieSlug,
               moviePosterUrl: state.selectedMoviePosterUrl,
-              locationName: locationName.trim(),
-              image: image,
+              locationName: _submitLocationName(locationName),
+              images: images,
             ),
           )
         : await _updateCommunityPostUseCase(
@@ -146,8 +233,9 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
               movieTitle: state.selectedMovieTitle,
               movieSlug: state.selectedMovieSlug,
               moviePosterUrl: state.selectedMoviePosterUrl,
-              locationName: locationName.trim(),
-              image: image,
+              locationName: _submitLocationName(locationName),
+              keptImageUrls: state.existingImageUrls,
+              images: images,
             ),
           );
 
@@ -168,22 +256,24 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
     );
   }
 
-  Future<CommunityImagePayload?> _imagePayload() async {
-    final image = state.selectedImage;
-    if (image == null) {
-      return null;
+  Future<List<CommunityImagePayload>> _imagePayloads() async {
+    final payloads = <CommunityImagePayload>[];
+    for (final image in state.selectedImages.take(maxPostImages)) {
+      final bytes = await image.readAsBytes();
+      if (bytes.isEmpty) {
+        continue;
+      }
+
+      payloads.add(
+        CommunityImagePayload(
+          bytes: bytes,
+          fileName: image.name,
+          contentType: image.mimeType ?? _contentTypeFor(image.name),
+        ),
+      );
     }
 
-    final bytes = await image.readAsBytes();
-    if (bytes.isEmpty) {
-      return null;
-    }
-
-    return CommunityImagePayload(
-      bytes: bytes,
-      fileName: image.name,
-      contentType: image.mimeType ?? _contentTypeFor(image.name),
-    );
+    return payloads;
   }
 
   String _contentTypeFor(String fileName) {
@@ -199,6 +289,16 @@ class CommunityComposeCubit extends BaseCubit<CommunityComposeState> {
     }
 
     return 'image/jpeg';
+  }
+
+  String _submitLocationName(String inputLocationName) {
+    final normalizedInput = inputLocationName.trim();
+    if (normalizedInput.isEmpty) {
+      return '';
+    }
+
+    final fullLocation = state.locationFullName.trim();
+    return fullLocation.isEmpty ? normalizedInput : fullLocation;
   }
 }
 

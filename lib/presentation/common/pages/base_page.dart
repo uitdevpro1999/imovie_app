@@ -14,6 +14,8 @@ abstract class BasePage<C extends BaseCubit<S>, S extends BaseState>
 
   Widget wrapPage(BuildContext context, S state, Widget child) => child;
 
+  bool buildWhen(S previous, S current) => previous != current;
+
   Widget buildLoading(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator(color: AppColors.yellow500),
@@ -99,7 +101,7 @@ class _BasePageState<C extends BaseCubit<S>, S extends BaseState>
     final l10n = AppLocalizations.of(context)!;
 
     return BlocConsumer<C, S>(
-      buildWhen: (previous, current) => previous != current,
+      buildWhen: widget.buildWhen,
       listenWhen: (previous, current) =>
           previous.pageStatus != PageStatus.loaded &&
           current.pageStatus == PageStatus.loaded,

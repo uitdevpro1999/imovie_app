@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
@@ -14,6 +15,7 @@ import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/main/main_cubit.dart';
 import 'package:imovie_app/presentation/ui/profile/edit_profile/edit_profile_cubit.dart';
 import 'package:imovie_app/presentation/ui/profile/edit_profile/edit_profile_state.dart';
+import 'package:imovie_app/presentation/ui/profile/edit_profile/widgets/profile_cover_picker.dart';
 import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
 import 'package:imovie_app/presentation/widgets/imovie_buttons.dart';
 import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
@@ -58,6 +60,17 @@ class ProfilePage extends BasePage<EditProfileCubit, EditProfileState>
   }
 
   @override
+  bool buildWhen(EditProfileState previous, EditProfileState current) {
+    return previous.pageStatus != current.pageStatus ||
+        previous.failure != current.failure ||
+        previous.isAuthenticated != current.isAuthenticated ||
+        previous.profile != current.profile ||
+        previous.pendingAvatarBytes != current.pendingAvatarBytes ||
+        previous.pendingCoverBytes != current.pendingCoverBytes ||
+        previous.processing != current.processing;
+  }
+
+  @override
   Widget buildPage(
     BuildContext context,
     EditProfileCubit cubit,
@@ -67,6 +80,11 @@ class ProfilePage extends BasePage<EditProfileCubit, EditProfileState>
 
     return BlocConsumer<EditProfileCubit, EditProfileState>(
       listenWhen: (previous, current) => previous.profile != current.profile,
+      buildWhen: (previous, current) =>
+          previous.isAuthenticated != current.isAuthenticated ||
+          previous.profile != current.profile ||
+          previous.pendingAvatarBytes != current.pendingAvatarBytes ||
+          previous.pendingCoverBytes != current.pendingCoverBytes,
       listener: (context, state) {
         _syncControllers(state.profile);
       },
@@ -87,8 +105,24 @@ class ProfilePage extends BasePage<EditProfileCubit, EditProfileState>
           l10n: l10n,
           profile: profile,
           pendingAvatarBytes: state.pendingAvatarBytes,
+          pendingCoverBytes: state.pendingCoverBytes,
           fullNameController: _fullNameController,
           phoneController: _phoneController,
+          onPickCover: () async {
+            final file = await _imagePicker.pickImage(
+              source: ImageSource.gallery,
+              maxWidth: 1280,
+              imageQuality: 85,
+            );
+            if (file == null) {
+              return;
+            }
+
+            await cubit.selectCover(
+              file: file,
+              invalidFileMessage: l10n.profileInvalidAvatar,
+            );
+          },
           onPickAvatar: () async {
             final file = await _imagePicker.pickImage(
               source: ImageSource.gallery,
@@ -185,8 +219,10 @@ class _ProfileContent extends StatelessWidget {
     required this.l10n,
     required this.profile,
     required this.pendingAvatarBytes,
+    required this.pendingCoverBytes,
     required this.fullNameController,
     required this.phoneController,
+    required this.onPickCover,
     required this.onPickAvatar,
     required this.onSave,
   });
@@ -194,8 +230,10 @@ class _ProfileContent extends StatelessWidget {
   final AppLocalizations l10n;
   final AppProfile profile;
   final Uint8List? pendingAvatarBytes;
+  final Uint8List? pendingCoverBytes;
   final TextEditingController fullNameController;
   final TextEditingController phoneController;
+  final VoidCallback onPickCover;
   final VoidCallback onPickAvatar;
   final VoidCallback onSave;
 
@@ -207,6 +245,13 @@ class _ProfileContent extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             children: [
+              ProfileCoverPicker(
+                profile: profile,
+                pendingCoverBytes: pendingCoverBytes,
+                label: l10n.profileChangeCover,
+                onPickCover: onPickCover,
+              ),
+              const SizedBox(height: 18),
               Center(
                 child: _ProfileAvatar(
                   profile: profile,
@@ -313,7 +358,7 @@ class _ProfileAvatar extends StatelessWidget {
                 child: const SizedBox.square(
                   dimension: 36,
                   child: Icon(
-                    Icons.photo_camera_rounded,
+                    FluentIcons.camera_24_regular,
                     color: AppColors.white,
                     size: 20,
                   ),
@@ -456,7 +501,7 @@ class _SignedOutProfileView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
-              Icons.person_outline_rounded,
+              FluentIcons.person_24_regular,
               color: AppColors.yellow500,
               size: 56,
             ),

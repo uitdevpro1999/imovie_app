@@ -19,5 +19,11 @@ abstract interface class ProfileRepository {
     required String contentType,
   });
 
+  Future<Result<AppProfile>> updateCover({
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  });
+
   Future<Result<void>> clearCachedProfile();
 }

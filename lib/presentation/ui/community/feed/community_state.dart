@@ -18,6 +18,7 @@ abstract class CommunityState with _$CommunityState implements BaseState {
     @Default(false) bool processing,
     AppFailure? failure,
     @Default(<CommunityStory>[]) List<CommunityStory> stories,
+    @Default(<String>{}) Set<String> followedUserIds,
     @Default(<CommunityPost>[]) List<CommunityPost> posts,
     @Default(1) int page,
     @Default(IMovieRefreshConfig.communityPageSize) int pageSize,

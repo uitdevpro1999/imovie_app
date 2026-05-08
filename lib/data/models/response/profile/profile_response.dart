@@ -7,6 +7,7 @@ class ProfileResponse {
     required this.fullName,
     required this.phone,
     required this.avatarUrl,
+    required this.coverUrl,
   });
 
   factory ProfileResponse.fromJson(Map<String, dynamic> json) {
@@ -16,6 +17,7 @@ class ProfileResponse {
       fullName: json['full_name']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       avatarUrl: json['avatar_url']?.toString() ?? '',
+      coverUrl: json['cover_url']?.toString() ?? '',
     );
   }
 
@@ -24,6 +26,7 @@ class ProfileResponse {
   final String fullName;
   final String phone;
   final String avatarUrl;
+  final String coverUrl;
 
   AppProfile toEntity() {
     return AppProfile(
@@ -32,6 +35,7 @@ class ProfileResponse {
       fullName: fullName,
       phone: phone,
       avatarUrl: avatarUrl,
+      coverUrl: coverUrl,
     );
   }
 }
