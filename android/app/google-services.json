@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "175042412431",
+    "project_id": "imovie-app-adc42",
+    "storage_bucket": "imovie-app-adc42.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175042412431:android:3365a03e6562ff57b155fa",
+        "android_client_info": {
+          "package_name": "com.shinjitsu.imovie_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcIIIVLIp2sLWVFaOKa1xkMjFc4aFRc7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
