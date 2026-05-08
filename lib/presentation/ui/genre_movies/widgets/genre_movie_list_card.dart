@@ -14,68 +14,74 @@ class GenreMovieListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final movie = item.movie;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      onTap: onTap,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: AppColors.grayscale900,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.grayscale800),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Poster(movie: movie, ratingLabel: item.ratingLabel),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movie.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.body1Regular.copyWith(
-                        color: AppColors.white,
-                      ),
-                    ),
-                    if (movie.originalTitle.trim().isNotEmpty) ...[
-                      const SizedBox(height: 4),
+    final borderRadius = BorderRadius.circular(18);
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: borderRadius,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: AppColors.grayscale900,
+            borderRadius: borderRadius,
+            border: Border.all(color: AppColors.grayscale800),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _Poster(movie: movie, ratingLabel: item.ratingLabel),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        movie.originalTitle,
+                        movie.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.body1Regular.copyWith(
+                          color: AppColors.white,
+                        ),
+                      ),
+                      if (movie.originalTitle.trim().isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          movie.originalTitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.body2Regular.copyWith(
+                            color: AppColors.grayscale400,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 8),
+                      Text(
+                        '${movie.yearLabel} • ${item.subtitle}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTypography.body2Regular.copyWith(
-                          color: AppColors.grayscale400,
+                          color: AppColors.grayscale300,
                         ),
                       ),
+                      if (item.tags.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            for (final tag in item.tags) _GenreTag(label: tag),
+                          ],
+                        ),
+                      ],
                     ],
-                    const SizedBox(height: 8),
-                    Text(
-                      '${movie.yearLabel} • ${item.subtitle}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.body2Regular.copyWith(
-                        color: AppColors.grayscale300,
-                      ),
-                    ),
-                    if (item.tags.isNotEmpty) ...[
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          for (final tag in item.tags) _GenreTag(label: tag),
-                        ],
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
