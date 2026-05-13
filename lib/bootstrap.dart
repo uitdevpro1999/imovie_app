@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:imovie_app/config/flavors/app_bootstrap.dart';
 import 'package:imovie_app/config/flavors/app_environment.dart';
@@ -12,6 +13,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   final environment = AppEnvironment.fromDefines();
   AppFailure? initializationFailure;

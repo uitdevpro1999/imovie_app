@@ -159,7 +159,9 @@ class _CommunityStoryViewerDialogState extends State<CommunityStoryViewerDialog>
 
   void _deleteCurrentStory() {
     final story = _story;
-    Navigator.of(context).pop();
+    if (widget.fullscreenModal) {
+      Navigator.of(context).pop();
+    }
     widget.onDeleteTap?.call(story);
   }
 
@@ -445,6 +447,23 @@ class _StoryViewerFrame extends StatelessWidget {
                 ),
               ),
             ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: onPreviousTap,
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: onNextTap,
+                  ),
+                ),
+              ],
+            ),
+            _StoryOverlayLayer(story: story),
             Padding(
               padding: EdgeInsets.fromLTRB(
                 14,
@@ -470,28 +489,182 @@ class _StoryViewerFrame extends StatelessWidget {
                     onAuthorTap: onAuthorTap,
                   ),
                   const Spacer(),
-                  _StoryCaptionBlock(story: story),
                 ],
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: onPreviousTap,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StoryOverlayLayer extends StatelessWidget {
+  const _StoryOverlayLayer({required this.story});
+
+  final CommunityStory story;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = Size(constraints.maxWidth, constraints.maxHeight);
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            if (story.caption.trim().isNotEmpty)
+              _StoryPositionedOverlay(
+                canvasSize: size,
+                position: Offset(story.textPositionX, story.textPositionY),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width - 28),
+                  child: _StoryTextOverlay(text: story.caption.trim()),
+                ),
+              ),
+            if (story.movieTitle.trim().isNotEmpty)
+              _StoryPositionedOverlay(
+                canvasSize: size,
+                position: Offset(story.moviePositionX, story.moviePositionY),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width - 28),
+                  child: _StoryMovieChip(
+                    title: story.movieTitle,
+                    posterUrl: story.moviePosterUrl,
                   ),
                 ),
-                Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: onNextTap,
+              ),
+            if (story.locationName.trim().isNotEmpty)
+              _StoryPositionedOverlay(
+                canvasSize: size,
+                position: Offset(
+                  story.locationPositionX,
+                  story.locationPositionY,
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width - 28),
+                  child: _StoryMetaPill(
+                    icon: FluentIcons.location_24_regular,
+                    label: LocationAddress.shortestLabel(story.locationName),
+                    tooltip: story.locationName,
                   ),
                 ),
-              ],
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _StoryPositionedOverlay extends StatelessWidget {
+  const _StoryPositionedOverlay({
+    required this.canvasSize,
+    required this.position,
+    required this.child,
+  });
+
+  final Size canvasSize;
+  final Offset position;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final clampedPosition = Offset(
+      position.dx.clamp(0.06, 0.94).toDouble(),
+      position.dy.clamp(0.06, 0.94).toDouble(),
+    );
+
+    return Positioned(
+      left: clampedPosition.dx * canvasSize.width,
+      top: clampedPosition.dy * canvasSize.height,
+      child: FractionalTranslation(
+        translation: const Offset(-0.5, -0.5),
+        child: IgnorePointer(child: child),
+      ),
+    );
+  }
+}
+
+class _StoryTextOverlay extends StatelessWidget {
+  const _StoryTextOverlay({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.sizeOf(context).width * 0.7,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.black.withValues(alpha: 0.22),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.white.withValues(alpha: 0.12)),
+      ),
+      child: Text(
+        text,
+        maxLines: 5,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        style: AppTypography.h2.copyWith(
+          color: AppColors.white,
+          shadows: [
+            Shadow(
+              color: AppColors.black.withValues(alpha: 0.55),
+              blurRadius: 12,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StoryMovieChip extends StatelessWidget {
+  const _StoryMovieChip({required this.title, required this.posterUrl});
+
+  final String title;
+  final String posterUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppColors.black.withValues(alpha: 0.62),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.white.withValues(alpha: 0.12)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (posterUrl.trim().isNotEmpty)
+            IMovieRemoteImage(
+              imageUrl: posterUrl,
+              width: 28,
+              height: 40,
+              borderRadius: BorderRadius.circular(7),
+              placeholderLabel: title,
+            )
+          else
+            const Icon(
+              FluentIcons.movies_and_tv_24_regular,
+              color: AppColors.yellow500,
+              size: 18,
+            ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.captionMedium.copyWith(
+                color: AppColors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -641,65 +814,6 @@ class _StoryTopActionButton extends StatelessWidget {
           height: 38,
           child: Icon(icon, color: iconColor, size: 20),
         ),
-      ),
-    );
-  }
-}
-
-class _StoryCaptionBlock extends StatelessWidget {
-  const _StoryCaptionBlock({required this.story});
-
-  final CommunityStory story;
-
-  @override
-  Widget build(BuildContext context) {
-    final hasCaption = story.caption.trim().isNotEmpty;
-    final hasMovie = story.movieTitle.trim().isNotEmpty;
-    final hasLocation = story.locationName.trim().isNotEmpty;
-    if (!hasCaption && !hasMovie && !hasLocation) {
-      return const SizedBox.shrink();
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.34),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.white.withValues(alpha: 0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (hasCaption)
-            Text(
-              story.caption,
-              style: AppTypography.body1Regular.copyWith(
-                color: AppColors.white,
-                height: 1.35,
-              ),
-            ),
-          if (hasMovie || hasLocation) ...[
-            if (hasCaption) const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                if (hasMovie)
-                  _StoryMetaPill(
-                    icon: FluentIcons.video_24_regular,
-                    label: story.movieTitle,
-                  ),
-                if (hasLocation)
-                  _StoryMetaPill(
-                    icon: FluentIcons.location_24_regular,
-                    label: LocationAddress.shortestLabel(story.locationName),
-                    tooltip: story.locationName,
-                  ),
-              ],
-            ),
-          ],
-        ],
       ),
     );
   }

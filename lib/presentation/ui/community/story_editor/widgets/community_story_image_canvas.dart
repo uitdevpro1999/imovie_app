@@ -106,6 +106,7 @@ class CommunityStoryImageCanvas extends StatelessWidget {
                         ),
                         if (storyText.trim().isNotEmpty)
                           _DraggableStoryOverlay(
+                            key: const ValueKey('story-text-overlay'),
                             canvasSize: canvasSize,
                             position: textPosition,
                             onPositionChanged: onTextPositionChanged,
@@ -113,6 +114,7 @@ class CommunityStoryImageCanvas extends StatelessWidget {
                           ),
                         if (movieTitle.trim().isNotEmpty)
                           _DraggableStoryOverlay(
+                            key: const ValueKey('story-movie-overlay'),
                             canvasSize: canvasSize,
                             position: moviePosition,
                             onPositionChanged: onMoviePositionChanged,
@@ -128,6 +130,7 @@ class CommunityStoryImageCanvas extends StatelessWidget {
                           ),
                         if (locationName.trim().isNotEmpty)
                           _DraggableStoryOverlay(
+                            key: const ValueKey('story-location-overlay'),
                             canvasSize: canvasSize,
                             position: locationPosition,
                             onPositionChanged: onLocationPositionChanged,
@@ -177,6 +180,7 @@ class CommunityStoryImageCanvas extends StatelessWidget {
 
 class _DraggableStoryOverlay extends StatefulWidget {
   const _DraggableStoryOverlay({
+    super.key,
     required this.canvasSize,
     required this.position,
     required this.onPositionChanged,

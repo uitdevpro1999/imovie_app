@@ -133,15 +133,6 @@ class NotificationsCard extends StatelessWidget {
                               color: AppColors.grayscale400,
                             ),
                           ),
-                          const Spacer(),
-                          if (notification.imageUrl.trim().isNotEmpty)
-                            IMovieRemoteImage(
-                              imageUrl: notification.imageUrl,
-                              width: 42,
-                              height: 56,
-                              borderRadius: BorderRadius.circular(10),
-                              placeholderLabel: notification.title,
-                            ),
                         ],
                       ),
                     ],
@@ -224,6 +215,26 @@ class _NotificationStyle {
       CommunityNotificationType.newFollower => const _NotificationStyle(
         icon: FluentIcons.person_add_24_filled,
         color: Color(0xFFA78BFA),
+      ),
+      CommunityNotificationType.chatMessage => const _NotificationStyle(
+        icon: FluentIcons.chat_24_filled,
+        color: Color(0xFF38BDF8),
+      ),
+      CommunityNotificationType.incomingCall => const _NotificationStyle(
+        icon: FluentIcons.call_24_filled,
+        color: AppColors.green400,
+      ),
+      CommunityNotificationType.callDeclined => const _NotificationStyle(
+        icon: FluentIcons.call_end_24_filled,
+        color: AppColors.red400,
+      ),
+      CommunityNotificationType.callEnded => const _NotificationStyle(
+        icon: FluentIcons.call_end_24_filled,
+        color: AppColors.red400,
+      ),
+      CommunityNotificationType.missedCall => const _NotificationStyle(
+        icon: FluentIcons.call_end_24_filled,
+        color: AppColors.red400,
       ),
     };
   }

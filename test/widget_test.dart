@@ -145,7 +145,8 @@ void main() {
     await tester.pumpWidget(const App());
     await tester.pumpAndSettle();
 
-    expect(find.text(l10n.homeBadgeAdFree), findsOneWidget);
+    expect(find.byIcon(FluentIcons.chat_24_regular), findsOneWidget);
+    expect(find.byIcon(FluentIcons.alert_24_regular), findsOneWidget);
     expect(find.text(l10n.homeSectionFreshUpdates), findsAtLeastNWidgets(1));
     expect(find.byType(PageView), findsOneWidget);
     await tester.scrollUntilVisible(

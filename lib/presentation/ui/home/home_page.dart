@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imovie_app/config/navigation/app_router.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
@@ -19,6 +18,7 @@ import 'package:imovie_app/presentation/ui/home/home_state.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_featured_updates_section.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_hero_banner.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_hero_slider.dart';
+import 'package:imovie_app/presentation/ui/home/widgets/home_chat_button.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_movie_strip_section.dart';
 import 'package:imovie_app/presentation/ui/home/widgets/home_notification_button.dart';
 import 'package:imovie_app/presentation/widgets/imovie_app_bar.dart';
@@ -41,7 +41,6 @@ class HomePage extends BasePage<HomeCubit, HomeState>
 
   @override
   Widget wrapPage(BuildContext context, HomeState state, Widget child) {
-    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.grayscale950,
       appBar: IMovieAppBar(
@@ -78,37 +77,8 @@ class HomePage extends BasePage<HomeCubit, HomeState>
           ),
         ),
         actions: [
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.yellow500,
-                borderRadius: BorderRadius.circular(999),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.yellow500.withValues(alpha: 0.18),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    FluentIcons.prohibited_24_regular,
-                    size: 14,
-                    color: AppColors.textPrimary,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    l10n.homeBadgeAdFree,
-                    style: AppTypography.captionMedium,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
+          const HomeChatButton(),
+          const SizedBox(width: 8),
           const HomeNotificationButton(),
           const SizedBox(width: 8),
         ],

@@ -3,12 +3,16 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:imovie_app/domain/entities/home/home_genre.dart';
 import 'package:imovie_app/domain/entities/home/home_movie.dart';
+import 'package:imovie_app/domain/entities/call/call_session.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
 import 'package:imovie_app/domain/entities/movie_detail/movie_detail.dart';
 import 'package:imovie_app/presentation/ui/auth/forgot_password/forgot_password_page.dart';
 import 'package:imovie_app/presentation/ui/auth/sign_in/sign_in_page.dart';
 import 'package:imovie_app/presentation/ui/auth/sign_up/sign_up_page.dart';
 import 'package:imovie_app/presentation/ui/browse/browse_page.dart';
+import 'package:imovie_app/presentation/ui/call/active/active_call_page.dart';
+import 'package:imovie_app/presentation/ui/chat/list/chat_list_page.dart';
+import 'package:imovie_app/presentation/ui/chat/thread/chat_thread_page.dart';
 import 'package:imovie_app/presentation/ui/community/compose/community_compose_page.dart';
 import 'package:imovie_app/presentation/ui/community/feed/community_mine_page.dart';
 import 'package:imovie_app/presentation/ui/community/feed/community_page.dart';
@@ -78,7 +82,10 @@ class AppRouter extends RootStackRouter {
       page: CommunityProfileRoute.page,
     ),
     AutoRoute(path: '/community/compose', page: CommunityComposeRoute.page),
-    AutoRoute(path: '/community/post/:postId', page: CommunityPostDetailRoute.page),
+    AutoRoute(
+      path: '/community/post/:postId',
+      page: CommunityPostDetailRoute.page,
+    ),
     AutoRoute(
       path: '/community/story-editor',
       page: CommunityStoryEditorRoute.page,
@@ -88,6 +95,9 @@ class AppRouter extends RootStackRouter {
       page: CommunityStoryViewerRoute.page,
     ),
     AutoRoute(path: '/notifications', page: NotificationsRoute.page),
+    AutoRoute(path: '/chat', page: ChatListRoute.page),
+    AutoRoute(path: '/chat/:conversationId', page: ChatThreadRoute.page),
+    AutoRoute(path: '/call/active', page: ActiveCallRoute.page),
     AutoRoute(path: '/sign-in', page: SignInRoute.page),
     AutoRoute(path: '/sign-up', page: SignUpRoute.page),
     AutoRoute(path: '/forgot-password', page: ForgotPasswordRoute.page),

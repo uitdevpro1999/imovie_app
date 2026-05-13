@@ -42,6 +42,7 @@ class CommunityProfileView extends StatelessWidget {
     required this.onRefresh,
     required this.onLoadMore,
     required this.onFollowTap,
+    required this.onChatTap,
     required this.onDeleteStoryTap,
     required this.onCreateStoryTap,
     required this.onCreateTap,
@@ -80,6 +81,7 @@ class CommunityProfileView extends StatelessWidget {
   final Future<bool> Function() onRefresh;
   final Future<IMovieLoadMoreResult> Function() onLoadMore;
   final VoidCallback onFollowTap;
+  final VoidCallback onChatTap;
   final ValueChanged<CommunityStory> onDeleteStoryTap;
   final VoidCallback onCreateStoryTap;
   final FutureOr<void> Function() onCreateTap;
@@ -103,6 +105,7 @@ class CommunityProfileView extends StatelessWidget {
         storiesLabel: storiesLabel,
         followProcessing: followProcessing,
         onFollowTap: onFollowTap,
+        onChatTap: onChatTap,
       ),
       if (profile.isMe)
         CommunityInlineComposer(

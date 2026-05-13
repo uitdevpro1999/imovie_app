@@ -27,8 +27,12 @@ class LibraryMovieCard extends StatelessWidget {
       if (movie.quality.trim().isNotEmpty) movie.quality,
       if (movie.language.trim().isNotEmpty) movie.language,
     ].join(' • ');
-    final subtitle = movie.originalTitle.trim().isEmpty ? meta : movie.originalTitle;
-    final genres = movie.genres.take(2).where((genre) => genre.trim().isNotEmpty);
+    final subtitle = movie.originalTitle.trim().isEmpty
+        ? meta
+        : movie.originalTitle;
+    final genres = movie.genres
+        .take(2)
+        .where((genre) => genre.trim().isNotEmpty);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
@@ -40,7 +44,9 @@ class LibraryMovieCard extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: IMovieRemoteImage(
-                  imageUrl: movie.backdropUrl.isEmpty ? movie.posterUrl : movie.backdropUrl,
+                  imageUrl: movie.backdropUrl.isEmpty
+                      ? movie.posterUrl
+                      : movie.backdropUrl,
                   fit: BoxFit.cover,
                   placeholderLabel: movie.title,
                 ),
@@ -107,7 +113,9 @@ class LibraryMovieCard extends StatelessWidget {
                                 subtitle,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: AppTypography.captionRegular1.copyWith(color: AppColors.grayscale300),
+                                style: AppTypography.captionRegular1.copyWith(
+                                  color: AppColors.grayscale300,
+                                ),
                               ),
                             const SizedBox(height: 8),
                             Wrap(
@@ -120,13 +128,18 @@ class LibraryMovieCard extends StatelessWidget {
                                     icon: FluentIcons.star_24_filled,
                                     highlighted: true,
                                   ),
-                                if (movie.yearLabel.isNotEmpty) _LibraryInfoPill(movie.yearLabel),
-                                if (movie.quality.trim().isNotEmpty) _LibraryInfoPill(movie.quality),
-                                if (movie.language.trim().isNotEmpty) _LibraryInfoPill(movie.language),
-                                ...genres.take(2).map((genre) => _LibraryInfoPill(genre)),
+                                if (movie.yearLabel.isNotEmpty)
+                                  _LibraryInfoPill(movie.yearLabel),
+                                if (movie.quality.trim().isNotEmpty)
+                                  _LibraryInfoPill(movie.quality),
+                                if (movie.language.trim().isNotEmpty)
+                                  _LibraryInfoPill(movie.language),
+                                ...genres
+                                    .take(2)
+                                    .map((genre) => _LibraryInfoPill(genre)),
                               ],
                             ),
-                            SizedBox(height: 2,),
+                            SizedBox(height: 2),
                             const Spacer(),
                             Row(
                               children: [
@@ -145,9 +158,10 @@ class LibraryMovieCard extends StatelessWidget {
                                             savedDateText,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: AppTypography.captionRegular2.copyWith(
-                                              color: AppColors.grayscale300,
-                                            ),
+                                            style: AppTypography.captionRegular2
+                                                .copyWith(
+                                                  color: AppColors.grayscale300,
+                                                ),
                                           ),
                                         ),
                                       ],
@@ -162,7 +176,10 @@ class LibraryMovieCard extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.right,
-                                    style: AppTypography.captionRegular2.copyWith(color: AppColors.grayscale400),
+                                    style: AppTypography.captionRegular2
+                                        .copyWith(
+                                          color: AppColors.grayscale400,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -198,7 +215,9 @@ class _LibraryInfoPill extends StatelessWidget {
         color: AppColors.black.withValues(alpha: 0.28),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
-          color: highlighted ? AppColors.yellow500.withValues(alpha: 0.32) : AppColors.white.withValues(alpha: 0.08),
+          color: highlighted
+              ? AppColors.yellow500.withValues(alpha: 0.32)
+              : AppColors.white.withValues(alpha: 0.08),
         ),
       ),
       child: Padding(
@@ -206,7 +225,10 @@ class _LibraryInfoPill extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (icon != null) ...[Icon(icon, size: 13, color: foreground), const SizedBox(width: 3)],
+            if (icon != null) ...[
+              Icon(icon, size: 13, color: foreground),
+              const SizedBox(width: 3),
+            ],
             Text(
               label,
               maxLines: 1,

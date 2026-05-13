@@ -34,9 +34,15 @@ class App extends StatelessWidget {
         listenWhen: (previous, current) =>
             previous.authStatus != current.authStatus,
         listener: (context, state) {
+          if (appRouter.current.name == ActiveCallRoute.name) {
+            return;
+          }
+
           switch (state.authStatus) {
             case AppAuthStatus.authenticated:
-              appRouter.replaceAll([const MainRoute()]);
+              if (_shouldRedirectAuthenticatedRoute(appRouter.current.name)) {
+                appRouter.replaceAll([const MainRoute()]);
+              }
             case AppAuthStatus.unauthenticated:
               appRouter.replaceAll([SignInRoute()]);
             case AppAuthStatus.initial:
@@ -92,4 +98,11 @@ class App extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _shouldRedirectAuthenticatedRoute(String routeName) {
+  return routeName == AppSplashRoute.name ||
+      routeName == SignInRoute.name ||
+      routeName == SignUpRoute.name ||
+      routeName == ForgotPasswordRoute.name;
 }

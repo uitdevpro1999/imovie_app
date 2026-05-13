@@ -4,9 +4,14 @@ enum CommunityNotificationType {
   postComment,
   postReaction,
   newFollower,
+  chatMessage,
+  incomingCall,
+  callDeclined,
+  callEnded,
+  missedCall,
 }
 
-enum CommunityNotificationEntityType { post, story, profile }
+enum CommunityNotificationEntityType { post, story, profile, chat, call }
 
 class CommunityNotification {
   const CommunityNotification({

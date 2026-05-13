@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:imovie_app/core/error/app_exception.dart';
@@ -98,6 +99,11 @@ abstract interface class SupabaseDataService {
   Future<void> rpc({
     required String function,
     Map<String, dynamic> params = const {},
+  });
+
+  Future<Map<String, dynamic>> invokeFunction({
+    required String function,
+    Map<String, dynamic> body = const {},
   });
 
   Stream<void> watchTableChanges({
@@ -294,6 +300,73 @@ class ConfiguredSupabaseDataService implements SupabaseDataService {
     Map<String, dynamic> params = const {},
   }) async {
     await client.rpc(function, params: params);
+  }
+
+  @override
+  Future<Map<String, dynamic>> invokeFunction({
+    required String function,
+    Map<String, dynamic> body = const {},
+  }) async {
+    try {
+      AppLogger.info(
+        'Invoke function=$function action=${body['action'] ?? '<none>'}',
+        name: 'Supabase.Function',
+      );
+      final response = await client.functions.invoke(function, body: body);
+      AppLogger.info(
+        'Function success function=$function status=${response.status}',
+        name: 'Supabase.Function',
+      );
+      return _asRow(response.data);
+    } on FunctionException catch (error) {
+      final fallbackFunction = _fallbackFunctionName(function);
+      if (fallbackFunction != null && _isFunctionNotFound(error)) {
+        AppLogger.warning(
+          'Function not found function=$function; retrying fallback=$fallbackFunction',
+          name: 'Supabase.Function',
+          error: error,
+        );
+        final response = await client.functions.invoke(
+          fallbackFunction,
+          body: body,
+        );
+        AppLogger.info(
+          'Function success function=$fallbackFunction status=${response.status}',
+          name: 'Supabase.Function',
+        );
+        return _asRow(response.data);
+      }
+      final message = _functionErrorMessage(error);
+      AppLogger.error(
+        'Function failed function=$function status=${error.status} '
+        'reason=${error.reasonPhrase} message=$message',
+        name: 'Supabase.Function',
+        error: error,
+      );
+      throw AppException(
+        AppFailure.server(
+          message.isEmpty ? 'Supabase function request failed.' : message,
+          details: error.toString(),
+        ),
+      );
+    }
+  }
+
+  String? _fallbackFunctionName(String function) {
+    return switch (function.trim()) {
+      'call-chat' => 'chat-call',
+      'chat-call' => 'call-chat',
+      _ => null,
+    };
+  }
+
+  bool _isFunctionNotFound(FunctionException error) {
+    final details = error.details?.toString().toLowerCase() ?? '';
+    final reason = error.reasonPhrase?.toLowerCase() ?? '';
+    return error.status == 404 ||
+        details.contains('not_found') ||
+        details.contains('function was not found') ||
+        reason.contains('not found');
   }
 
   @override
@@ -524,6 +597,24 @@ class ConfiguredSupabaseDataService implements SupabaseDataService {
     );
   }
 
+  String _functionErrorMessage(FunctionException error) {
+    final details = error.details;
+    if (details is Map) {
+      final value = details['error'] ?? details['message'];
+      if (value != null) {
+        if (value is Map || value is Iterable) {
+          return jsonEncode(value);
+        }
+        return value.toString();
+      }
+      return jsonEncode(details);
+    }
+    if (details is String) {
+      return details;
+    }
+    return error.reasonPhrase ?? '';
+  }
+
   SupabaseTableChange? _extractBroadcastChangePayload(
     Map<String, dynamic> payload, {
     required String fallbackEvent,
@@ -713,6 +804,14 @@ class UnconfiguredSupabaseDataService implements SupabaseDataService {
   Future<void> rpc({
     required String function,
     Map<String, dynamic> params = const {},
+  }) async {
+    throw const AppException(_configurationFailure);
+  }
+
+  @override
+  Future<Map<String, dynamic>> invokeFunction({
+    required String function,
+    Map<String, dynamic> body = const {},
   }) async {
     throw const AppException(_configurationFailure);
   }

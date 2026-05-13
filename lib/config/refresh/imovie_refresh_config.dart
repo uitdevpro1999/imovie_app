@@ -9,10 +9,15 @@ abstract final class IMovieRefreshConfig {
   static const bool enablePullDown = true;
   static const double footerSpinnerSize = 22;
   static const double footerSpinnerStrokeWidth = 2;
+  static const double dragSpeedRatio = 0.9;
+  static const double headerTriggerDistance = 76;
+  static const Duration minRefreshIndicatorDuration = Duration(
+    milliseconds: 420,
+  );
   static const springDescription = SpringDescription(
-    mass: 1,
-    stiffness: 364.73,
-    damping: 35.2,
+    mass: 1.9,
+    stiffness: 170,
+    damping: 16,
   );
 
   static const String loadingText = '';

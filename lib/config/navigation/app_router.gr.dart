@@ -27,6 +27,55 @@ class AboutRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ActiveCallPage]
+class ActiveCallRoute extends PageRouteInfo<ActiveCallRouteArgs> {
+  ActiveCallRoute({
+    Key? key,
+    required CallSession call,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ActiveCallRoute.name,
+         args: ActiveCallRouteArgs(key: key, call: call),
+         initialChildren: children,
+       );
+
+  static const String name = 'ActiveCallRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ActiveCallRouteArgs>();
+      return WrappedRoute(
+        child: ActiveCallPage(key: args.key, call: args.call),
+      );
+    },
+  );
+}
+
+class ActiveCallRouteArgs {
+  const ActiveCallRouteArgs({this.key, required this.call});
+
+  final Key? key;
+
+  final CallSession call;
+
+  @override
+  String toString() {
+    return 'ActiveCallRouteArgs{key: $key, call: $call}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ActiveCallRouteArgs) return false;
+    return key == other.key && call == other.call;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ call.hashCode;
+}
+
+/// generated route for
 /// [AppSplashPage]
 class AppSplashRoute extends PageRouteInfo<void> {
   const AppSplashRoute({List<PageRouteInfo>? children})
@@ -128,6 +177,99 @@ class ChangePasswordRouteArgs {
 
   @override
   int get hashCode => key.hashCode;
+}
+
+/// generated route for
+/// [ChatListPage]
+class ChatListRoute extends PageRouteInfo<void> {
+  const ChatListRoute({List<PageRouteInfo>? children})
+    : super(ChatListRoute.name, initialChildren: children);
+
+  static const String name = 'ChatListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return WrappedRoute(child: const ChatListPage());
+    },
+  );
+}
+
+/// generated route for
+/// [ChatThreadPage]
+class ChatThreadRoute extends PageRouteInfo<ChatThreadRouteArgs> {
+  ChatThreadRoute({
+    Key? key,
+    required String conversationId,
+    required String title,
+    String avatarUrl = '',
+    List<PageRouteInfo>? children,
+  }) : super(
+         ChatThreadRoute.name,
+         args: ChatThreadRouteArgs(
+           key: key,
+           conversationId: conversationId,
+           title: title,
+           avatarUrl: avatarUrl,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ChatThreadRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChatThreadRouteArgs>();
+      return WrappedRoute(
+        child: ChatThreadPage(
+          key: args.key,
+          conversationId: args.conversationId,
+          title: args.title,
+          avatarUrl: args.avatarUrl,
+        ),
+      );
+    },
+  );
+}
+
+class ChatThreadRouteArgs {
+  const ChatThreadRouteArgs({
+    this.key,
+    required this.conversationId,
+    required this.title,
+    this.avatarUrl = '',
+  });
+
+  final Key? key;
+
+  final String conversationId;
+
+  final String title;
+
+  final String avatarUrl;
+
+  @override
+  String toString() {
+    return 'ChatThreadRouteArgs{key: $key, conversationId: $conversationId, title: $title, avatarUrl: $avatarUrl}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatThreadRouteArgs) return false;
+    return key == other.key &&
+        conversationId == other.conversationId &&
+        title == other.title &&
+        avatarUrl == other.avatarUrl;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      conversationId.hashCode ^
+      title.hashCode ^
+      avatarUrl.hashCode;
 }
 
 /// generated route for

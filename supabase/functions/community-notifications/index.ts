@@ -583,7 +583,10 @@ async function sendFcmMessage(
           android: {
             priority: "high",
             notification: {
-              channelId: "community_updates",
+              channelId: "community_updates_v2",
+              icon: "ic_stat_notification",
+              color: "#F8C84B",
+              defaultSound: true,
               image: row.image_url || undefined,
             },
           },

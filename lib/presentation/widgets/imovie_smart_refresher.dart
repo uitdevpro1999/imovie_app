@@ -39,6 +39,8 @@ class IMovieSmartRefresher extends StatefulWidget {
 
 class _IMovieSmartRefresherState extends State<IMovieSmartRefresher> {
   late final RefreshController _refreshController;
+  bool _refreshing = false;
+  bool _loadingMore = false;
 
   @override
   void initState() {
@@ -56,6 +58,9 @@ class _IMovieSmartRefresherState extends State<IMovieSmartRefresher> {
   Widget build(BuildContext context) {
     return RefreshConfiguration(
       springDescription: IMovieRefreshConfig.springDescription,
+      dragSpeedRatio: IMovieRefreshConfig.dragSpeedRatio,
+      headerTriggerDistance: IMovieRefreshConfig.headerTriggerDistance,
+      enableScrollWhenRefreshCompleted: true,
       child: SmartRefresher(
         controller: _refreshController,
         enablePullDown: IMovieRefreshConfig.enablePullDown,
@@ -70,9 +75,26 @@ class _IMovieSmartRefresherState extends State<IMovieSmartRefresher> {
   }
 
   Future<void> _handleRefresh() async {
+    if (_refreshing) {
+      return;
+    }
+
+    _refreshing = true;
+    final startedAt = DateTime.now();
     final completed = await widget.onRefresh();
     if (!mounted) {
+      _refreshing = false;
       return;
+    }
+
+    final elapsed = DateTime.now().difference(startedAt);
+    final remaining = IMovieRefreshConfig.minRefreshIndicatorDuration - elapsed;
+    if (remaining > Duration.zero) {
+      await Future<void>.delayed(remaining);
+      if (!mounted) {
+        _refreshing = false;
+        return;
+      }
     }
 
     if (completed) {
@@ -80,21 +102,29 @@ class _IMovieSmartRefresherState extends State<IMovieSmartRefresher> {
     } else {
       _refreshController.refreshFailed();
     }
+    _refreshing = false;
   }
 
   Future<void> _handleLoadMore() async {
+    if (_loadingMore) {
+      return;
+    }
+
     if (!widget.hasMore || widget.onLoadMore == null) {
       _refreshController.loadNoData();
       return;
     }
 
+    _loadingMore = true;
     final result = await widget.onLoadMore!();
     if (!mounted) {
+      _loadingMore = false;
       return;
     }
 
     if (!result.success) {
       _refreshController.loadFailed();
+      _loadingMore = false;
       return;
     }
 
@@ -103,5 +133,6 @@ class _IMovieSmartRefresherState extends State<IMovieSmartRefresher> {
     } else {
       _refreshController.loadNoData();
     }
+    _loadingMore = false;
   }
 }

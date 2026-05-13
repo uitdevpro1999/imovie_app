@@ -52,7 +52,17 @@ class CommunityStoryViewerPage
       stories: state.stories,
       initialIndex: state.initialIndex,
       deleteLabel: AppLocalizations.of(context)!.communityDeleteAction,
-      onDeleteTap: (_) {},
+      onDeleteTap: (story) async {
+        final deleted = await cubit.deleteStory(
+          story: story,
+          successMessage: AppLocalizations.of(
+            context,
+          )!.communityDeleteStorySuccess,
+        );
+        if (deleted && context.mounted && cubit.state.stories.isEmpty) {
+          await context.router.maybePop();
+        }
+      },
       onAuthorTap: (userId) {
         final normalizedUserId = userId.trim();
         if (normalizedUserId.isEmpty) {

@@ -26,6 +26,17 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>iMovie uses your current location to attach an address to community posts.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>iMovie uses the camera for video calls.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>iMovie uses the microphone for voice and video calls.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>iMovie uses Bluetooth audio devices during calls.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/domain/entities/community/community_profile.dart';
@@ -17,6 +18,7 @@ class CommunityProfileHeader extends StatelessWidget {
     required this.storiesLabel,
     required this.followProcessing,
     required this.onFollowTap,
+    required this.onChatTap,
   });
 
   final CommunityProfile profile;
@@ -29,6 +31,7 @@ class CommunityProfileHeader extends StatelessWidget {
   final String storiesLabel;
   final bool followProcessing;
   final VoidCallback onFollowTap;
+  final VoidCallback onChatTap;
 
   @override
   Widget build(BuildContext context) {
@@ -145,11 +148,21 @@ class CommunityProfileHeader extends StatelessWidget {
                   ),
                   if (!profile.isMe) ...[
                     const SizedBox(height: 18),
-                    _FollowButton(
-                      label: profile.isFollowing ? followingLabel : followLabel,
-                      active: profile.isFollowing,
-                      processing: followProcessing,
-                      onTap: onFollowTap,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _ProfileActionButton(
+                            label: profile.isFollowing
+                                ? followingLabel
+                                : followLabel,
+                            active: profile.isFollowing,
+                            processing: followProcessing,
+                            onTap: onFollowTap,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        _ChatButton(onTap: onChatTap),
+                      ],
                     ),
                   ],
                 ],
@@ -247,8 +260,8 @@ class _ProfileMetric extends StatelessWidget {
   }
 }
 
-class _FollowButton extends StatelessWidget {
-  const _FollowButton({
+class _ProfileActionButton extends StatelessWidget {
+  const _ProfileActionButton({
     required this.label,
     required this.active,
     required this.processing,
@@ -289,6 +302,32 @@ class _FollowButton extends StatelessWidget {
                       color: active ? AppColors.white : AppColors.grayscale950,
                     ),
                   ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatButton extends StatelessWidget {
+  const _ChatButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.grayscale800,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: const SizedBox.square(
+          dimension: 46,
+          child: Icon(
+            FluentIcons.chat_24_regular,
+            color: AppColors.white,
+            size: 22,
           ),
         ),
       ),

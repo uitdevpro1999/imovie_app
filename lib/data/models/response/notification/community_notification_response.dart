@@ -82,6 +82,11 @@ CommunityNotificationType _typeFromRaw(String? raw) {
     'post_comment' => CommunityNotificationType.postComment,
     'post_reaction' => CommunityNotificationType.postReaction,
     'new_follower' => CommunityNotificationType.newFollower,
+    'chat_message' => CommunityNotificationType.chatMessage,
+    'incoming_call' => CommunityNotificationType.incomingCall,
+    'call_declined' => CommunityNotificationType.callDeclined,
+    'call_ended' => CommunityNotificationType.callEnded,
+    'missed_call' => CommunityNotificationType.missedCall,
     _ => CommunityNotificationType.newPost,
   };
 }
@@ -90,6 +95,8 @@ CommunityNotificationEntityType _entityTypeFromRaw(String? raw) {
   return switch ((raw ?? '').trim()) {
     'story' => CommunityNotificationEntityType.story,
     'profile' => CommunityNotificationEntityType.profile,
+    'chat' => CommunityNotificationEntityType.chat,
+    'call' => CommunityNotificationEntityType.call,
     _ => CommunityNotificationEntityType.post,
   };
 }

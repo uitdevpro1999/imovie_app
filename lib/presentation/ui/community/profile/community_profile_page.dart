@@ -130,6 +130,19 @@ class CommunityProfilePage
         followSuccessMessage: l10n.communityFollowSuccess,
         unfollowSuccessMessage: l10n.communityUnfollowSuccess,
       ),
+      onChatTap: () async {
+        final conversation = await cubit.openDirectConversation();
+        if (conversation == null || !context.mounted) {
+          return;
+        }
+        await context.router.push(
+          ChatThreadRoute(
+            conversationId: conversation.id,
+            title: conversation.title,
+            avatarUrl: conversation.avatarUrl,
+          ),
+        );
+      },
       onDeleteStoryTap: (story) => cubit.deleteStory(
         storyId: story.id,
         successMessage: l10n.communityDeleteStorySuccess,

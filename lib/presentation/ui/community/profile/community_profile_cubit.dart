@@ -9,6 +9,8 @@ import 'package:imovie_app/domain/entities/community/community_comment.dart';
 import 'package:imovie_app/domain/entities/community/community_post.dart';
 import 'package:imovie_app/domain/entities/community/community_profile.dart';
 import 'package:imovie_app/domain/entities/community/community_story.dart';
+import 'package:imovie_app/domain/entities/chat/chat_conversation.dart';
+import 'package:imovie_app/domain/usecases/chat/get_or_create_direct_conversation_use_case.dart';
 import 'package:imovie_app/domain/usecases/community/add_community_comment_use_case.dart';
 import 'package:imovie_app/domain/usecases/community/delete_community_post_use_case.dart';
 import 'package:imovie_app/domain/usecases/community/delete_community_story_use_case.dart';
@@ -27,6 +29,8 @@ class CommunityProfileCubit extends BaseCubit<CommunityProfileState> {
     required String userId,
     required String currentUserId,
     required GetCommunityProfileUseCase getCommunityProfileUseCase,
+    required GetOrCreateDirectConversationUseCase
+    getOrCreateDirectConversationUseCase,
     required FollowCommunityUserUseCase followCommunityUserUseCase,
     required UnfollowCommunityUserUseCase unfollowCommunityUserUseCase,
     required GetCommunityStoriesUseCase getCommunityStoriesUseCase,
@@ -38,6 +42,8 @@ class CommunityProfileCubit extends BaseCubit<CommunityProfileState> {
     required GetCommunityCommentsUseCase getCommunityCommentsUseCase,
     required AddCommunityCommentUseCase addCommunityCommentUseCase,
   }) : _getCommunityProfileUseCase = getCommunityProfileUseCase,
+       _getOrCreateDirectConversationUseCase =
+           getOrCreateDirectConversationUseCase,
        _followCommunityUserUseCase = followCommunityUserUseCase,
        _unfollowCommunityUserUseCase = unfollowCommunityUserUseCase,
        _getCommunityStoriesUseCase = getCommunityStoriesUseCase,
@@ -58,6 +64,8 @@ class CommunityProfileCubit extends BaseCubit<CommunityProfileState> {
   static const _initialPage = 1;
 
   final GetCommunityProfileUseCase _getCommunityProfileUseCase;
+  final GetOrCreateDirectConversationUseCase
+  _getOrCreateDirectConversationUseCase;
   final FollowCommunityUserUseCase _followCommunityUserUseCase;
   final UnfollowCommunityUserUseCase _unfollowCommunityUserUseCase;
   final GetCommunityStoriesUseCase _getCommunityStoriesUseCase;
@@ -187,6 +195,29 @@ class CommunityProfileCubit extends BaseCubit<CommunityProfileState> {
         );
         showFailureToast(failure);
         return false;
+      },
+    );
+  }
+
+  Future<ChatConversation?> openDirectConversation() async {
+    final profile = state.profile;
+    if (profile == null || profile.isMe) {
+      return null;
+    }
+
+    emit(state.copyWith(processing: true, failure: null));
+    final result = await _getOrCreateDirectConversationUseCase(
+      GetOrCreateDirectConversationParams(userId: profile.userId),
+    );
+    return result.map(
+      success: (conversation) {
+        emit(state.copyWith(processing: false, failure: null));
+        return conversation;
+      },
+      failure: (failure) {
+        emit(state.copyWith(processing: false, failure: failure));
+        showFailureToast(failure);
+        return null;
       },
     );
   }
