@@ -461,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @watchNoPlayableSource.
   ///
   /// In en, this message translates to:
-  /// **'No playable m3u8 source is available for the selected episode.'**
+  /// **'No playable source is available for the selected episode.'**
   String get watchNoPlayableSource;
 
   /// No description provided for @watchPlayerError.
@@ -481,6 +481,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No episode selected'**
   String get watchNoEpisodeSelected;
+
+  /// No description provided for @watchPlaybackSourceEmbed.
+  ///
+  /// In en, this message translates to:
+  /// **'Embed'**
+  String get watchPlaybackSourceEmbed;
+
+  /// No description provided for @watchPlaybackSourceM3u8.
+  ///
+  /// In en, this message translates to:
+  /// **'M3U8'**
+  String get watchPlaybackSourceM3u8;
+
+  /// No description provided for @watchSwitchToEmbed.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to Embed'**
+  String get watchSwitchToEmbed;
+
+  /// No description provided for @watchSwitchToM3u8.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to M3U8'**
+  String get watchSwitchToM3u8;
 
   /// No description provided for @watchEpisodeValue.
   ///

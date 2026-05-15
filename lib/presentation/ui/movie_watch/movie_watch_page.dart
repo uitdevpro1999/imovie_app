@@ -2,8 +2,10 @@ import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:imovie_app/config/styles/app_colors.dart';
 import 'package:imovie_app/config/styles/app_typography.dart';
 import 'package:imovie_app/core/di/service_locator.dart';

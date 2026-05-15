@@ -14,6 +14,8 @@ import 'package:imovie_app/data/repositories/home/home_repository_impl.dart';
 import 'package:imovie_app/data/repositories/movie_detail/movie_detail_repository_impl.dart';
 import 'package:imovie_app/domain/entities/library/library_movie.dart';
 import 'package:imovie_app/domain/entities/movie_detail/movie_detail.dart';
+import 'package:imovie_app/domain/entities/movie_detail/movie_stream_episode.dart';
+import 'package:imovie_app/domain/entities/movie_detail/movie_stream_server.dart';
 import 'package:imovie_app/domain/entities/session/app_session.dart';
 import 'package:imovie_app/domain/repositories/home_repository.dart';
 import 'package:imovie_app/domain/repositories/library_repository.dart';
@@ -412,6 +414,25 @@ void main() {
     expect(find.text(l10n.watchEpisodeSection), findsAtLeastNWidgets(1));
     expect(find.text('Vietsub #1'), findsOneWidget);
     expect(find.text('Backup #1'), findsOneWidget);
+  });
+
+  test('treats embed-only episodes as playable streams', () {
+    const server = MovieStreamServer(
+      name: 'Embed',
+      isAi: false,
+      episodes: [
+        MovieStreamEpisode(
+          name: '1',
+          slug: 'tap-1',
+          fileName: '',
+          embedUrl: 'https://example.com/embed/movie',
+          m3u8Url: '',
+        ),
+      ],
+    );
+
+    expect(server.hasPlayableEpisodes, isTrue);
+    expect(server.playableEpisodes, hasLength(1));
   });
 }
 

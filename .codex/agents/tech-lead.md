@@ -16,6 +16,7 @@ Make architecture, package, build, and integration decisions that unblock implem
 - `skills/architecture/unstructured_starter_bootstrap.md` for starter or unclear structure
 - `skills/architecture/rest_api_pattern.md`
 - `skills/architecture/graphql_pattern.md`
+- `skills/architecture/supabase_pattern.md`
 - `skills/architecture/bootstrap_flavors.md`
 - `skills/context/write_context.md`
 

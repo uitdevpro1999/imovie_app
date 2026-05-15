@@ -16,6 +16,7 @@ import 'package:imovie_app/l10n/app_localizations.dart';
 import 'package:imovie_app/presentation/common/pages/base_page.dart';
 import 'package:imovie_app/presentation/ui/chat/thread/chat_thread_cubit.dart';
 import 'package:imovie_app/presentation/ui/chat/thread/chat_thread_state.dart';
+import 'package:imovie_app/presentation/ui/chat/thread/widgets/chat_thread_message_list.dart';
 import 'package:imovie_app/presentation/widgets/imovie_remote_image.dart';
 
 @RoutePage()
@@ -134,9 +135,9 @@ class ChatThreadPage extends BasePage<ChatThreadCubit, ChatThreadState>
         Expanded(
           child: state.messages.isEmpty
               ? const _EmptyThreadView()
-              : ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 18),
-                  itemCount: state.messages.length,
+              : ChatThreadMessageList(
+                  messages: state.messages,
+                  currentUserId: currentUserId,
                   itemBuilder: (context, index) {
                     final message = state.messages[index];
                     return _MessageBubble(

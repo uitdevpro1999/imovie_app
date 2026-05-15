@@ -10,6 +10,7 @@ Create or recommend tests that target the highest-risk behavior introduced or ch
 - `skills/context/expert_operating_model.md`
 - `skills/analysis/analyze_code.md`
 - `skills/architecture/flutter_architecture_adaptation.md`
+- `skills/architecture/supabase_pattern.md` when Supabase-backed behavior is involved
 - `skills/quality/testing_strategy.md`
 - `skills/quality/validator.md`
 - `skills/implementation/app_validation_patterns.md` when validation is involved

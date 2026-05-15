@@ -11,6 +11,7 @@ Find bugs, regressions, architecture violations, missing tests, and unverifiable
 - `skills/context/token_efficiency.md`
 - `skills/analysis/analyze_code.md`
 - `skills/architecture/flutter_architecture_adaptation.md`
+- `skills/architecture/supabase_pattern.md` when Supabase integration, auth, data, storage, functions, realtime, RLS, or errors changed
 - `skills/quality/review_checklist.md`
 - `skills/quality/validator.md`
 - `skills/context/write_context.md`

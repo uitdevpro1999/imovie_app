@@ -15,6 +15,7 @@ Implement the smallest closed change that satisfies the accepted brief and prese
 - `skills/architecture/state_flow_patterns.md` when state, page flow, or form state changes
 - `skills/architecture/rest_api_pattern.md` for REST, OpenAPI, Swagger, Postman, cURL, Dio, or http work
 - `skills/architecture/graphql_pattern.md` for GraphQL documents, operations, schema, or clients
+- `skills/architecture/supabase_pattern.md` for Supabase setup, auth, data, storage, functions, realtime, RLS, or Supabase errors
 - `skills/architecture/routing_di_codegen.md` for routing, DI, generated files, or annotations
 - `skills/implementation/write_code.md`
 - `skills/implementation/app_validation_patterns.md` for form, field, or business validation

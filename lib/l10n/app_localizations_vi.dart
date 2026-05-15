@@ -199,7 +199,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get watchNoPlayableSource =>
-      'Không có nguồn m3u8 khả dụng cho tập đã chọn.';
+      'Không có nguồn phát khả dụng cho tập đã chọn.';
 
   @override
   String get watchPlayerError => 'Trình phát không thể khởi chạy luồng này.';
@@ -210,6 +210,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get watchNoEpisodeSelected => 'Chưa chọn tập';
+
+  @override
+  String get watchPlaybackSourceEmbed => 'Embed';
+
+  @override
+  String get watchPlaybackSourceM3u8 => 'M3U8';
+
+  @override
+  String get watchSwitchToEmbed => 'Đổi sang Embed';
+
+  @override
+  String get watchSwitchToM3u8 => 'Đổi sang M3U8';
 
   @override
   String watchEpisodeValue(Object episode) {

@@ -84,10 +84,14 @@
   "watchServerSection": "Servers",
   "watchEpisodeSection": "Episodes",
   "watchNoEpisodes": "This server does not have any episodes yet.",
-  "watchNoPlayableSource": "No playable m3u8 source is available for the selected episode.",
+  "watchNoPlayableSource": "No playable source is available for the selected episode.",
   "watchPlayerError": "The player could not start this stream.",
   "watchPlayerPreview": "Video preview is replaced with a test placeholder in widget tests.",
   "watchNoEpisodeSelected": "No episode selected",
+  "watchPlaybackSourceEmbed": "Embed",
+  "watchPlaybackSourceM3u8": "M3U8",
+  "watchSwitchToEmbed": "Switch to Embed",
+  "watchSwitchToM3u8": "Switch to M3U8",
   "watchEpisodeValue": "Episode {episode}",
   "@watchEpisodeValue": {
     "placeholders": {

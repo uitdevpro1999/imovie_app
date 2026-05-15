@@ -22,7 +22,10 @@ class _MovieWatchSuccessView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _MoviePlayerCard(streamUrl: state.selectedStreamUrl),
+          _MoviePlayerCard(
+            embedUrl: state.selectedEmbedUrl,
+            m3u8Url: state.selectedM3u8Url,
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
             child: Column(

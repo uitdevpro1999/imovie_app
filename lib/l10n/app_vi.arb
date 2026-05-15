@@ -91,10 +91,14 @@
   "watchServerSection": "Server",
   "watchEpisodeSection": "Tập",
   "watchNoEpisodes": "Server này chưa có danh sách tập.",
-  "watchNoPlayableSource": "Không có nguồn m3u8 khả dụng cho tập đã chọn.",
+  "watchNoPlayableSource": "Không có nguồn phát khả dụng cho tập đã chọn.",
   "watchPlayerError": "Trình phát không thể khởi chạy luồng này.",
   "watchPlayerPreview": "Trong widget test, player được thay bằng placeholder xem trước.",
   "watchNoEpisodeSelected": "Chưa chọn tập",
+  "watchPlaybackSourceEmbed": "Embed",
+  "watchPlaybackSourceM3u8": "M3U8",
+  "watchSwitchToEmbed": "Đổi sang Embed",
+  "watchSwitchToM3u8": "Đổi sang M3U8",
   "watchEpisodeValue": "Tập {episode}",
   "@watchEpisodeValue": {
     "placeholders": {

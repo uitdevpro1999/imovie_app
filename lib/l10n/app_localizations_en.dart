@@ -201,7 +201,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get watchNoPlayableSource =>
-      'No playable m3u8 source is available for the selected episode.';
+      'No playable source is available for the selected episode.';
 
   @override
   String get watchPlayerError => 'The player could not start this stream.';
@@ -212,6 +212,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get watchNoEpisodeSelected => 'No episode selected';
+
+  @override
+  String get watchPlaybackSourceEmbed => 'Embed';
+
+  @override
+  String get watchPlaybackSourceM3u8 => 'M3U8';
+
+  @override
+  String get watchSwitchToEmbed => 'Switch to Embed';
+
+  @override
+  String get watchSwitchToM3u8 => 'Switch to M3U8';
 
   @override
   String watchEpisodeValue(Object episode) {

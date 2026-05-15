@@ -14,7 +14,8 @@ abstract class MovieStreamEpisode with _$MovieStreamEpisode {
     required String m3u8Url,
   }) = _MovieStreamEpisode;
 
-  bool get hasPlayableStream => m3u8Url.trim().isNotEmpty;
+  bool get hasPlayableStream =>
+      embedUrl.trim().isNotEmpty || m3u8Url.trim().isNotEmpty;
 
   String get displayName {
     if (name.trim().isNotEmpty) {

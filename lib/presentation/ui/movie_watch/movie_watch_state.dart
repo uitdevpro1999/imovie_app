@@ -40,7 +40,9 @@ abstract class MovieWatchState with _$MovieWatchState implements BaseState {
     return server.episodes[selectedEpisodeIndex];
   }
 
-  String get selectedStreamUrl => selectedEpisode?.m3u8Url.trim() ?? '';
+  String get selectedEmbedUrl => selectedEpisode?.embedUrl.trim() ?? '';
+
+  String get selectedM3u8Url => selectedEpisode?.m3u8Url.trim() ?? '';
 
   bool get hasSelectedServerEpisodes =>
       selectedServer?.episodes.isNotEmpty ?? false;
